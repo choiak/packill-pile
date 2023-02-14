@@ -5,6 +5,16 @@
     >
       <h6 class="font-semibold">Create an account</h6>
       <form class="mt-6 space-y-6">
+        <Textbox
+          default-type="text"
+          input-class="w-full mt-1 rounded-r-lg"
+          button-class="border-r-0 rounded-l-lg"
+          placeholder="Username"
+          has-icon
+          left-icon
+        >
+          <AtSymbolIcon class="h-6 w-6 text-neutral-500" />
+        </Textbox>
         <div class="flex w-full">
           <div class="w-1/2">
             <Textbox
@@ -33,7 +43,9 @@
           toggled-type="text"
           autocomplete="password"
           input-class="mt-1 rounded-l-lg"
+          button-class="rounded-r-lg border-l-0"
           has-icon
+          toggleable
         />
         <button
           type="submit"
@@ -67,7 +79,9 @@
       />
       <div class="absolute bottom-8 left-8 space-y-4 text-white">
         <h1 class="font-semibold drop-shadow-xl">Packill,</h1>
-        <p class="leading-5 drop-shadow-xl" >Packed with in-depth<br />but straightforward content.</p>
+        <p class="leading-5 drop-shadow-xl">
+          Packed with in-depth<br />but straightforward content.
+        </p>
       </div>
     </div>
   </div>
@@ -75,4 +89,5 @@
 
 <script setup>
 import Textbox from "@/components/textbox/textbox.vue";
+import { AtSymbolIcon } from "@heroicons/vue/24/outline";
 </script>
