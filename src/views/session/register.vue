@@ -37,7 +37,7 @@
         />
         <button
           type="submit"
-          class="btn-white bg-blue-600 text-sm font-medium text-white hover:bg-blue-700 active:shadow-blue-900"
+          class="btn bg-blue-600 text-sm font-medium text-white hover:bg-blue-700 active:shadow-blue-900"
         >
           Create account
         </button>
@@ -49,7 +49,7 @@
         <div>
           <a href="/pile/login">
             <button
-              class="btn-white bg-white text-sm font-medium text-neutral-700 hover:bg-slate-400/20 active:shadow-slate-300"
+              class="btn bg-white text-sm font-medium text-neutral-700 hover:bg-slate-400/20 active:shadow-slate-300"
             >
               Sign in
             </button>
