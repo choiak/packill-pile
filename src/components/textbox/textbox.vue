@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center">
+  <div class="flex items-center" :class="{ 'flex-row-reverse': leftIcon }">
     <input
       :type="inputType"
       :placeholder="placeholder"
@@ -12,10 +12,10 @@
     <div
       v-if="hasIcon"
       @click="show()"
-      class="mt-1 rounded-r-lg border border-l-0 bg-neutral-200/40 py-2 px-2 shadow-sm hover:bg-white"
-      :class="buttonClass"
+      class="mt-1 border bg-neutral-200/40 py-2 px-2 shadow-sm"
+      :class="[toggledStyles, toggleableStyles, buttonClass]"
     >
-      <slot name="icon"><EyeIcon class="h-6 w-6 text-gray-500" /></slot>
+      <slot><EyeIcon class="h-6 w-6 text-gray-500" /></slot>
     </div>
   </div>
 </template>
@@ -32,14 +32,17 @@ const state = reactive({ isActive: false });
 
 const props = defineProps({
   hasIcon: Boolean,
+  leftIcon: Boolean,
   required: Boolean,
   inputClass: String,
+  buttonClass: String,
   activeClass: String,
   inactiveClass: String,
   placeholder: String,
   autocomplete: String,
   defaultType: String,
   toggledType: String,
+  toggleable: Boolean,
 });
 
 function sendParent() {
@@ -47,7 +50,9 @@ function sendParent() {
 }
 
 function show() {
-  state.isActive = !state.isActive;
+  if (props.toggleable) {
+    state.isActive = !state.isActive;
+  }
 }
 
 const inputType = computed(() => {
@@ -59,7 +64,16 @@ const inputType = computed(() => {
   }
 });
 
-const buttonClass = computed(() => {
+const toggleableStyles = computed(() => {
+  switch (props.toggleable) {
+    case true:
+      return "hover:bg-white";
+    default:
+      return "";
+  }
+});
+
+const toggledStyles = computed(() => {
   switch (state.isActive) {
     case true:
       return "bg-white shadow-blue-100 border-blue-600";
