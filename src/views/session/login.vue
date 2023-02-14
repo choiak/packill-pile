@@ -18,7 +18,9 @@
           toggled-type="text"
           autocomplete="password"
           input-class="mt-1 rounded-l-lg"
+          button-class="rounded-r-lg border-l-0"
           has-icon
+          toggleable
         />
         <button
           type="submit"
@@ -27,7 +29,9 @@
           Sign in
         </button>
       </form>
-      <a href="/pile/password-reset" class="text-xs font-medium text-neutral-500"
+      <a
+        href="/pile/password-reset"
+        class="text-xs font-medium text-neutral-500"
         >Forgot your password?</a
       >
       <div class="space-y-2">
@@ -45,7 +49,9 @@
         </div>
       </div>
     </div>
-    <div class="relative hidden overflow-hidden sm:block sm:h-full sm:w-5/12 lg:w-7/12">
+    <div
+      class="relative hidden overflow-hidden sm:block sm:h-full sm:w-5/12 lg:w-7/12"
+    >
       <img
         src="@/assets/img/login.jpg"
         class="h-full w-full bg-center object-cover"
@@ -53,7 +59,9 @@
       />
       <div class="absolute bottom-8 left-8 space-y-4 text-white">
         <h1 class="font-semibold drop-shadow-xl">Welcome back,</h1>
-        <p class="leading-5 drop-shadow-xl">Continue your journey at Packill.</p>
+        <p class="leading-5 drop-shadow-xl">
+          Continue your journey at Packill.
+        </p>
       </div>
     </div>
   </div>
