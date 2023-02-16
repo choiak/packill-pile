@@ -7,7 +7,7 @@
       :class="inputClass"
       :required="required"
       v-model="inputValue"
-      @change="sendParent"
+      @input="sendParent"
     />
     <div
       v-if="hasIcon"
