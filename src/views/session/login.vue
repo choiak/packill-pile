@@ -16,36 +16,47 @@
           placeholder="Password"
           default-type="password"
           toggled-type="text"
-          autocomplete="password"
+          autocomplete="current-password"
           input-class="mt-1 rounded-l-lg"
+          button-class="rounded-r-lg border-l-0"
           has-icon
+          toggleable
+          @model="getPassword"
         />
-        <button
-          type="submit"
-          class="btn-white bg-blue-600 text-sm font-medium text-white hover:bg-blue-700 active:shadow-blue-900"
-        >
-          Sign in
-        </button>
+        <div class="space-y-2">
+          <button
+            type="submit"
+            class="btn bg-blue-600 text-sm font-medium text-white hover:bg-blue-700 active:shadow-blue-900"
+            @click.prevent="loginHandler"
+          >
+            Sign in
+          </button>
+          <p
+            @click.prevent="router.push('/pile/forget-password')"
+            class="text-xs font-medium text-neutral-500 hover:text-blue-700 active:text-blue-900"
+          >
+            Forgot your password?
+          </p>
+        </div>
       </form>
-      <a href="/pile/password-reset" class="text-xs font-medium text-neutral-500"
-        >Forgot your password?</a
-      >
       <div class="space-y-2">
         <p class="text-sm font-medium text-neutral-700">
           Don't have a Packill account?
         </p>
         <div>
-          <a href="/pile/register">
-            <button
-              class="btn-white bg-white text-sm font-medium text-neutral-700 hover:bg-slate-400/20 active:shadow-slate-300"
-            >
-              Create new account
-            </button>
-          </a>
+          <button
+            type="button"
+            @click.prevent="router.push('/pile/register')"
+            class="btn bg-white text-sm font-medium text-neutral-700 hover:bg-slate-400/20 active:shadow-slate-300"
+          >
+            Create new account
+          </button>
         </div>
       </div>
     </div>
-    <div class="relative hidden overflow-hidden sm:block sm:h-full sm:w-5/12 lg:w-7/12">
+    <div
+      class="relative hidden overflow-hidden sm:block sm:h-full sm:w-5/12 lg:w-7/12"
+    >
       <img
         src="@/assets/img/login.jpg"
         class="h-full w-full bg-center object-cover"
@@ -53,7 +64,9 @@
       />
       <div class="absolute bottom-8 left-8 space-y-4 text-white">
         <h1 class="font-semibold drop-shadow-xl">Welcome back,</h1>
-        <p class="leading-5 drop-shadow-xl">Continue your journey at Packill.</p>
+        <p class="leading-5 drop-shadow-xl">
+          Continue your journey at Packill.
+        </p>
       </div>
     </div>
   </div>
@@ -62,11 +75,21 @@
 <script setup>
 import Textbox from "@/components/textbox/textbox.vue";
 import { ref } from "vue";
+import { login } from "@/api/user.js";
+import router from "@/router/index.js";
 
 let email = ref("");
+let password = ref("");
 
 function getEmail(value) {
   email = value;
-  console.log(email);
+}
+
+function getPassword(value) {
+  password = value;
+}
+
+async function loginHandler() {
+  await login(email, password);
 }
 </script>

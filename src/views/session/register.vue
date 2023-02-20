@@ -5,39 +5,57 @@
     >
       <h6 class="font-semibold">Create an account</h6>
       <form class="mt-6 space-y-6">
-        <div class="flex w-full">
-          <div class="w-1/2">
-            <Textbox
-              placeholder="First name"
-              default-type="text"
-              input-class="mt-1 rounded-l-lg"
-            />
-          </div>
-          <div class="w-1/2">
-            <Textbox
-              placeholder="Last name"
-              default-type="text"
-              input-class="mt-1 rounded-r-lg"
-            />
-          </div>
-        </div>
+        <Textbox
+          default-type="text"
+          input-class="w-full mt-1 rounded-r-lg"
+          button-class="border-r-0 rounded-l-lg"
+          placeholder="Username"
+          has-icon
+          left-icon
+          @model="getUsername"
+        >
+          <AtSymbolIcon class="h-6 w-6 text-neutral-500" />
+        </Textbox>
+        <!--        <div class="flex w-full">-->
+        <!--          <div class="w-1/2">-->
+        <!--            <Textbox-->
+        <!--              placeholder="First name"-->
+        <!--              default-type="text"-->
+        <!--              input-class="mt-1 rounded-l-lg"-->
+        <!--              @model="getFirstName"-->
+        <!--            />-->
+        <!--          </div>-->
+        <!--          <div class="w-1/2">-->
+        <!--            <Textbox-->
+        <!--              placeholder="Last name"-->
+        <!--              default-type="text"-->
+        <!--              input-class="mt-1 rounded-r-lg"-->
+        <!--              @model="getLastName"-->
+        <!--            />-->
+        <!--          </div>-->
+        <!--        </div>-->
         <Textbox
           placeholder="Email"
           default-type="email"
           autocomplete="email"
           input-class="mt-1 rounded-lg"
+          @model="getEmail"
         />
         <Textbox
           placeholder="Password"
           default-type="password"
           toggled-type="text"
-          autocomplete="password"
+          autocomplete="new-password"
           input-class="mt-1 rounded-l-lg"
+          button-class="rounded-r-lg border-l-0"
           has-icon
+          toggleable
+          @model="getPassword"
         />
         <button
           type="submit"
-          class="btn-white bg-blue-600 text-sm font-medium text-white hover:bg-blue-700 active:shadow-blue-900"
+          class="btn bg-blue-600 text-sm font-medium text-white hover:bg-blue-700 active:shadow-blue-900"
+          @click.prevent="registerHandler"
         >
           Create account
         </button>
@@ -46,15 +64,13 @@
         <p class="text-sm font-medium text-neutral-700">
           Already have a Packill account?
         </p>
-        <div>
-          <a href="/pile/login">
-            <button
-              class="btn-white bg-white text-sm font-medium text-neutral-700 hover:bg-slate-400/20 active:shadow-slate-300"
-            >
-              Sign in
-            </button>
-          </a>
-        </div>
+        <button
+          type="submit"
+          @click.prevent="router.push('/pile/login')"
+          class="btn bg-white text-sm font-medium text-neutral-700 hover:bg-slate-400/20 active:shadow-slate-300"
+        >
+          Sign in
+        </button>
       </div>
     </div>
     <div
@@ -67,7 +83,9 @@
       />
       <div class="absolute bottom-8 left-8 space-y-4 text-white">
         <h1 class="font-semibold drop-shadow-xl">Packill,</h1>
-        <p class="leading-5 drop-shadow-xl" >Packed with in-depth<br />but straightforward content.</p>
+        <p class="leading-5 drop-shadow-xl">
+          Packed with in-depth<br />but straightforward content.
+        </p>
       </div>
     </div>
   </div>
@@ -75,4 +93,28 @@
 
 <script setup>
 import Textbox from "@/components/textbox/textbox.vue";
+import { AtSymbolIcon } from "@heroicons/vue/24/outline";
+import { ref } from "vue";
+import { register } from "@/api/user.js";
+import router from "@/router/index.js";
+
+let email = ref("");
+let password = ref("");
+let username = ref("");
+
+function getEmail(value) {
+  email = value;
+}
+
+function getPassword(value) {
+  password = value;
+}
+
+function getUsername(value) {
+  username = value;
+}
+
+async function registerHandler() {
+  await register(username, email, password);
+}
 </script>
