@@ -16,6 +16,7 @@
           default-type="email"
           autocomplete="email"
           input-class="mt-1 rounded-lg"
+          @model="getEmail"
         />
         <button
           type="submit"
@@ -29,13 +30,12 @@
           Found your Packill password?
         </p>
         <div>
-          <a href="/pile/login">
-            <button
-              class="btn bg-white text-sm font-medium text-neutral-700 hover:bg-slate-400/20 active:shadow-slate-300"
-            >
-              Sign in
-            </button>
-          </a>
+          <button
+            @click.prevent="router.push('/pile/login')"
+            class="btn bg-white text-sm font-medium text-neutral-700 hover:bg-slate-400/20 active:shadow-slate-300"
+          >
+            Sign in
+          </button>
         </div>
       </div>
     </div>
@@ -60,6 +60,12 @@
 
 <script setup>
 import Textbox from "@/components/textbox/textbox.vue";
-</script>
+import router from "@/router/index.js";
+import { ref } from "vue";
 
-<style scoped></style>
+let email = ref("");
+
+function getEmail(value) {
+  email = value;
+}
+</script>
