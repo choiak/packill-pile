@@ -18,10 +18,7 @@
           input-class="rounded-lg"
           @model="getEmail"
         />
-        <button
-          type="submit"
-          class="btn-accent"
-        >
+        <button type="submit" class="btn-accent">
           Send reset instructions
         </button>
       </form>
@@ -30,10 +27,7 @@
           Found your Packill password?
         </p>
         <div>
-          <button
-            @click.prevent="router.push('/pile/login')"
-            class="btn-light"
-          >
+          <button @click.prevent="router.push('/pile/login')" class="btn-light">
             Sign in
           </button>
         </div>
