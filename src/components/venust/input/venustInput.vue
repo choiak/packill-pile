@@ -4,6 +4,7 @@
       :type="inputType"
       :placeholder="placeholder"
       :autocomplete="autocomplete"
+      class="w-full border border-gray-300 bg-neutral-200/40 px-3 py-2 shadow-sm focus:border focus:border-blue-600 focus:bg-white focus:shadow-lg focus:shadow-blue-100 focus:ring-0 active:ring-0"
       :class="inputClass"
       :required="required"
       v-model="inputValue"
@@ -12,7 +13,7 @@
     <div
       v-if="hasIcon"
       @click="show()"
-      class="mt-1 border bg-neutral-200/40 py-2 px-2 shadow-sm"
+      class="border bg-neutral-200/40 py-2 px-2 shadow-sm"
       :class="[toggledStyles, toggleableStyles, buttonClass]"
     >
       <slot><EyeIcon class="h-6 w-6 text-gray-500" /></slot>
@@ -24,20 +25,15 @@
 import { EyeIcon } from "@heroicons/vue/24/outline";
 import { computed, reactive, ref } from "vue";
 
-const inputValue = ref("");
-
 const emit = defineEmits(["model"]);
-
+const inputValue = ref("");
 const state = reactive({ isActive: false });
-
 const props = defineProps({
   hasIcon: Boolean,
   leftIcon: Boolean,
   required: Boolean,
   inputClass: String,
   buttonClass: String,
-  activeClass: String,
-  inactiveClass: String,
   placeholder: String,
   autocomplete: String,
   defaultType: String,
@@ -50,9 +46,7 @@ function sendParent() {
 }
 
 function show() {
-  if (props.toggleable) {
-    state.isActive = !state.isActive;
-  }
+  state.isActive = props.toggleable ? !state.isActive : false;
 }
 
 const inputType = computed(() => {
