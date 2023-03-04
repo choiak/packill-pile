@@ -5,7 +5,7 @@
     >
       <div class="space-y-4">
         <h6 class="font-semibold">Reset password</h6>
-        <p class="text-left text-sm">
+        <p class="text-left text-sm text-neutral-700">
           For security reasons, we do <strong>NOT</strong> store your password.
           So we will never ask for, or send your password via email
         </p>
@@ -15,12 +15,12 @@
           placeholder="Email"
           default-type="email"
           autocomplete="email"
-          input-class="mt-1 rounded-lg"
+          input-class="rounded-lg"
           @model="getEmail"
         />
         <button
           type="submit"
-          class="btn bg-blue-600 text-sm font-medium text-white hover:bg-blue-700 active:shadow-blue-900"
+          class="btn-accent"
         >
           Send reset instructions
         </button>
@@ -32,7 +32,7 @@
         <div>
           <button
             @click.prevent="router.push('/pile/login')"
-            class="btn bg-white text-sm font-medium text-neutral-700 hover:bg-slate-400/20 active:shadow-slate-300"
+            class="btn-light"
           >
             Sign in
           </button>
@@ -59,7 +59,7 @@
 </template>
 
 <script setup>
-import Textbox from "@/components/textbox/textbox.vue";
+import Textbox from "@/components/venust/input/venustInput.vue";
 import router from "@/router/index.js";
 import { ref } from "vue";
 

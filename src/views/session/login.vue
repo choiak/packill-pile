@@ -9,7 +9,7 @@
           placeholder="Email"
           default-type="email"
           autocomplete="email"
-          input-class="mt-1 rounded-lg"
+          input-class="rounded-lg"
           @model="getEmail"
         />
         <Textbox
@@ -17,7 +17,7 @@
           default-type="password"
           toggled-type="text"
           autocomplete="current-password"
-          input-class="mt-1 rounded-l-lg"
+          input-class="rounded-l-lg"
           button-class="rounded-r-lg border-l-0"
           has-icon
           toggleable
@@ -26,7 +26,7 @@
         <div class="space-y-2">
           <button
             type="submit"
-            class="btn bg-blue-600 text-sm font-medium text-white hover:bg-blue-700 active:shadow-blue-900"
+            class="btn-accent"
             @click.prevent="loginHandler"
           >
             Sign in
@@ -47,7 +47,7 @@
           <button
             type="button"
             @click.prevent="router.push('/pile/register')"
-            class="btn bg-white text-sm font-medium text-neutral-700 hover:bg-slate-400/20 active:shadow-slate-300"
+            class="btn-light"
           >
             Create new account
           </button>
@@ -73,10 +73,11 @@
 </template>
 
 <script setup>
-import Textbox from "@/components/textbox/textbox.vue";
+import Textbox from "@/components/venust/input/venustInput.vue";
 import { ref } from "vue";
 import { login } from "@/api/user.js";
 import router from "@/router/index.js";
+import UserImg from "@/components/userimg/userImg.vue";
 
 let email = ref("");
 let password = ref("");

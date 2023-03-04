@@ -7,7 +7,7 @@
       <form class="mt-6 space-y-6">
         <Textbox
           default-type="text"
-          input-class="w-full mt-1 rounded-r-lg"
+          input-class="w-full rounded-r-lg"
           button-class="border-r-0 rounded-l-lg"
           placeholder="Username"
           has-icon
@@ -38,7 +38,7 @@
           placeholder="Email"
           default-type="email"
           autocomplete="email"
-          input-class="mt-1 rounded-lg"
+          input-class="rounded-lg"
           @model="getEmail"
         />
         <Textbox
@@ -46,7 +46,7 @@
           default-type="password"
           toggled-type="text"
           autocomplete="new-password"
-          input-class="mt-1 rounded-l-lg"
+          input-class="rounded-l-lg"
           button-class="rounded-r-lg border-l-0"
           has-icon
           toggleable
@@ -54,7 +54,7 @@
         />
         <button
           type="submit"
-          class="btn bg-blue-600 text-sm font-medium text-white hover:bg-blue-700 active:shadow-blue-900"
+          class="btn-accent"
           @click.prevent="registerHandler"
         >
           Create account
@@ -67,7 +67,7 @@
         <button
           type="submit"
           @click.prevent="router.push('/pile/login')"
-          class="btn bg-white text-sm font-medium text-neutral-700 hover:bg-slate-400/20 active:shadow-slate-300"
+          class="btn-light"
         >
           Sign in
         </button>
@@ -92,7 +92,7 @@
 </template>
 
 <script setup>
-import Textbox from "@/components/textbox/textbox.vue";
+import Textbox from "@/components/venust/input/venustInput.vue";
 import { AtSymbolIcon } from "@heroicons/vue/24/outline";
 import { ref } from "vue";
 import { register } from "@/api/user.js";
