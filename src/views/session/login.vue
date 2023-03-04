@@ -32,7 +32,7 @@
             Sign in
           </button>
           <p
-            @click.prevent="router.push('/pile/forget-password')"
+            @click.prevent="router.push('/forget-password')"
             class="text-xs font-medium text-neutral-500 hover:text-blue-700 active:text-blue-900"
           >
             Forgot your password?
@@ -46,7 +46,7 @@
         <div>
           <button
             type="button"
-            @click.prevent="router.push('/pile/register')"
+            @click.prevent="router.push('/register')"
             class="btn-light"
           >
             Create new account
@@ -55,7 +55,7 @@
       </div>
     </div>
     <div
-      class="relative hidden overflow-hidden sm:block sm:h-full sm:w-5/12 lg:w-7/12"
+      class="relative hidden overflow-hidden sm:block sm:h-full sm:flex-1"
     >
       <img
         src="@/assets/img/login.jpg"

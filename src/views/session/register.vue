@@ -66,7 +66,7 @@
         </p>
         <button
           type="submit"
-          @click.prevent="router.push('/pile/login')"
+          @click.prevent="router.push('/login')"
           class="btn-light"
         >
           Sign in
@@ -74,7 +74,7 @@
       </div>
     </div>
     <div
-      class="relative hidden overflow-hidden sm:block sm:h-full sm:w-5/12 lg:w-7/12"
+      class="relative hidden overflow-hidden sm:block sm:h-full sm:flex-1"
     >
       <img
         src="@/assets/img/login.jpg"

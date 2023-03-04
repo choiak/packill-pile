@@ -1,29 +1,35 @@
-import PileLogin from "/src/views/session/login.vue";
-import PileRegister from "/src/views/session/register.vue";
-import PileForgetPassword from "/src/views/session/forgetPassword.vue";
-import PileIndex from "/src/views/pile/index.vue";
+import PileLogin from "@/views/session/login.vue";
+import PileRegister from "@/views/session/register.vue";
+import PileForgetPassword from "@/views/session/forgetPassword.vue";
+import PileIndex from "@/layouts/ile/index.vue";
+import PileUser from "@/views/pile/user.vue";
 import { createRouter, createWebHistory } from "vue-router";
 import { validate } from "@/api/user.js";
 
 const routes = [
   {
-    name: "PileDashboard",
-    path: "/pile/dashboard",
+    name: "Dashboard",
+    path: "/dashboard",
     component: PileIndex,
   },
   {
-    name: "PileLogin",
-    path: "/pile/login",
+    name: "Profile",
+    path: "/user/:id",
+    component: PileUser,
+  },
+  {
+    name: "Login",
+    path: "/login",
     component: PileLogin,
   },
   {
-    name: "PileRegister",
-    path: "/pile/register",
+    name: "Register",
+    path: "/register",
     component: PileRegister,
   },
   {
-    name: "PileForgetPassword",
-    path: "/pile/forget-password",
+    name: "ForgetPassword",
+    path: "/forget-password",
     component: PileForgetPassword,
   },
 ];
@@ -33,14 +39,15 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach(async (to, from) => {
-  if (
-    to.name !== "PileLogin" &&
-    to.name !== "PileRegister" &&
-    !(await validate())
-  ) {
-    return { name: "PileLogin" };
-  }
-});
+// router.beforeEach(async (to, from) => {
+//     if (
+//         to.name !== "Login" &&
+//         to.name !== "Register" &&
+//         to.name !== "ForgetPassword" &&
+//         !(await validate())
+//     ) {
+//         return { name: "PileLogin" };
+//     }
+// });
 
 export default router;
