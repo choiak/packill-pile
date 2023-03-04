@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
   h1 {
     @apply text-6xl;
   }
@@ -27,27 +31,24 @@
     @apply text-lg;
   }
 
-  [type="text"],
-  [type="password"],
-  [type="email"],
-  [type="number"],
-  [type="url"],
-  [type="date"],
-  [type="datetime-local"],
-  [type="month"],
-  [type="week"],
-  [type="time"],
-  [type="search"],
-  [type="tel"],
-  [type="checkbox"],
-  [type="radio"],
-  textarea,
-  select {
-    @apply w-full border border-gray-300 bg-neutral-200/40 px-3 py-2 shadow-sm focus:border focus:border-blue-600 focus:bg-white focus:shadow-lg focus:shadow-blue-100 focus:ring-0 active:ring-0;
-  }
-
   .btn {
     @apply w-fit rounded-lg border border-gray-300 px-4 py-2 shadow-sm active:shadow-inner;
+  }
+
+  .btn-accent {
+    @apply w-fit rounded-lg  px-4 py-2 shadow-sm active:shadow-inner bg-blue-600 text-sm font-medium text-white hover:bg-blue-700 active:shadow-blue-900;
+  }
+
+  .btn-light {
+    @apply w-fit rounded-lg border border-gray-300 px-4 py-2 shadow-sm active:shadow-inner bg-white text-sm font-medium text-black hover:bg-slate-400/20 active:shadow-slate-300;
+  }
+
+  .btn-menu {
+    @apply w-fit rounded-lg bg-white p-2 font-medium text-neutral-700 shadow transition hover:bg-blue-600 hover:text-white active:shadow-blue-900
+  }
+
+  .btn-nav-menu {
+    @apply w-fit rounded-lg bg-white p-2 font-medium text-orange-600 shadow transition hover:bg-blue-600 hover:text-white active:shadow-blue-900;
   }
 }
 
