@@ -1,53 +1,71 @@
-import PileLogin from "@/views/session/login.vue";
-import PileRegister from "@/views/session/register.vue";
-import PileForgetPassword from "@/views/session/forgetPassword.vue";
-import PileIndex from "@/layouts/ile/index.vue";
-import PileUser from "@/views/pile/user.vue";
-import { createRouter, createWebHistory } from "vue-router";
-import { validate } from "@/api/user.js";
+import { createRouter, createWebHistory } from 'vue-router';
+import { validate } from '@/api/auth.js';
+import Login from '@/views/session/login.vue';
+import Register from '@/views/session/register.vue';
+import ForgetPassword from '@/views/session/forgetPassword.vue';
+import Index from '@/layouts/pile/index.vue';
+import User from '@/views/pile/user.vue';
+import Workspace from '@/views/pile/workspace.vue';
+import Packages from '@/views/pile/packages.vue';
+import Package from '@/views/pile/package.vue';
 
 const routes = [
-  {
-    name: "Dashboard",
-    path: "/dashboard",
-    component: PileIndex,
-  },
-  {
-    name: "Profile",
-    path: "/user/:id",
-    component: PileUser,
-  },
-  {
-    name: "Login",
-    path: "/login",
-    component: PileLogin,
-  },
-  {
-    name: "Register",
-    path: "/register",
-    component: PileRegister,
-  },
-  {
-    name: "ForgetPassword",
-    path: "/forget-password",
-    component: PileForgetPassword,
-  },
+	{
+		name: 'Login',
+		path: '/login',
+		component: Login,
+	},
+	{
+		name: 'Register',
+		path: '/register',
+		component: Register,
+	},
+	{
+		name: 'ForgetPassword',
+		path: '/forget-password',
+		component: ForgetPassword,
+	},
+	{
+		name: 'Dashboard',
+		path: '/dashboard',
+		component: Index,
+	},
+	{
+		name: 'User',
+		path: '/user/:id',
+		component: User,
+	},
+	{
+		name: 'Workspace',
+		path: '/workspace/:topicId',
+		component: Workspace,
+	},
+	{
+		name: 'Packages',
+		path: '/packages',
+		component: Packages,
+	},
+	{
+		name:'Package',
+		path: '/package/:id',
+		component: Package,
+	}
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
-  routes,
+	history: createWebHistory(),
+	routes,
 });
 
-// router.beforeEach(async (to, from) => {
-//     if (
-//         to.name !== "Login" &&
-//         to.name !== "Register" &&
-//         to.name !== "ForgetPassword" &&
-//         !(await validate())
-//     ) {
-//         return { name: "PileLogin" };
-//     }
-// });
+router.beforeEach(async (to, from) => {
+	if (
+		to.name !== 'Login' &&
+		to.name !== 'Register' &&
+		to.name !== 'ForgetPassword' &&
+		!(await validate())
+	) {
+		return { name: 'Login' };
+	}
+});
 
 export default router;
