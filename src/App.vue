@@ -14,8 +14,8 @@
 		rel="stylesheet"
 	/>
 	<Suspense>
-		<div id="app" class="flex justify-center bg-stone-100 w-screen h-screen min-h-[392px]">
-			<router-view class='max-w-[2560px]'/>
+		<div id="app" class="flex justify-center bg-stone-100 w-screen h-screen">
+			<router-view class='flex-1 max-w-[1920px] min-h-[392px]'/>
 		</div>
 	</Suspense>
 </template>
