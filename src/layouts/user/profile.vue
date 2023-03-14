@@ -1,5 +1,5 @@
 <template>
-	<div class='flex flex-col w-full rounded-lg border p-4 space-y-4'>
+	<div class='flex flex-col w-full rounded-lg border space-y-4 p-4'>
 		<div class='flex items-center space-x-2'>
 			<Avatar :img-src='userAvatarUrl' />
 			<div>
@@ -23,7 +23,7 @@
 				<div class='flex space-x-8'>
 					<div>
 						<h4 class='font-medium'>{{ userEmail }}</h4>
-						<p class='text-sm font-medium text-neutral-500'>Email</p>
+						<div class='text-sm font-medium text-neutral-500'>Email</div>
 						<a :href='`mailto:${userEmail}`'
 						   class='flex items-center btn-accent mt-2 text-sm px-2 py-1 space-x-1'>
 							<PaperAirplaneIcon class='h-4 w-4' />
@@ -32,7 +32,7 @@
 					</div>
 					<div>
 						<h4 class='font-medium'>anson-val</h4>
-						<p class='text-sm font-medium text-neutral-500'>GitHub</p>
+						<div class='text-sm font-medium text-neutral-500'>GitHub</div>
 						<a class='flex items-center btn-accent mt-2 text-sm px-2 py-1 space-x-1'>
 							<ArrowUturnRightIcon class='h-4 w-4' />
 							<p>Go to profile</p>
