@@ -13,6 +13,19 @@ export async function getTopic(id) {
 		});
 }
 
+export async function getPackage(id) {
+	return await requestWIthValidation
+		.get(
+			`/api/packages/${id}?populate=areas`,
+		)
+		.then((res) => {
+			return res.data.data;
+		})
+		.catch((err) => {
+			console.log(err);
+		});
+}
+
 export async function listPackages() {
 	return await requestWIthValidation
 		.get(
