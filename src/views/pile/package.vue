@@ -16,10 +16,10 @@
 				</div>
 				<button class='group btn-accent flex items-center space-x-1'>
 					<CursorArrowRippleIcon class='h-4 w-4 animate-pulse'/>
-					<p class='animate-pulse'>Unpack and start this package</p>
+					<label class='animate-pulse'>Unpack and start this package</label>
 				</button>
 			</div>
-			<div class='flex-1 space-y-8 md:space-y-0 md:flex w-full rounded-lg border p-4 md:space-x-8 overflow-auto'>
+			<div class='flex-1 space-y-8 md:space-y-0 md:flex w-full rounded-xl border p-4 md:space-x-8 overflow-auto'>
 				<div
 					class='rounded-lg space-y-4 md:space-y-0 md:w-1/2 lg:w-1/3 md:flex md:flex-col md:justify-between bg-gradient-to-tr from-neutral-700 to-purple-300 rounded-lg p-4 shadow-lg'>
 					<div class='grid grid-cols-2 lg:grid-cols-3 grid-flow-row gap-y-2 justify-between'>
