@@ -8,6 +8,7 @@ import User from '@/views/pile/user.vue';
 import Workspace from '@/views/pile/workspace.vue';
 import Packages from '@/views/pile/packages.vue';
 import Package from '@/views/pile/package.vue';
+import UserSettings from '@/views/pile/userSettings.vue';
 
 const routes = [
 	{
@@ -32,8 +33,13 @@ const routes = [
 	},
 	{
 		name: 'User',
-		path: '/user/:id',
+		path: '/users/:id',
 		component: User,
+	},
+	{
+		name: 'UserSettings',
+		path: '/settings',
+		component: UserSettings,
 	},
 	{
 		name: 'Workspace',
@@ -47,7 +53,7 @@ const routes = [
 	},
 	{
 		name:'Package',
-		path: '/package/:id',
+		path: '/packages/:id',
 		component: Package,
 	}
 ];
