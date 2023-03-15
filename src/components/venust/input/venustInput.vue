@@ -7,6 +7,7 @@
 			class="w-full border border-gray-300 bg-neutral-200/40 px-3 py-2 shadow-sm focus:border focus:border-blue-600 focus:bg-white focus:shadow-lg focus:shadow-blue-100 focus:ring-0 active:ring-0"
 			:class="inputClass"
 			:required="required"
+			:disabled='disabled'
 			v-model="inputValue"
 			@input="sendParent"
 		/>
@@ -32,6 +33,7 @@ const props = defineProps({
 	hasIcon: Boolean,
 	leftIcon: Boolean,
 	required: Boolean,
+	disabled: Boolean,
 	inputClass: String,
 	buttonClass: String,
 	placeholder: String,
