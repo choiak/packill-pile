@@ -51,7 +51,7 @@
 						>
 							Learning Objective
 						</h5>
-						<div v-html='packageObjective' class='prose-article prose-sm border rounded-lg p-4' />
+						<div v-html='packageObjective' class='prose-article border rounded-lg p-4' />
 					</div>
 					<div class='space-y-2'>
 						<h5
