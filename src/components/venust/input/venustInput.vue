@@ -27,21 +27,23 @@ import { EyeIcon } from '@heroicons/vue/24/outline';
 import { computed, reactive, ref } from 'vue';
 
 const emit = defineEmits(['model']);
-const inputValue = ref('');
-const state = reactive({ isActive: false });
 const props = defineProps({
 	hasIcon: Boolean,
 	leftIcon: Boolean,
+	toggleable: Boolean,
 	required: Boolean,
 	disabled: Boolean,
+	defaultValue: String,
 	inputClass: String,
 	buttonClass: String,
 	placeholder: String,
 	autocomplete: String,
 	defaultType: String,
 	toggledType: String,
-	toggleable: Boolean,
 });
+
+const inputValue = ref(props.defaultValue);
+const state = reactive({ isActive: false });
 
 function sendParent() {
 	emit('model', inputValue.value);
