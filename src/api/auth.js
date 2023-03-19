@@ -40,7 +40,7 @@ export async function register(username, email, password) {
 		});
 }
 
-export async function validate() {
+export async function validateToken() {
 	let isValid = false;
 	await requestWIthValidation
 		.get('/api/users/me')
@@ -55,6 +55,33 @@ export async function validate() {
 			console.log(err);
 		});
 	return isValid;
+}
+
+export async function doubleValidate(password) {
+	const userStore = useUserStore();
+
+	const tokenIsValid = await requestWIthValidation
+		.get('/api/users/me')
+		.then((res) => {
+			return true;
+		})
+		.catch((err) => {
+			return false
+		});
+
+	const passwordIsValid = await request
+		.post('/api/auth/local', {
+			identifier: userStore.user.username,
+			password: password,
+		})
+		.then((res) => {
+			return true
+		})
+		.catch((err) => {
+			return false
+		});
+
+	return tokenIsValid && passwordIsValid
 }
 
 export function getToken() {
