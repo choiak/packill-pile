@@ -48,13 +48,13 @@
 </template>
 
 <script setup>
-import Index from '@/layouts/pile/index.vue';
-import Back from '@/components/button/back.vue';
+import Index from '@/layouts/workspace/index.vue';
+import Back from '@/components/venust/button/back.vue';
 import { ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { getTopic } from '@/api/workspace.js';
-import Topic from '@/layouts/pile/topic.vue';
-import Problem from '@/layouts/pile/problem.vue';
+import Topic from '@/layouts/workspace/topic.vue';
+import Problem from '@/layouts/workspace/problem.vue';
 
 const route = useRoute();
 const topicId = route.params.topicId;

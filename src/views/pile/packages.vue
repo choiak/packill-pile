@@ -79,7 +79,7 @@
 </template>
 
 <script setup>
-import Index from '@/layouts/pile/index.vue';
+import Index from '@/layouts/workspace/index.vue';
 import { listAreas, listPackages } from '@/api/workspace.js';
 import { ref } from 'vue';
 

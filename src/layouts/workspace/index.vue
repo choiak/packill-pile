@@ -11,5 +11,5 @@
 
 <script setup>
 import Menubar from '@/layouts/menuBar/menubar.vue';
-import Topic from '@/layouts/pile/topic.vue';
+import Topic from '@/layouts/workspace/topic.vue';
 </script>

@@ -32,7 +32,7 @@
 import { DocumentTextIcon } from '@heroicons/vue/24/outline';
 import { useRoute } from 'vue-router';
 import { getTopic } from '@/api/workspace.js';
-import Knowledge from '@/layouts/pile/knowledge.vue';
+import Knowledge from '@/layouts/workspace/knowledge.vue';
 
 const route = useRoute();
 const topicId = route.params.topicId;

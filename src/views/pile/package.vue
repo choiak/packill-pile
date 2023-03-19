@@ -70,7 +70,7 @@
 </template>
 
 <script setup>
-import Index from '@/layouts/pile/index.vue';
+import Index from '@/layouts/workspace/index.vue';
 import { CursorArrowRippleIcon } from '@heroicons/vue/24/outline/index.js';
 import { useRoute } from 'vue-router';
 import { getPackage } from '@/api/workspace.js';
