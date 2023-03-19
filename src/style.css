@@ -36,7 +36,11 @@
 	}
 
 	.btn-accent {
-		@apply w-fit rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 active:shadow-inner active:shadow-blue-900;
+		@apply w-fit rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 active:shadow-inner active:shadow-blue-900 transition;
+	}
+
+	.btn-secondary {
+		@apply w-fit rounded-lg bg-orange-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-orange-700 active:shadow-inner active:shadow-orange-900 transition;
 	}
 
 	.btn-light {
