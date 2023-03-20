@@ -1,14 +1,15 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { validate } from '@/api/auth.js';
+import { validateToken } from '@/api/auth.js';
 import Login from '@/views/session/login.vue';
 import Register from '@/views/session/register.vue';
 import ForgetPassword from '@/views/session/forgetPassword.vue';
-import Index from '@/layouts/pile/index.vue';
-import User from '@/views/pile/user.vue';
-import Workspace from '@/views/pile/workspace.vue';
-import Packages from '@/views/pile/packages.vue';
-import Package from '@/views/pile/package.vue';
-import UserSettings from '@/views/pile/userSettings.vue';
+import Index from '@/layouts/workspace/index.vue';
+import User from '@/views/user/user.vue';
+import Workspace from '@/views/workspace/workspace.vue';
+import Packages from '@/views/workspace/packages.vue';
+import Package from '@/views/workspace/package.vue';
+import UserSettings from '@/views/user/userSettings.vue';
+import NotFound from '@/views/pile/404.vue';
 
 const routes = [
 	{
@@ -55,6 +56,15 @@ const routes = [
 		name:'Package',
 		path: '/packages/:id',
 		component: Package,
+	},
+	{
+		name: '404',
+		path: '/404',
+		component: NotFound,
+	},
+	{
+		path: '/:pathMatch(.*)*',
+		redirect: '/404',
 	}
 ];
 
@@ -68,7 +78,7 @@ router.beforeEach(async (to, from) => {
 		to.name !== 'Login' &&
 		to.name !== 'Register' &&
 		to.name !== 'ForgetPassword' &&
-		!(await validate())
+		!(await validateToken())
 	) {
 		return { name: 'Login' };
 	}
