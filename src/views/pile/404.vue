@@ -1,7 +1,7 @@
 <template>
 	<div class='h-screen w-screen bg-orange-600 p-8 flex flex-col justify-between'>
 		<div>
-			<button class='flex items-center space-x-1 w-fit rounded-lg text-white hover:bg-white p-2 transition hover:bg-blue-600 hover:shadow active:shadow-blue-900' @click.prevent='router.push("/dashboard")'>
+			<button class='flex items-center space-x-1 w-fit rounded-lg text-white hover:bg-white hover:text-black p-2 transition hover:bg-blue-600 hover:shadow active:shadow-blue-900' @click.prevent='router.push("/dashboard")'>
 				<ArrowLeftCircleIcon class='h-5 w-5' />
 				<label>Back</label>
 			</button>
