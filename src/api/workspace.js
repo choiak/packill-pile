@@ -1,9 +1,28 @@
+import qs from 'qs';
 import { requestWIthValidation } from '@/utils/request.js';
 
 export async function getTopic(id) {
+	const query = qs.stringify(
+		{
+			populate: {
+				knowledges: {
+					populate: {
+						author: {
+							populate: ['avatar'],
+						},
+						areas: true,
+					}
+				}
+			}
+		},
+		{
+			encodeValuesOnly: true, // prettify URL
+		}
+	)
+
 	return await requestWIthValidation
 		.get(
-			`/api/topics/${id}?populate[knowledges][populate][author][populate]=avatar&populate[knowledges][populate]=areas`,
+			`/api/topics/${id}?${query}`,
 		)
 		.then((res) => {
 			return res.data.data;
@@ -14,9 +33,18 @@ export async function getTopic(id) {
 }
 
 export async function getPackage(id) {
+	const query = qs.stringify(
+		{
+			populate: ['areas'],
+		},
+		{
+			encodeValuesOnly: true, // prettify URL
+		}
+	)
+
 	return await requestWIthValidation
 		.get(
-			`/api/packages/${id}?populate=areas`,
+			`/api/packages/${id}?${query}`,
 		)
 		.then((res) => {
 			return res.data.data;
@@ -27,9 +55,18 @@ export async function getPackage(id) {
 }
 
 export async function listPackages() {
+	const query = qs.stringify(
+		{
+			populate: ['areas'],
+		},
+		{
+			encodeValuesOnly: true, // prettify URL
+		}
+	)
+
 	return await requestWIthValidation
 		.get(
-			`/api/packages?populate=areas`,
+			`/api/packages?${query}`,
 		)
 		.then((res) => {
 			return res.data.data;
