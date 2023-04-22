@@ -66,7 +66,7 @@ export async function doubleValidate(password) {
 			return true;
 		})
 		.catch((err) => {
-			return false
+			return false;
 		});
 
 	const passwordIsValid = await request
@@ -75,13 +75,13 @@ export async function doubleValidate(password) {
 			password: password,
 		})
 		.then((res) => {
-			return true
+			return true;
 		})
 		.catch((err) => {
-			return false
+			return false;
 		});
 
-	return tokenIsValid && passwordIsValid
+	return tokenIsValid && passwordIsValid;
 }
 
 export function getToken() {
