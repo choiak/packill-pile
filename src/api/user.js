@@ -1,23 +1,46 @@
 import qs from 'qs';
-import { requestWIthValidation } from '@/utils/request.js';
+import { useFetch } from '@/utils/fetch.js';
 
-export async function getUser(id) {
+export function getUser(username) {
 	const query = qs.stringify(
 		{
-			populate: ['avatar', 'role'],
+			filters: {
+				username: {
+					$eq: username,
+				},
+			},
+			populate: ['avatar', 'role', 'currentPackage'],
 		},
 		{
 			encodeValuesOnly: true, // prettify URL
-		});
+		},
+	);
 
-	return await requestWIthValidation
-		.get(
-			`/api/users/${id}?${query}`,
-		)
-		.then((res) => {
-			return res.data;
-		})
-		.catch((err) => {
-			console.log(err);
-		});
+	return useFetch(
+		`http://localhost:1337/api/users?${query}`,
+		{
+			method: 'GET',
+		},
+		true,
+	);
+}
+
+export function getUserAvatar(id) {
+	const query = qs.stringify(
+		{
+			populate: ['avatar'],
+			fields: [''],
+		},
+		{
+			encodeValuesOnly: true, // prettify URL
+		},
+	);
+
+	return useFetch(
+		`http://localhost:1337/api/users/${id}?${query}`,
+		{
+			method: 'GET',
+		},
+		true,
+	);
 }
