@@ -25,7 +25,7 @@
 <script setup>
 import { CubeTransparentIcon } from '@heroicons/vue/24/outline/index.js';
 import { computed, ref, watch } from 'vue';
-import { getDifficulty } from '@/api/workspace.js';
+import { getDifficulty } from '@/api/difficulty.js';
 import { getUserAvatar } from '@/api/user.js';
 
 const props = defineProps({

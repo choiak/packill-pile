@@ -61,7 +61,8 @@
 <script setup>
 import Index from '@/layouts/utils/index.vue';
 import { FunnelIcon } from '@heroicons/vue/24/solid';
-import { listAreas, listPackages } from '@/api/workspace.js';
+import { listPackages } from '@/api/package.js';
+import { listAreas } from '@/api/area.js';
 import { computed, ref, watch } from 'vue';
 import gsap from 'gsap';
 import Dock from '@/layouts/dock/dock.vue';

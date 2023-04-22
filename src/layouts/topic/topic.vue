@@ -19,7 +19,7 @@
 <script setup>
 import { DocumentTextIcon } from '@heroicons/vue/24/solid';
 import { useRoute } from 'vue-router';
-import { getTopic } from '@/api/workspace.js';
+import { getTopic } from '@/api/topic.js';
 import Knowledge from '@/layouts/knowledge/knowledge.vue';
 import { computed } from 'vue';
 

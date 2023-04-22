@@ -33,7 +33,7 @@
 import Index from '@/layouts/utils/index.vue';
 import { computed, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { getTopic } from '@/api/workspace.js';
+import { getTopic } from '@/api/topic.js';
 import Topic from '@/layouts/topic/topic.vue';
 import Problem from '@/layouts/problem/problem.vue';
 import Dock from '@/layouts/dock/dock.vue';

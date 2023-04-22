@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-import { getProblems } from '@/api/workspace.js';
+import { getProblems } from '@/api/problem.js';
 import { computed } from 'vue';
 import DifficultyIndicator from '@/components/pile/problem/difficultyIndicator.vue';
 import VenustBadge from '@/components/venust/badge/venustBadge.vue';

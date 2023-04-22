@@ -36,7 +36,7 @@
 import VenustTag from '@/components/venust/tag/venustTag.vue';
 import { PlusIcon } from '@heroicons/vue/24/outline/index.js';
 import { computed, ref, toRefs, watch } from 'vue';
-import { listAreas } from '@/api/workspace.js';
+import { listAreas } from '@/api/area.js';
 const emit = defineEmits(['model']);
 
 const areaResponse = listAreas();

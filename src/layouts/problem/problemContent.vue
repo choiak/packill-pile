@@ -50,11 +50,9 @@
 
 <script setup>
 import DifficultyIndicator from '@/components/pile/problem/difficultyIndicator.vue';
-import Choice from '@/layouts/question/choice.vue';
 import { ChevronDoubleRightIcon } from '@heroicons/vue/24/outline/index.js';
-import Short from '@/layouts/question/short.vue';
 import { computed, provide, ref, watch } from 'vue';
-import { getProblem } from '@/api/workspace.js';
+import { getProblem } from '@/api/problem.js';
 import {
 	getProblemSubmission,
 	postProblemSubmission,

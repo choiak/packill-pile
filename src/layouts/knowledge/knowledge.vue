@@ -31,7 +31,7 @@
 <script setup>
 import 'highlight.js/styles/a11y-dark.css';
 import { computed } from 'vue';
-import { getKnowledge } from '@/api/workspace.js';
+import { getKnowledge } from '@/api/knowledge.js';
 
 const props = defineProps({
 	id: Number,

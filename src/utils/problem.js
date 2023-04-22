@@ -1,4 +1,4 @@
-import { getProblems } from '@/api/workspace.js';
+import { getProblems } from '@/api/problem.js';
 import { getMe } from '@/api/me.js';
 import { computed, ref, watch } from 'vue';
 

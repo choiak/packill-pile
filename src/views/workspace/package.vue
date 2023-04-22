@@ -106,7 +106,7 @@
 import Index from '@/layouts/utils/index.vue';
 import { CursorArrowRippleIcon } from '@heroicons/vue/24/outline/index.js';
 import { useRoute } from 'vue-router';
-import { getPackage, selectPackage } from '@/api/workspace.js';
+import { getPackage, selectPackage } from '@/api/package.js';
 import { computed } from 'vue';
 
 const route = useRoute();
