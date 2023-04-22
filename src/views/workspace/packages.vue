@@ -61,8 +61,8 @@
 <script setup>
 import Index from '@/layouts/utils/index.vue';
 import { FunnelIcon } from '@heroicons/vue/24/solid';
-import { listPackages } from '@/api/package.js';
-import { listAreas } from '@/api/area.js';
+import { getPackages } from '@/api/package.js';
+import { getAreas } from '@/api/area.js';
 import { computed, ref, watch } from 'vue';
 import gsap from 'gsap';
 import Dock from '@/layouts/dock/dock.vue';
@@ -70,7 +70,7 @@ import PackageCard from '@/components/pile/package/packageCard.vue';
 import MultiAreaSelector from '@/components/pile/multiAreaSelector.vue';
 import VenustNumberBadge from '@/components/venust/badge/venustBadge.vue';
 
-const packageResponse = listPackages();
+const packageResponse = getPackages();
 const packageLoading = computed(() => {
 	return packageResponse.loading.value;
 });

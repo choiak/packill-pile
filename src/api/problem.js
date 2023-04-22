@@ -1,19 +1,10 @@
 import { useFetch } from '@/utils/fetch.js';
 import qs from 'qs';
 
-export function getProblem(id) {
+export function getProblem(id, config = {}) {
 	const query = qs.stringify(
 		{
-			populate: {
-				content: {
-					populate: {
-						question: {
-							fields: ['id'],
-						},
-					},
-				},
-				difficulty: true,
-			},
+			...config,
 		},
 		{
 			encodeValuesOnly: true, // prettify URL

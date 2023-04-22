@@ -159,7 +159,9 @@ import { computed } from 'vue';
 const route = useRoute();
 const username = route.params.username;
 
-const { response, data, error, loading, retry } = getUser(username);
+const { response, data, error, loading, retry } = getUser(username, {
+	populate: ['avatar', 'role', 'currentPackage'],
+});
 
 console.log(data);
 

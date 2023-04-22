@@ -1,9 +1,9 @@
 import qs from 'qs';
 import { useFetch } from '@/utils/fetch.js';
 
-export function getDifficulty(id) {
+export function getDifficulty(id, config = {}) {
 	const query = qs.stringify(
-		{},
+		{...config},
 		{
 			encodeValuesOnly: true, // prettify URL
 		},

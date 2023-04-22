@@ -38,7 +38,14 @@ const props = defineProps({
 	order: Number,
 });
 
-const knowledgeResponse = getKnowledge(props.id);
+const knowledgeResponse = getKnowledge(props.id, {
+	populate: {
+		author: {
+			populate: ['avatar'],
+		},
+		areas: true,
+	},
+});
 
 const knowledge = computed(() => {
 	return knowledgeResponse.data.value?.data;

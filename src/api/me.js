@@ -27,9 +27,6 @@ export function getMyProgress(config = {}) {
 
 export function getMe(config = {}) {
 	const query = qs.stringify({
-		populate: {
-			avatar: true,
-		},
 		...config,
 	});
 

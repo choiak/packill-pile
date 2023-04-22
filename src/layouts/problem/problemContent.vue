@@ -1,48 +1,48 @@
 <template>
-	<form class="space-y-8" @keydown.enter.prevent="handleSubmit">
-		<div class="flex items-center justify-between">
+	<form class='space-y-8' @keydown.enter.prevent='handleSubmit'>
+		<div class='flex items-center justify-between'>
 			<div>
-				<h5 class="font-semibold">{{ attributes?.name }}</h5>
-				<div class="flex space-x-2">
-					<p class="text-sm text-neutral-500">
+				<h5 class='font-semibold'>{{ attributes?.name }}</h5>
+				<div class='flex space-x-2'>
+					<p class='text-sm text-neutral-500'>
 						Published on
-						<span class="font-medium">
+						<span class='font-medium'>
 							{{ publishedAtString }}
 						</span>
 					</p>
-					<p class="text-sm text-neutral-500">•</p>
-					<p class="text-sm text-neutral-500">
+					<p class='text-sm text-neutral-500'>•</p>
+					<p class='text-sm text-neutral-500'>
 						Updated on
-						<span class="font-medium">
+						<span class='font-medium'>
 							{{ updatedAtString }}
 						</span>
 					</p>
 				</div>
 			</div>
-			<DifficultyIndicator :difficulty-id="difficultyId" show-name />
+			<DifficultyIndicator :difficulty-id='difficultyId' show-name />
 		</div>
-		<div v-for="item in content" :key="`${item.__component}-${item.id}`">
+		<div v-for='item in content' :key='`${item.__component}-${item.id}`'>
 			<p
 				v-if="item.__component === 'generic.rich-text'"
-				class="prose-article text-justify font-text"
-				v-html="item.text"
+				class='prose-article text-justify font-text'
+				v-html='item.text'
 			/>
 			<Question
 				v-if="item.__component === 'relation.question-connector'"
-				:questionId="item.question.data.id"
-				@model="getAnswer(item.question.data.id, $event)"
+				:questionId='item.question.data.id'
+				@model='getAnswer(item.question.data.id, $event)'
 			/>
 		</div>
-		<div class="flex items-center justify-between">
+		<div class='flex items-center justify-between'>
 			<div></div>
 			<button
-				type="submit"
-				@click.prevent="handleSubmit"
-				class="btn-accent flex items-center space-x-1"
-				:disabled="!isCompleted || isWaitingResult"
+				type='submit'
+				@click.prevent='handleSubmit'
+				class='btn-accent flex items-center space-x-1'
+				:disabled='!isCompleted || isWaitingResult'
 			>
 				<span>Submit</span>
-				<ChevronDoubleRightIcon class="h-4 w-4" />
+				<ChevronDoubleRightIcon class='h-4 w-4' />
 			</button>
 		</div>
 	</form>
@@ -67,14 +67,36 @@ const problemResponse = ref();
 
 watch(props, (newProps) => {
 	if (newProps.problemId) {
-		problemResponse.value = getProblem(props.problemId);
+		problemResponse.value = getProblem(props.problemId, {
+			populate: {
+				content: {
+					populate: {
+						question: {
+							fields: ['id'],
+						},
+					},
+				},
+				difficulty: true,
+			},
+		});
 	} else if (newProps.problemId === null) {
 		problemResponse.value = null;
 	}
 });
 
 if (props.problemId) {
-	problemResponse.value = getProblem(props.problemId);
+	problemResponse.value = getProblem(props.problemId, {
+		populate: {
+			content: {
+				populate: {
+					question: {
+						fields: ['id'],
+					},
+				},
+			},
+			difficulty: true,
+		},
+	});
 }
 
 // if there are new refs , the inner ref is destructed

@@ -1,10 +1,10 @@
 import qs from 'qs';
 import { useFetch } from '@/utils/fetch.js';
 
-export function getPartition(id) {
+export function getPartition(id, config= {}) {
 	const query = qs.stringify(
 		{
-			populate: ['topics'],
+			...config
 		},
 		{
 			encodeValuesOnly: true, // prettify URL

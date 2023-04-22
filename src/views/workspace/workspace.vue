@@ -46,7 +46,14 @@ const route = useRoute();
 const topicId = Number(route.params.topicId);
 const problemId = route.params.problemId;
 
-const { data } = getTopic(topicId);
+const { data } = getTopic(topicId, {
+	populate: {
+		knowledges: true,
+		problems: {
+			fields: ['id'],
+		},
+	},
+});
 const attributes = computed(() => {
 	return data.value?.data?.attributes;
 });

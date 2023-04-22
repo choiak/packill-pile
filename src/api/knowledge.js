@@ -1,15 +1,10 @@
 import qs from 'qs';
 import { useFetch } from '@/utils/fetch.js';
 
-export function getKnowledge(id) {
+export function getKnowledge(id, config = {}) {
 	const query = qs.stringify(
 		{
-			populate: {
-				author: {
-					populate: ['avatar'],
-				},
-				areas: true,
-			},
+			...config
 		},
 		{
 			encodeValuesOnly: true, // prettify URL

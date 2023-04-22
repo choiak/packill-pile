@@ -1,15 +1,10 @@
 import qs from 'qs';
 import { useFetch } from '@/utils/fetch.js';
 
-export function getTopic(id) {
+export function getTopic(id, config = {}) {
 	const query = qs.stringify(
 		{
-			populate: {
-				knowledges: true,
-				problems: {
-					fields: ['id'],
-				},
-			},
+			...config,
 		},
 		{
 			encodeValuesOnly: true, // prettify URL

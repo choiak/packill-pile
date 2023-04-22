@@ -2,10 +2,11 @@ import qs from 'qs';
 import { useFetch } from '@/utils/fetch.js';
 import { requestWIthValidation } from '@/utils/request.js';
 
-export function getPackage(id) {
+export function getPackage(id, config = {}) {
 	const query = qs.stringify(
 		{
 			populate: ['areas'],
+			...config,
 		},
 		{
 			encodeValuesOnly: true, // prettify URL
@@ -21,11 +22,12 @@ export function getPackage(id) {
 	);
 }
 
-export function listPackages() {
+export function getPackages(config = {}) {
 	const query = qs.stringify(
 		{
 			populate: ['areas'],
 			fields: ['name', 'description', 'areas', 'certificated'],
+			...config,
 		},
 		{
 			encodeValuesOnly: true, // prettify URL

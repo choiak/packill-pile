@@ -41,7 +41,7 @@ const props = defineProps({
 	userId: String,
 });
 
-const userObject = await getUser(props.userId);
+const userObject = getUser(props.userId);
 
 let userAvatarUrl;
 

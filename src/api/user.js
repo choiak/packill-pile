@@ -1,7 +1,7 @@
 import qs from 'qs';
 import { useFetch } from '@/utils/fetch.js';
 
-export function getUser(username) {
+export function getUser(username, config = {}) {
 	const query = qs.stringify(
 		{
 			filters: {
@@ -9,7 +9,7 @@ export function getUser(username) {
 					$eq: username,
 				},
 			},
-			populate: ['avatar', 'role', 'currentPackage'],
+			...config,
 		},
 		{
 			encodeValuesOnly: true, // prettify URL
