@@ -2,7 +2,7 @@ import axios from 'axios';
 import { getToken } from '@/api/auth.js';
 
 const request = axios.create({
-	baseURL: 'http://192.168.1.22:1337',
+	baseURL: 'http://localhost:1337',
 	timeout: 5000,
 });
 
@@ -30,7 +30,7 @@ request.interceptors.response.use(
 );
 
 const requestWIthValidation = axios.create({
-	baseURL: 'http://192.168.1.22:1337',
+	baseURL: 'http://localhost:1337',
 	timeout: 5000,
 });
 
