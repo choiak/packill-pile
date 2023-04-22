@@ -1,5 +1,5 @@
 <template>
-	<div class="flex flex-col justify-between">
+	<div class="flex flex-col justify-between border-r bg-white px-6 py-4">
 		<NavSection />
 		<UserSection />
 	</div>
