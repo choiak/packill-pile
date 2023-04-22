@@ -3,13 +3,18 @@ import { validateToken } from '@/api/auth.js';
 import Login from '@/views/session/login.vue';
 import Register from '@/views/session/register.vue';
 import ForgetPassword from '@/views/session/forgetPassword.vue';
-import Index from '@/layouts/workspace/index.vue';
+import ResetPassword from '@/views/session/resetPassword.vue';
+import Dashboard from '@/views/pile/dashboard.vue';
 import User from '@/views/user/user.vue';
 import Workspace from '@/views/workspace/workspace.vue';
 import Packages from '@/views/workspace/packages.vue';
 import Package from '@/views/workspace/package.vue';
-import UserSettings from '@/views/user/userSettings.vue';
+import UserSettings from '@/views/settings/settings.vue';
+import General from '@/layouts/settings/general.vue';
 import NotFound from '@/views/pile/404.vue';
+import Security from '@/layouts/settings/security.vue';
+import Activities from '@/layouts/user/activities.vue';
+import Projects from '@/layouts/user/projects.vue';
 
 const routes = [
 	{
@@ -28,24 +33,67 @@ const routes = [
 		component: ForgetPassword,
 	},
 	{
+		name: 'ResetPassword',
+		path: '/reset-password',
+		component: ResetPassword,
+	},
+	{
 		name: 'Dashboard',
 		path: '/dashboard',
-		component: Index,
+		component: Dashboard,
 	},
 	{
 		name: 'User',
-		path: '/users/:id',
+		path: '/users/:username',
 		component: User,
+		redirect: {
+			name: 'UserActivity',
+		},
+		children: [
+			{
+				name: 'UserActivities',
+				path: 'activities',
+				component: Activities,
+			},
+			{
+				name: 'userProjects',
+				path: 'projects',
+				component: Projects,
+			},
+		],
 	},
 	{
 		name: 'UserSettings',
 		path: '/settings',
 		component: UserSettings,
+		redirect: {
+			name: 'SettingsGeneral',
+		},
+		children: [
+			{
+				name: 'SettingsGeneral',
+				path: 'general',
+				component: General,
+			},
+			{
+				name: 'SettingsSecurity',
+				path: 'security',
+				component: Security,
+			},
+		],
 	},
 	{
 		name: 'Workspace',
-		path: '/workspace/:topicId',
+		path: '/workspace/:topicId/:problemId?',
 		component: Workspace,
+	},
+	{
+		name: 'Topic',
+		path: '/topics/:id',
+	},
+	{
+		name: 'Problem',
+		path: '/problems/:id',
 	},
 	{
 		name: 'Packages',
@@ -53,7 +101,7 @@ const routes = [
 		component: Packages,
 	},
 	{
-		name:'Package',
+		name: 'Package',
 		path: '/packages/:id',
 		component: Package,
 	},
@@ -65,7 +113,7 @@ const routes = [
 	{
 		path: '/:pathMatch(.*)*',
 		redirect: '/404',
-	}
+	},
 ];
 
 const router = createRouter({
