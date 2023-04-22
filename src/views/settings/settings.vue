@@ -59,7 +59,7 @@ import {
 	CheckIcon,
 	EnvelopeIcon,
 } from '@heroicons/vue/24/outline/index.js';
-import VenustExpandable from '@/components/venust/expandable/expandable.vue';
+import VenustExpandable from '@/components/venust/expandable/venustExpandable.vue';
 import VenustInput from '@/components/venust/input/venustInput.vue';
 import { computed, reactive, ref, watch } from 'vue';
 import SettingsValidationPrompt from '@/layouts/user/settingsValidationPrompt.vue';
