@@ -100,23 +100,23 @@ import { ref } from 'vue';
 import { register } from '@/api/auth.js';
 import router from '@/router/index.js';
 
-let email = ref('');
-let password = ref('');
-let username = ref('');
+const email = ref('');
+const password = ref('');
+const username = ref('');
 
 function getEmail(value) {
-	email = value;
+	email.value = value;
 }
 
 function getPassword(value) {
-	password = value;
+	password.value = value;
 }
 
 function getUsername(value) {
-	username = value;
+	username.value = value;
 }
 
 async function registerHandler() {
-	await register(username, email, password);
+	await register(username.value, email.value, password.value);
 }
 </script>

@@ -4,7 +4,7 @@
 			class="w-full space-y-10 px-6 text-center sm:w-7/12 lg:w-5/12 lg:px-12 xl:px-32"
 		>
 			<h6 class="font-semibold">Sign in</h6>
-			<form class="mt-6 space-y-6">
+			<form class="mt-6 space-y-6" @keydown.enter.prevent="loginHandler">
 				<Textbox
 					placeholder="Email"
 					default-type="email"
@@ -78,18 +78,18 @@ import { ref } from 'vue';
 import { login } from '@/api/auth.js';
 import router from '@/router/index.js';
 
-let email = ref('');
-let password = ref('');
+const email = ref('');
+const password = ref('');
 
 function getEmail(value) {
-	email = value;
+	email.value = value;
 }
 
 function getPassword(value) {
-	password = value;
+	password.value = value;
 }
 
 async function loginHandler() {
-	await login(email, password);
+	await login(email.value, password.value);
 }
 </script>
