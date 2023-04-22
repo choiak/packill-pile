@@ -1,13 +1,4 @@
-<template>
-	<div
-		v-if="state.isActive"
-		v-click-away="close"
-		class="absolute w-max"
-		:class="[expandToCSS, alignmentToCSS, orientationToCSS]"
-	>
-		<slot />
-	</div>
-</template>
+<template></template>
 
 <script setup>
 import { computed, inject } from 'vue';
