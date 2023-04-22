@@ -1,8 +1,6 @@
-<script setup></script>
-
 <template>
 	<link
-		href="https://api.fontshare.com/v2/css?f[]=general-sans@1,2&display=swap"
+		href="https://api.fontshare.com/v2/css?f[]=satoshi@1,2&display=swap"
 		rel="stylesheet"
 	/>
 	<link
@@ -13,9 +11,13 @@
 		href="https://api.fontshare.com/v2/css?f[]=azeret-mono@2,1&display=swap"
 		rel="stylesheet"
 	/>
+	<link
+		href="https://api.fontshare.com/v2/css?f[]=zodiak@1,2&display=swap"
+		rel="stylesheet"
+	/>
 	<Suspense>
-		<div id="app" class="flex justify-center bg-stone-100 w-screen h-screen">
-			<router-view class='flex-1 max-w-[1920px] min-h-[392px]'/>
-		</div>
+		<router-view class="h-full w-full" :key="$route.path" />
 	</Suspense>
 </template>
+
+<script setup></script>
