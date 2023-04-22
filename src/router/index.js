@@ -47,7 +47,7 @@ const routes = [
 		path: '/users/:username',
 		component: User,
 		redirect: {
-			name: 'UserActivity',
+			name: 'UserActivities',
 		},
 		children: [
 			{
