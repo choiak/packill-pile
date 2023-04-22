@@ -4,17 +4,17 @@
 			:type="inputType"
 			:placeholder="placeholder"
 			:autocomplete="autocomplete"
-			class="w-full border border-gray-300 bg-neutral-200/40 px-3 py-2 shadow-sm focus:border focus:border-blue-600 focus:bg-white focus:shadow-lg focus:shadow-blue-100 focus:ring-0 active:ring-0"
+			class="input disabled:cursor-not-allowed"
 			:class="inputClass"
 			:required="required"
-			:disabled='disabled'
-			v-model="inputValue"
+			:disabled="disabled"
+			v-model="input"
 			@input="sendParent"
 		/>
 		<div
 			v-if="hasIcon"
 			@click="show()"
-			class="border bg-neutral-200/40 py-2 px-2 shadow-sm"
+			class="border bg-neutral-50 px-2 py-2 shadow-sm"
 			:class="[toggledStyles, toggleableStyles, buttonClass]"
 		>
 			<slot><EyeIcon class="h-6 w-6 text-gray-500" /></slot>
@@ -24,7 +24,7 @@
 
 <script setup>
 import { EyeIcon } from '@heroicons/vue/24/outline';
-import { computed, reactive, ref } from 'vue';
+import { computed, reactive, ref, watch } from 'vue';
 
 const emit = defineEmits(['model']);
 const props = defineProps({
@@ -42,11 +42,17 @@ const props = defineProps({
 	toggledType: String,
 });
 
-const inputValue = ref(props.defaultValue);
+const input = ref();
+watch(props, (newValue) => {
+	if (newValue.defaultValue) {
+		input.value = props.defaultValue;
+	}
+});
+
 const state = reactive({ isActive: false });
 
 function sendParent() {
-	emit('model', inputValue.value);
+	emit('model', input.value);
 }
 
 function show() {
