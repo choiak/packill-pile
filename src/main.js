@@ -4,7 +4,7 @@ import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 import './style.css';
 import App from './App.vue';
 import router from './router/index';
-import 'highlight.js/styles/stackoverflow-light.css';
+import 'highlight.js/styles/github.css';
 import InstantSearch from 'vue-instantsearch/vue3/es';
 
 const app = createApp(App);

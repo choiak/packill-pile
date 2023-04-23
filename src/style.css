@@ -70,7 +70,7 @@
 	}
 
 	.prose-article .hint {
-		@apply bg-slate-50 rounded-lg my-5 divide-y;
+		@apply bg-slate-50 rounded-lg my-5 divide-y shadow active:scale-[97%] transition border;
 	}
 
 	.prose-article .hint-heading {
@@ -82,23 +82,23 @@
 	}
 
 	.prose-article .focus {
-		@apply bg-yellow-50 rounded-lg my-5 divide-y divide-yellow-300;
+		@apply bg-orange-950 rounded-lg my-5 divide-y divide-orange-300;
 	}
 
 	.prose-article .focus-heading {
-		@apply rounded-t-lg text-yellow-600 flex items-center justify-between font-bold uppercase px-4 py-2 bg-stripes bg-stripes-yellow-100;
+		@apply rounded-t-lg text-orange-50 flex items-center justify-between font-bold uppercase px-4 py-2 bg-stripes bg-stripes-orange-900;
 	}
 
 	.prose-article .focus-content {
-		@apply p-4;
+		@apply p-4 text-orange-50;
 	}
 
 	.prose-article .extension {
-		@apply bg-sky-50 rounded-lg my-5 divide-y divide-sky-300;
+		@apply bg-gradient-to-tr from-blue-50 to-purple-50 rounded-lg my-5 divide-y divide-purple-300;
 	}
 
 	.prose-article .extension-heading {
-		@apply rounded-t-lg text-sky-600 flex items-center justify-between font-bold uppercase px-4 py-2 bg-stripes bg-stripes-sky-100;
+		@apply rounded-t-lg text-purple-600 flex items-center justify-between font-bold uppercase px-4 py-2 bg-stripes bg-stripes-purple-100;
 	}
 
 	.prose-article .extension-content {
