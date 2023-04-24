@@ -1,7 +1,7 @@
 <template>
 	<div class="flex items-center">
 		<textarea
-			class="min-h-fit w-full rounded-lg border border-gray-300 bg-neutral-50 px-3 py-2 shadow-sm focus:border focus:border-blue-600 focus:bg-white focus:shadow-lg focus:shadow-blue-100 focus:ring-0 active:ring-0"
+			class="min-h-fit w-full rounded-lg border border-gray-300 bg-neutral-50 px-3 py-2 shadow-sm focus:border focus:border-blue-600 focus:bg-white focus:shadow-lg focus:shadow-blue-100 focus:ring-0 active:ring-0 disabled:brightness-95 disabled:cursor-not-allowed"
 			:required="required"
 			:disabled="disabled"
 			:placeholder="placeholder"

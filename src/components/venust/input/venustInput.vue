@@ -4,7 +4,7 @@
 			:type="inputType"
 			:placeholder="placeholder"
 			:autocomplete="autocomplete"
-			class="input disabled:cursor-not-allowed"
+			class="input disabled:cursor-not-allowed disabled:brightness-90 peer"
 			:class="inputClass"
 			:required="required"
 			:disabled="disabled"
@@ -14,7 +14,7 @@
 		<div
 			v-if="hasIcon"
 			@click="show()"
-			class="border bg-neutral-50 px-2 py-2 shadow-sm"
+			class="border bg-neutral-50 px-2 py-2 shadow-sm peer-disabled:brightness-95 peer-disabled:cursor-not-allowed"
 			:class="[toggledStyles, toggleableStyles, buttonClass]"
 		>
 			<slot><EyeIcon class="h-6 w-6 text-gray-500" /></slot>
