@@ -1,12 +1,14 @@
 <template>
-	<div @click="toggle" class="relative">
-		<slot name="toggler" />
+	<div @click.prevent="toggle" class="relative">
+		<div ref='elToggler'>
+			<slot name="toggler" />
+		</div>
 		<transition name="fade">
 			<div
 				v-show="isActive"
 				class="absolute z-20 w-max"
-				:class="[expandToCSS, alignmentToCSS, orientationToCSS]"
-				v-on-click-outside="close"
+				v-on-click-outside="onClickOutsideHandler"
+				ref='elContainer'
 			>
 				<slot name="container" />
 			</div>
@@ -15,57 +17,64 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+import { nextTick, onUnmounted, ref, unref } from 'vue';
 import { vOnClickOutside } from '@vueuse/components';
+import { createPopper } from '@popperjs/core';
 
 const props = defineProps({
-	expand: String,
-	alignment: String,
-	orientation: String,
+	modifiers: {
+		type: Array,
+		default: [],
+	},
 });
 
 const isActive = ref(false);
 
+const elToggler = ref(null);
+const elContainer = ref(null);
+let popperInstance = null;
+
 function toggle() {
 	isActive.value = !isActive.value;
+	if (isActive.value) {
+		createPopperInstance()
+	}
 }
 
 function close() {
 	isActive.value = false;
 }
 
-const expandToCSS = computed(() => {
-	switch (props.expand) {
-		case 'top':
-			return 'bottom-full mb-2';
-		case 'right':
-			return 'left-full ml-4';
-		case 'left':
-			return 'right-full mr-4';
-		default:
-			return 'mt-2';
-	}
-});
+const onClickOutsideHandler = [
+	() => {
+		close()
+	},
+	{ ignore: [elToggler] }
+]
 
-const alignmentToCSS = computed(() => {
-	switch (props.alignment) {
-		case 'right':
-			return 'right-0';
-		case 'center':
-			return 'top-1/2 -translate-y-1/2';
-		case 'top':
-			return 'top-0';
-		default:
-			return 'bottom-0';
-	}
-});
+const createPopperInstance = () => {
+	popperInstance = createPopper(unref(elToggler), unref(elContainer), {
+		modifiers: [
+			{
+				name: 'offset',
+				options: {
+					offset: [0, 4],
+				},
+			},
+			...props.modifiers,
+		],
+	});
+	nextTick(() => {
+		popperInstance.update();
+	});
+};
 
-const orientationToCSS = computed(() => {
-	switch (props.orientation) {
-		case 'horizontal':
-			return 'flex';
-		default:
-			return '';
-	}
+const destroyPopperInstance = () => {
+	popperInstance?.destroy?.();
+	popperInstance = null;
+};
+
+onUnmounted(() => {
+	destroyPopperInstance();
 });
 </script>
