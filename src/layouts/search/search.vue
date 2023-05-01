@@ -503,10 +503,9 @@ import MultiTagSelector from '@/components/pile/multiTagSelector.vue';
 import { instantMeiliSearch } from '@meilisearch/instant-meilisearch';
 import VenustBadge from '@/components/venust/badge/venustBadge.vue';
 import { computed, ref } from 'vue';
-import { onKeyStroke } from '@vueuse/core';
+import { onKeyStroke, useMagicKeys, whenever } from '@vueuse/core';
 import { vOnClickOutside } from '@vueuse/components';
 import SearchPreview from '@/layouts/search/searchPreview.vue';
-import { useRoute } from 'vue-router';
 import VenustAvatar from '@/components/venust/avatar/venustAvatar.vue';
 
 const searchClient = instantMeiliSearch(
@@ -524,9 +523,12 @@ function close() {
 	isActive.value = false;
 }
 
-onKeyStroke('Control' && 'k', (e) => {
-	e.preventDefault();
-	toggle();
+const keys = useMagicKeys();
+
+whenever(keys.ctrl_k, (isPressed) => {
+	if (isPressed) {
+		toggle();
+	}
 });
 
 onKeyStroke('Escape', (e) => {
