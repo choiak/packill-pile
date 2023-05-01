@@ -63,9 +63,9 @@ import Textbox from '@/components/venust/input/venustInput.vue';
 import router from '@/router/index.js';
 import { ref } from 'vue';
 
-let email = ref('');
+const email = ref('');
 
 function getEmail(value) {
-	email = value;
+	email.value = value;
 }
 </script>
