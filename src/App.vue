@@ -16,7 +16,7 @@
 		rel="stylesheet"
 	/>
 	<Suspense>
-		<router-view class="h-full w-full" :key="$route.path" />
+		<router-view class="h-full w-full"/>
 	</Suspense>
 </template>
 
