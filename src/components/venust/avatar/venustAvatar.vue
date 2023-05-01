@@ -10,13 +10,12 @@
 	<div
 		class="rounded-full border-2 p-0.5"
 		:class="{
-			'border-neutral-300': !isOnline,
-			'border-dashed': !isOnline,
+			'border-neutral-300 border-dashed': !isOnline,
 			'border-teal-600': isOnline,
 		}"
 		v-else
 	>
-		<div class="h-[64px] w-[64px] overflow-hidden rounded-full">
+		<div class="h-16 w-16 overflow-hidden rounded-full">
 			<img
 				v-if="avatarUrlRelative"
 				:src="avatarUrlFull"
@@ -37,7 +36,7 @@ const props = defineProps({
 });
 
 const userAvatar = ref();
-const isOnline = ref(false); //dummy
+const isOnline = ref(false);
 
 if (props.userId) {
 	userAvatar.value = getUserAvatar(props.userId);

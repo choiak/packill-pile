@@ -20,6 +20,4 @@ import {
 	RectangleGroupIcon,
 	Square3Stack3DIcon,
 } from '@heroicons/vue/24/outline';
-import { useUserStore } from '@/store/index.js';
-import DividerHorizontal from '@/components/venust/divider/dividerHorizontal.vue';
 </script>

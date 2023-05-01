@@ -24,9 +24,9 @@ import Knowledge from '@/layouts/knowledge/knowledge.vue';
 import { computed } from 'vue';
 
 const route = useRoute();
-const topicId = route.params.topicId;
+const paramTopicId = route.params.topicId;
 
-const topicResponse = getTopic(topicId, {
+const topicResponse = getTopic(paramTopicId, {
 	populate: {
 		knowledges: true,
 		problems: {

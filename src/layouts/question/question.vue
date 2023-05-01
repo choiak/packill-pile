@@ -29,7 +29,11 @@ const questionResponse = ref();
 watch(props, (newProps) => {
 	if (newProps.questionId) {
 		questionResponse.value = getQuestion(props.questionId, {
-			populate: ['content'],
+			populate: {
+				content: {
+					populate: '*',
+				},
+			},
 		});
 	} else if (newProps.questionId === null) {
 		questionResponse.value = null;

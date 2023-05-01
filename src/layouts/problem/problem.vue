@@ -15,12 +15,12 @@
 						</button>
 					</template>
 					<template #container>
-						<ProblemList :topic-id="topicId" />
+						<ProblemList :topic-id="paramTopicId" />
 					</template>
 				</VenustDropdown>
 				<button
 					class="rounded-lg border p-0.5 text-neutral-700 transition hover:brightness-95 active:scale-90"
-					v-if="problemId"
+					v-if="paramProblemId"
 					:class="{
 						'bg-white': !submissionsIsActive,
 						'border-blue-600 bg-blue-600 text-white':
@@ -34,31 +34,30 @@
 		</div>
 		<div
 			class="relative flex-1 overflow-auto px-6 py-4"
-			v-if="problemId !== 0"
+			v-if="paramProblemId !== 0"
 		>
 			<ProblemContent
-				:problem-id="problemId"
+				:problem-id="paramProblemId"
 				v-show="!submissionsIsActive"
 			/>
-			<Submissions :problem-id="problemId" v-show="submissionsIsActive" />
+			<Submissions :problem-id="paramProblemId" v-show="submissionsIsActive" />
 		</div>
 	</div>
 </template>
 
 <script setup>
 import { ClockIcon, ListBulletIcon } from '@heroicons/vue/24/outline';
-import { PencilIcon, DocumentCheckIcon } from '@heroicons/vue/24/solid';
+import { PencilIcon } from '@heroicons/vue/24/solid';
 import { ref } from 'vue';
 import Submissions from '@/layouts/submission/problemSubmissions.vue';
 import ProblemContent from '@/layouts/problem/problemContent.vue';
-import VenustInput from '@/components/venust/input/venustInput.vue';
 import VenustDropdown from '@/components/venust/dropdown/venustDropdown.vue';
 import ProblemList from '@/layouts/problem/problemList.vue';
+import { useRoute } from 'vue-router';
 
-const props = defineProps({
-	topicId: Number,
-	problemId: Number,
-});
+const route = useRoute();
+const paramTopicId = Number(route.params.topicId) || null;
+const paramProblemId = Number(route.params.problemId) || null;
 
 const submissionsIsActive = ref(false);
 
@@ -66,5 +65,4 @@ function toggleSubmissions() {
 	submissionsIsActive.value = !submissionsIsActive.value;
 }
 
-console.log(props.problemId);
 </script>

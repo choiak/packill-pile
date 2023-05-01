@@ -27,12 +27,8 @@
 
 <script setup>
 import { Cog6ToothIcon, SwatchIcon, BellIcon } from '@heroicons/vue/24/outline';
-import { useUserStore } from '@/store/index.js';
-import router from '@/router/index.js';
 import VenustDropdown from '@/components/venust/dropdown/venustDropdown.vue';
 import VenustDropdownContainer from '@/components/venust/dropdown/venustDropdownContainer.vue';
 import ProfileCard from '@/layouts/user/profileCard.vue';
 import Swatch from '@/layouts/utils/swatch.vue';
-
-const userStore = useUserStore();
 </script>

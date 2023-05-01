@@ -8,7 +8,7 @@
 						<p>Users</p>
 						<ChevronRightIcon class="h-4 w-4 text-neutral-500" />
 						<AtSymbolIcon class="h-4 w-4 text-neutral-500" />
-						<p>{{ attributes?.username }}</p>
+						<p>{{ username }}</p>
 					</div>
 				</div>
 			</Dock>
@@ -23,16 +23,16 @@
 						/>
 						<div class="space-y-2">
 							<h3 class="font-semibold">
-								{{ attributes?.displayName }}
+								{{ displayName }}
 							</h3>
 							<div class="flex items-center space-x-1">
 								<MapPinIcon class="h-4 w-4 text-neutral-500" />
 								<a
 									target="_blank"
 									class="text-sm font-medium text-sky-800"
-									:href="`https://www.google.com.hk/maps/search/${attributes?.location}`"
+									:href="`https://www.google.com.hk/maps/search/${location}`"
 								>
-									{{ attributes?.location }}
+									{{ location }}
 								</a>
 							</div>
 						</div>
@@ -46,17 +46,17 @@
 								<AtSymbolIcon
 									class="h-5 w-5 text-neutral-500"
 								/>
-								<p>{{ attributes?.username }}</p>
+								<p>{{ username }}</p>
 							</div>
 							<div class="flex items-center space-x-1">
 								<EnvelopeIcon
 									class="h-5 w-5 text-neutral-500"
 								/>
 								<a
-									:href="`mailto:${attributes?.email}`"
+									:href="`mailto:${email}`"
 									class="text-sky-800"
 								>
-									{{ attributes?.email }}
+									{{ email }}
 								</a>
 							</div>
 						</div>
@@ -66,7 +66,7 @@
 							>
 								Personal Biography
 							</h6>
-							<p class="tracking-wide">{{ attributes?.bio }}</p>
+							<p>{{ bio }}</p>
 						</div>
 						<div class="space-y-2">
 							<h6
@@ -76,7 +76,7 @@
 							</h6>
 							<div class="flex items-center space-x-1">
 								<CakeIcon class="h-5 w-5 text-neutral-500" />
-								<p>{{ birthdayVerbose }}</p>
+								<p>{{ birthdayDateString }}</p>
 							</div>
 						</div>
 					</div>
@@ -87,10 +87,7 @@
 							:to="`/users/${username}/activities`"
 							class="relative before:absolute before:-bottom-2 before:left-1/2 before:h-1 before:w-4 before:-translate-x-1/2 before:rounded-full before:bg-blue-600"
 							:class="{
-								'text-2xl':
-									route.path ===
-									`/users/${username}/activities`,
-								'font-bold':
+								'text-2xl font-bold':
 									route.path ===
 									`/users/${username}/activities`,
 								'before:hidden':
@@ -104,10 +101,7 @@
 							:to="`/users/${username}/projects`"
 							class="relative before:absolute before:-bottom-2 before:left-1/2 before:h-1 before:w-4 before:-translate-x-1/2 before:rounded-full before:bg-blue-600"
 							:class="{
-								'text-2xl':
-									route.path ===
-									`/users/${username}/projects`,
-								'font-bold':
+								'text-2xl font-bold':
 									route.path ===
 									`/users/${username}/projects`,
 								'before:hidden':
@@ -117,7 +111,6 @@
 						>
 							Projects
 						</router-link>
-						<router-link to="/settings/subscription"></router-link>
 					</div>
 					<router-view />
 				</div>
@@ -157,22 +150,44 @@ import {
 import { computed } from 'vue';
 
 const route = useRoute();
-const username = route.params.username;
+const paramUsername = route.params.username;
 
-const { response, data, error, loading, retry } = getUser(username, {
+const userResponse = getUser(paramUsername, {
 	populate: ['avatar', 'role', 'currentPackage'],
 });
 
-console.log(data);
-
-const attributes = computed(() => {
-	if (data.value) {
-		return data.value[0];
+const user = computed(() => {
+	if (userResponse.data.value) {
+		return userResponse.data.value[0];
 	}
 });
 
-const birthdayVerbose = computed(() => {
-	const date = new Date(attributes.value?.birthday);
+const username = computed(() => {
+	return user.value?.username;
+});
+
+const displayName = computed(() => {
+	return user.value?.displayName;
+});
+
+const location = computed(() => {
+	return user.value?.location;
+});
+
+const email = computed(() => {
+	return user.value?.email;
+});
+
+const bio = computed(() => {
+	return user.value?.bio;
+})
+
+const birthday = computed(() => {
+	return user.value?.birthday;
+});
+
+const birthdayDateString = computed(() => {
+	const date = new Date(birthday.value);
 	return date.toLocaleDateString();
 });
 </script>

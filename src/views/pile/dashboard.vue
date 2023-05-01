@@ -23,10 +23,10 @@
 						</router-link>
 					</div>
 				</div>
-				<div class="space-y-4" v-if="data?.currentPackage">
+				<div class="space-y-4" v-if="currentPackage">
 					<div class="space-y-1">
 						<h5 class="font-semibold">
-							{{ data?.currentPackage?.name }}
+							{{ currentPackageName }}
 						</h5>
 					</div>
 					<div
@@ -34,6 +34,7 @@
 					>
 						<router-link
 							v-for="(topic, index) in upcomingTopics"
+							:key='topic.id'
 							:to="`/workspace/${topic.id}`"
 							class="flex h-32 flex-col-reverse justify-between rounded-lg border p-4 transition first:border-0 first:bg-gradient-to-tr first:from-purple-600 first:to-sky-100 first:text-white hover:brightness-90 active:scale-[97%]"
 						>
@@ -65,19 +66,44 @@ import {
 } from '@heroicons/vue/24/outline/index.js';
 import Index from '@/layouts/utils/index.vue';
 import { getMyProgress } from '@/api/me.js';
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import Dock from '@/layouts/dock/dock.vue';
 
-const { data, loading } = getMyProgress();
+const myProgressResponse = getMyProgress();
+
+const myProgressLoading = computed(() => {
+	return myProgressResponse.loading.value;
+});
+
+const myProgress = computed(() => {
+	return myProgressResponse.data.value;
+});
+
+const currentPackage = computed(() => {
+	return myProgress.value?.currentPackage;
+});
+
+const currentPackageName = computed(() => {
+	return currentPackage.value?.name;
+})
+
+const currentPartition = computed(() => {
+	return myProgress.value?.currentPartition;
+});
+
+const currentTopic = computed(() => {
+	return myProgress.value?.currentTopic;
+})
+
 const upcomingTopics = ref();
 
-watch(loading, (loading) => {
+watch(myProgressLoading, (loading) => {
 	if (!loading) {
-		const currentTopicIndex = data.value.currentPartition.topics.findIndex(
-			(it) => it.id === data.value.currentTopic.id,
+		const currentTopicIndex = currentPartition.value?.topics.findIndex(
+			(it) => it.id === currentTopic.value?.id,
 		);
 		upcomingTopics.value =
-			data.value.currentPartition.topics.slice(currentTopicIndex);
+			currentPartition.value?.topics.slice(currentTopicIndex);
 	}
 });
 </script>

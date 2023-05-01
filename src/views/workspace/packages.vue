@@ -15,16 +15,12 @@
 					tag="div"
 					class="flex-1 columns-3 space-y-4 overflow-auto"
 				>
-					<PackageCard
-						class="break-inside-avoid"
-						v-for="pack in packsFiltered"
-						:key="pack.id"
-						:to="`/packages/${pack.id}`"
-						:title="pack.attributes.name"
-						:description="pack.attributes.description"
-						:certificated="pack.attributes.certificated"
-						:areas="pack.attributes.areas.data"
-					/>
+					<router-link :to='`/packages/${pack.id}`' :key="pack.id" v-for="pack in packsFiltered" class="block break-inside-avoid">
+						<PackageCard
+							:key="pack.id"
+							:package-id='pack.id'
+						/>
+					</router-link>
 				</transition-group>
 				<div class="h-fit justify-between rounded-xl border bg-white">
 					<div
@@ -34,10 +30,7 @@
 							Filters
 						</p>
 						<div class="flex items-center space-x-1">
-							<VenustNumberBadge>
-								<span class="text-xs uppercase">Results:</span>
-								{{ packsFilteredCount.toFixed(0) }}
-							</VenustNumberBadge>
+							<VenustNumberBadge>{{ packsFilteredCount.toFixed(0) }}</VenustNumberBadge>
 							<FunnelIcon class="h-4 w-4 text-neutral-500" />
 						</div>
 					</div>
@@ -62,7 +55,6 @@
 import Index from '@/layouts/utils/index.vue';
 import { FunnelIcon } from '@heroicons/vue/24/solid';
 import { getPackages } from '@/api/package.js';
-import { getAreas } from '@/api/area.js';
 import { computed, ref, watch } from 'vue';
 import gsap from 'gsap';
 import Dock from '@/layouts/dock/dock.vue';
@@ -70,7 +62,11 @@ import PackageCard from '@/components/pile/package/packageCard.vue';
 import MultiAreaSelector from '@/components/pile/multiAreaSelector.vue';
 import VenustNumberBadge from '@/components/venust/badge/venustBadge.vue';
 
-const packageResponse = getPackages();
+const packageResponse = getPackages({
+	fields: ['id'],
+	populate: ['areas'],
+});
+
 const packageLoading = computed(() => {
 	return packageResponse.loading.value;
 });
@@ -97,11 +93,14 @@ watch(packsFiltered, (newList) => {
 const areasSelected = ref();
 function getAreasSelected(value) {
 	areasSelected.value = value;
-	filterPackages();
 }
 
+watch(areasSelected, () => {
+	filterPackages();
+})
+
 function filterPackages() {
-	if (!areasSelected.value || areasSelected.value.length) {
+	if (areasSelected.value.length) {
 		packsFiltered.value = packs.value.filter((pack) =>
 			pack.attributes.areas.data.some((area) =>
 				areasSelected.value.includes(area.id),
