@@ -1,5 +1,5 @@
 <template>
-	<VenustCard :to="to">
+	<VenustCard>
 		<div class="space-y-4">
 			<div class="flex items-center space-x-1">
 				<VenustTag
@@ -13,7 +13,7 @@
 				</VenustTag>
 			</div>
 			<div class="space-y-1">
-				<h4 class="font-bold">{{ title }}</h4>
+				<h4 class="font-bold">{{ name }}</h4>
 				<p class="line-clamp-3 text-neutral-700">{{ description }}</p>
 			</div>
 			<div class="flex items-end justify-between">
@@ -71,15 +71,38 @@ import {
 	WrenchScrewdriverIcon,
 } from '@heroicons/vue/24/outline/index.js';
 import VenustTag from '@/components/venust/tag/venustTag.vue';
+import { getPackage } from '@/api/package.js';
+import { computed, ref } from 'vue';
 
 const props = defineProps({
-	to: String,
-	title: String,
-	description: String,
-	areas: Array,
-	partitions: Number,
-	topics: Number,
-	projects: Number,
-	certificated: Boolean,
+	packageId: Number,
 });
+
+const packageResponse = getPackage(props.packageId, {
+	populate: ['areas'],
+});
+
+const pack = computed(() => {
+	return packageResponse.data.value?.data.attributes;
+});
+
+const name = computed(() => {
+	return pack.value?.name;
+})
+
+const description = computed(() => {
+	return pack.value?.description;
+})
+
+const certificated = computed(() => {
+	return pack.value?.certificated;
+})
+
+const areas = computed(() => {
+	return pack.value?.areas?.data;
+})
+
+const partitions = ref(7);
+const topics = ref(330);
+const projects = ref(15);
 </script>

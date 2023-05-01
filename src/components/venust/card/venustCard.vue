@@ -1,6 +1,5 @@
 <template>
-	<router-link
-		:to="to"
+	<div
 		class="group block rounded-lg bg-white shadow-lg transition hover:brightness-95"
 	>
 		<div class="relative p-2">
@@ -17,13 +16,9 @@
 		<div class="p-4">
 			<slot />
 		</div>
-	</router-link>
+	</div>
 </template>
 
 <script setup>
 import { ArrowUpRightIcon } from '@heroicons/vue/24/outline/index.js';
-
-const props = defineProps({
-	to: String,
-});
 </script>
