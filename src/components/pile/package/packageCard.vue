@@ -50,7 +50,7 @@
 				<div>
 					<button
 						class="btn-accent flex items-center space-x-1 rounded-full"
-						@click.prevent
+						@click.prevent='updateMyPackage(packageId)'
 					>
 						<CursorArrowRippleIcon class="h-5 w-5" />
 						<label>Unpack</label>
@@ -72,7 +72,8 @@ import {
 } from '@heroicons/vue/24/outline/index.js';
 import VenustTag from '@/components/venust/tag/venustTag.vue';
 import { getPackage } from '@/api/package.js';
-import { computed, ref } from 'vue';
+import { computed, onUnmounted, ref } from 'vue';
+import { updateMyPackage } from '@/api/me.js';
 
 const props = defineProps({
 	packageId: Number,
@@ -105,4 +106,10 @@ const areas = computed(() => {
 const partitions = ref(7);
 const topics = ref(330);
 const projects = ref(15);
+
+onUnmounted(() => {
+	if (packageResponse.canAbort.value) {
+		packageResponse.abort();
+	}
+});
 </script>

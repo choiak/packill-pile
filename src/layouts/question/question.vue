@@ -14,7 +14,7 @@
 </template>
 
 <script setup>
-import { computed, inject, ref, watch } from 'vue';
+import { computed, inject, onUnmounted, ref, watch } from 'vue';
 import { getQuestion } from '@/api/question.js';
 import Choice from '@/layouts/question/choice.vue';
 import Short from '@/layouts/question/short.vue';

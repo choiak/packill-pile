@@ -55,7 +55,7 @@
 import Index from '@/layouts/utils/index.vue';
 import { FunnelIcon } from '@heroicons/vue/24/solid';
 import { getPackages } from '@/api/package.js';
-import { computed, ref, watch } from 'vue';
+import { computed, onUnmounted, ref, watch } from 'vue';
 import gsap from 'gsap';
 import Dock from '@/layouts/dock/dock.vue';
 import PackageCard from '@/components/pile/package/packageCard.vue';
@@ -110,4 +110,10 @@ function filterPackages() {
 		packsFiltered.value = packs.value;
 	}
 }
+
+onUnmounted(() => {
+	if (packageResponse.canAbort.value) {
+		packageResponse.abort();
+	}
+});
 </script>

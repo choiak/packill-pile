@@ -147,7 +147,7 @@ import {
 	MapPinIcon,
 	ChevronRightIcon,
 } from '@heroicons/vue/24/outline';
-import { computed } from 'vue';
+import { computed, onUnmounted } from 'vue';
 
 const route = useRoute();
 const paramUsername = route.params.username;
@@ -189,5 +189,11 @@ const birthday = computed(() => {
 const birthdayDateString = computed(() => {
 	const date = new Date(birthday.value);
 	return date.toLocaleDateString();
+});
+
+onUnmounted(() => {
+	if (userResponse.canAbort.value) {
+		userResponse.abort();
+	}
 });
 </script>

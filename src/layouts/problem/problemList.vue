@@ -21,7 +21,7 @@
 
 <script setup>
 import { getProblems } from '@/api/problem.js';
-import { computed } from 'vue';
+import { computed, onUnmounted } from 'vue';
 import DifficultyIndicator from '@/components/pile/problem/difficultyIndicator.vue';
 import VenustBadge from '@/components/venust/badge/venustBadge.vue';
 
@@ -52,5 +52,11 @@ const pagination = computed(() => {
 
 const problemsCount = computed(() => {
 	return pagination.value?.total;
+});
+
+onUnmounted(() => {
+	if (problemsResponse.canAbort.value) {
+		problemsResponse.abort();
+	}
 });
 </script>

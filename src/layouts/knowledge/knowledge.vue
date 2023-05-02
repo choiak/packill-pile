@@ -30,7 +30,7 @@
 
 <script setup>
 import 'highlight.js/styles/a11y-dark.css';
-import { computed } from 'vue';
+import { computed, onUnmounted } from 'vue';
 import { getKnowledge } from '@/api/knowledge.js';
 
 const props = defineProps({
@@ -75,5 +75,11 @@ const publishDateTime = computed(() => {
 		hour: 'numeric',
 		minute: '2-digit',
 	});
+});
+
+onUnmounted(() => {
+	if (knowledgeResponse.canAbort.value) {
+		knowledgeResponse.abort();
+	}
 });
 </script>

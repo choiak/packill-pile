@@ -21,7 +21,7 @@
 
 <script setup>
 import Index from '@/layouts/utils/index.vue';
-import { computed, watch } from 'vue';
+import { computed, onUnmounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { getTopic } from '@/api/topic.js';
 import Topic from '@/layouts/topic/topic.vue';
@@ -31,7 +31,9 @@ import router from '@/router/index.js';
 
 const route = useRoute();
 const paramTopicId = Number(route.params.topicId) || null;
-const paramProblemId = Number(route.params.problemId) || null;
+const paramProblemId = computed(() => {
+	return Number(route.params.problemId) || null;
+});
 
 const topicResponse = getTopic(paramTopicId, {
 	populate: {
@@ -51,14 +53,24 @@ const topicTitle = computed(() => {
 
 const problemSuggested = getMyNextProblem(paramTopicId);
 const problemIdSuggested = computed(() => {
-	return problemSuggested.value;
+	return problemSuggested.id.value;
 });
 
 watch(problemIdSuggested, (newId) => {
-	if (!paramProblemId || (paramProblemId === '0' && newId !== 0)) {
-		setTimeout(() => {
-			router.push(`/workspace/${paramTopicId}/${newId}`);
-		}, 5000); //debug
+	if (!paramProblemId.value || (paramProblemId.value === '0' && newId !== 0)) {
+		router.push(`/workspace/${paramTopicId}/${newId}`);
+	}
+});
+
+watch(paramProblemId, () => {
+	if (topicResponse.canAbort.value) {
+		topicResponse.abort();
+	}
+});
+
+onUnmounted(() => {
+	if (topicResponse.canAbort.value) {
+		topicResponse.abort();
 	}
 });
 </script>

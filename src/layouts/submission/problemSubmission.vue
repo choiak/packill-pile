@@ -38,7 +38,7 @@
 <script setup>
 import { CheckIcon, XMarkIcon } from '@heroicons/vue/24/outline/index.js';
 import { getProblemSubmission } from '@/api/submission.js';
-import { computed } from 'vue';
+import { computed, onUnmounted } from 'vue';
 import QuestionSubmission from '@/layouts/submission/questionSubmission.vue';
 
 const props = defineProps({
@@ -96,5 +96,11 @@ const publishDateTime = computed(() => {
 
 const questionSubmissions = computed(() => {
 	return attributes.value?.questionSubmissions?.data;
+});
+
+onUnmounted(() => {
+	if (problemSubmissionResponse.canAbort.value) {
+		problemSubmissionResponse.abort();
+	}
 });
 </script>

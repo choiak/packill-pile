@@ -66,7 +66,7 @@ import {
 } from '@heroicons/vue/24/outline/index.js';
 import Index from '@/layouts/utils/index.vue';
 import { getMyProgress } from '@/api/me.js';
-import { computed, ref, watch } from 'vue';
+import { computed, onUnmounted, ref, watch } from 'vue';
 import Dock from '@/layouts/dock/dock.vue';
 
 const myProgressResponse = getMyProgress();
@@ -104,6 +104,12 @@ watch(myProgressLoading, (loading) => {
 		);
 		upcomingTopics.value =
 			currentPartition.value?.topics.slice(currentTopicIndex);
+	}
+});
+
+onUnmounted(() => {
+	if (myProgressResponse.canAbort.value) {
+		myProgressResponse.abort();
 	}
 });
 </script>

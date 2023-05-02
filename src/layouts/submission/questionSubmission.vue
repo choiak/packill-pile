@@ -15,7 +15,7 @@
 
 <script setup>
 import { getQuestionSubmission } from '@/api/submission.js';
-import { computed } from 'vue';
+import { computed, onUnmounted } from 'vue';
 import ChoiceSubmission from '@/layouts/submission/choiceSubmission.vue';
 import ShortSubmission from '@/layouts/submission/shortSubmission.vue';
 
@@ -76,4 +76,10 @@ const questionTypeIsShort = computed(() => {
 const answer = computed(() => {
 	return attributes.value?.rawAnswer?.value;
 });
+
+onUnmounted(() => {
+	if (questionSubmissionResponse.canAbort.value) {
+		questionSubmissionResponse.abort();
+	}
+})
 </script>

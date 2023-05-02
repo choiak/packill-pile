@@ -21,7 +21,7 @@ import { DocumentTextIcon } from '@heroicons/vue/24/solid';
 import { useRoute } from 'vue-router';
 import { getTopic } from '@/api/topic.js';
 import Knowledge from '@/layouts/knowledge/knowledge.vue';
-import { computed } from 'vue';
+import { computed, onUnmounted } from 'vue';
 
 const route = useRoute();
 const paramTopicId = route.params.topicId;
@@ -45,5 +45,11 @@ const attributes = computed(() => {
 
 const knowledges = computed(() => {
 	return attributes.value?.knowledges?.data;
+});
+
+onUnmounted(() => {
+	if (topicResponse.canAbort.value) {
+		topicResponse.abort()
+	}
 });
 </script>
