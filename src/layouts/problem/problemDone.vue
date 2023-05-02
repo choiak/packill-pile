@@ -45,7 +45,7 @@
 <script setup>
 import { DocumentCheckIcon } from '@heroicons/vue/24/solid';
 import VenustDropdown from '@/components/venust/dropdown/venustDropdown.vue';
-import { ClockIcon, ListBulletIcon } from '@heroicons/vue/24/outline/index.js';
+import { ListBulletIcon } from '@heroicons/vue/24/outline/index.js';
 import ProblemList from '@/layouts/problem/problemList.vue';
 import { PencilIcon } from '@heroicons/vue/24/solid/index.js';
 
