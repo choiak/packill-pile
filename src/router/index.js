@@ -15,6 +15,11 @@ import NotFound from '@/views/pile/404.vue';
 import Security from '@/layouts/settings/security.vue';
 import Activities from '@/layouts/user/activities.vue';
 import Projects from '@/layouts/user/projects.vue';
+import Subscription from '@/layouts/settings/subscription.vue';
+import DeleteAccount from '@/layouts/settings/deleteAccount.vue';
+import ProblemLoading from '@/layouts/problem/problemLoading.vue';
+import ProblemDone from '@/layouts/problem/problemDone.vue';
+import Problem from '@/layouts/problem/problem.vue';
 
 const routes = [
 	{
@@ -36,6 +41,11 @@ const routes = [
 		name: 'ResetPassword',
 		path: '/reset-password',
 		component: ResetPassword,
+	},
+	{
+		name: 'DeleteAccount',
+		path: '/delete-account',
+		component: DeleteAccount,
 	},
 	{
 		name: 'Dashboard',
@@ -80,12 +90,34 @@ const routes = [
 				path: 'security',
 				component: Security,
 			},
+			{
+				name: 'SettingsSubscription',
+				path: 'subscription',
+				component: Subscription,
+			}
 		],
 	},
 	{
 		name: 'Workspace',
-		path: '/workspace/:topicId/:problemId?',
+		path: '/workspace/:topicId',
 		component: Workspace,
+		children: [
+			{
+				name: 'WorkspaceProblemLoading',
+				path: '',
+				component: ProblemLoading
+			},
+			{
+				name: 'WorkspaceProblemDone',
+				path: '0',
+				component: ProblemDone,
+			},
+			{
+				name: 'WorkspaceProblem',
+				path: ':problemId',
+				component: Problem,
+			}
+		]
 	},
 	{
 		name: 'Topic',
