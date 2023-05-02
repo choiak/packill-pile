@@ -1,4 +1,4 @@
-import { useFetch } from '@/utils/fetch.js';
+import { useFetchValidated } from '@/utils/fetch.js';
 import qs from 'qs';
 
 export function getAreas(config = {}) {
@@ -8,11 +8,5 @@ export function getAreas(config = {}) {
 		},
 	);
 
-	return useFetch(
-		`http://localhost:1337/api/areas`,
-		{
-			method: 'GET',
-		},
-		true,
-	);
+	return useFetchValidated(`http://localhost:1337/api/areas?${query}`).get().json();
 }

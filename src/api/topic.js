@@ -1,5 +1,5 @@
 import qs from 'qs';
-import { useFetch } from '@/utils/fetch.js';
+import { useFetchValidated } from '@/utils/fetch.js';
 
 export function getTopic(id, config = {}) {
 	const query = qs.stringify(
@@ -11,11 +11,5 @@ export function getTopic(id, config = {}) {
 		},
 	);
 
-	return useFetch(
-		`http://localhost:1337/api/topics/${id}?${query}`,
-		{
-			method: 'GET',
-		},
-		true,
-	);
+	return useFetchValidated(`http://localhost:1337/api/topics/${id}?${query}`).get().json();
 }

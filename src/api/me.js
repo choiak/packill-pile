@@ -1,5 +1,6 @@
 import qs from 'qs';
-import { useFetch } from '@/utils/fetch.js';
+import { useFetchValidated } from '@/utils/fetch.js';
+import { useUserStore } from '@/store/index.js';
 
 export function getMyProgress(config = {}) {
 	const query = qs.stringify({
@@ -16,13 +17,7 @@ export function getMyProgress(config = {}) {
 		...config,
 	});
 
-	return useFetch(
-		`http://localhost:1337/api/users/me?${query}`,
-		{
-			method: 'GET',
-		},
-		true,
-	);
+	return useFetchValidated(`http://localhost:1337/api/users/me?${query}`).get().json();
 }
 
 export function getMe(config = {}) {
@@ -30,11 +25,71 @@ export function getMe(config = {}) {
 		...config,
 	});
 
-	return useFetch(
-		`http://localhost:1337/api/users/me?${query}`,
-		{
-			method: 'GET',
+	return useFetchValidated(`http://localhost:1337/api/users/me?${query}`).get().json();
+}
+
+export function updateMe(content, config = {}) {
+	const userStore = useUserStore();
+	const query = qs.stringify({
+			...config,
 		},
-		true,
-	);
+		{
+			encodeValuesOnly: true, // prettify URL
+		});
+
+	return useFetchValidated(`http://localhost:1337/api/users/${userStore.user.id}?${query}`).put({
+		...content,
+	}).json();
+}
+
+export function updateMyPassword(currentPassword, newPassword, confirmationPassword, config = {}) {
+	const query = qs.stringify({
+			...config,
+		},
+		{
+			encodeValuesOnly: true, // prettify URL
+		});
+
+	return useFetchValidated(`http://localhost:1337/api/auth/change-password?${query}`).post({
+		currentPassword: currentPassword,
+		password: newPassword,
+		passwordConfirmation: confirmationPassword,
+	}).json();
+}
+
+export function deleteMe(password, config = {}) {
+	const userStore = useUserStore();
+	const query = qs.stringify({
+			...config,
+		},
+		{
+			encodeValuesOnly: true, // prettify URL
+		});
+
+	// return useFetch(
+	// 	`http://localhost:1337/api/users/${userStore.user.id}?${query}`,
+	// 	{
+	// 		method: 'DELETE',
+	// 		data: {
+	// 			validationPassword: password,
+	// 		},
+	// 	},
+	// 	true,
+	// );
+}
+
+export function updateMyPackage(id, config = {}) {
+	const userStore = useUserStore();
+	const query = qs.stringify({
+		...config,
+	}, {
+		encodeValuesOnly: true,
+	});
+
+	return useFetchValidated(`http://localhost:1337/api/users/${userStore.user.id}?${query}`).put({
+		validationPassword: 'Anson914',
+		currentPackage: {
+			set: [id],
+		},
+	}).json();
 }

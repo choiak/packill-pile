@@ -72,7 +72,7 @@ import Dock from '@/layouts/dock/dock.vue';
 const myProgressResponse = getMyProgress();
 
 const myProgressLoading = computed(() => {
-	return myProgressResponse.loading.value;
+	return myProgressResponse.isFetching.value;
 });
 
 const myProgress = computed(() => {

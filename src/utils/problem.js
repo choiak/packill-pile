@@ -22,8 +22,8 @@ export function getMyNextProblem(topicId) {
 
 	const isLoading = computed(() => {
 		return (
-			problemsResponse.loading.value ||
-			problemsCompletedResponse.loading.value
+			problemsResponse.isFetching.value ||
+			problemsCompletedResponse.isFetching.value
 		);
 	});
 

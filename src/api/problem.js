@@ -1,4 +1,4 @@
-import { useFetch } from '@/utils/fetch.js';
+import { useFetchValidated } from '@/utils/fetch.js';
 import qs from 'qs';
 
 export function getProblem(id, config = {}) {
@@ -11,13 +11,7 @@ export function getProblem(id, config = {}) {
 		},
 	);
 
-	return useFetch(
-		`http://localhost:1337/api/problems/${id}?${query}`,
-		{
-			method: 'GET',
-		},
-		true,
-	);
+	return useFetchValidated(`http://localhost:1337/api/problems/${id}?${query}`).get().json();
 }
 
 export function getProblems(config = {}) {
@@ -30,11 +24,5 @@ export function getProblems(config = {}) {
 		},
 	);
 
-	return useFetch(
-		`http://localhost:1337/api/problems/?${query}`,
-		{
-			method: 'GET',
-		},
-		true,
-	);
+	return useFetchValidated(`http://localhost:1337/api/problems/?${query}`).get().json();
 }

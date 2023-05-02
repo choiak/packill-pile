@@ -68,7 +68,7 @@ const packageResponse = getPackages({
 });
 
 const packageLoading = computed(() => {
-	return packageResponse.loading.value;
+	return packageResponse.isFetching.value;
 });
 const packs = computed(() => {
 	return packageResponse.data?.value?.data;

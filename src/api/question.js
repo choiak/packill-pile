@@ -1,4 +1,4 @@
-import { useFetch } from '@/utils/fetch.js';
+import { useFetchValidated } from '@/utils/fetch.js';
 import qs from 'qs';
 
 export function getQuestion(id, config = {}) {
@@ -11,11 +11,5 @@ export function getQuestion(id, config = {}) {
 		},
 	);
 
-	return useFetch(
-		`http://localhost:1337/api/questions/${id}?${query}`,
-		{
-			method: 'GET',
-		},
-		true,
-	);
+	return useFetchValidated(`http://localhost:1337/api/questions/${id}?${query}`).get().json();
 }

@@ -1,4 +1,4 @@
-import { useFetch } from '@/utils/fetch.js';
+import { useFetchValidated } from '@/utils/fetch.js';
 import qs from 'qs';
 
 export const postProblemSubmission = (problemId, answers, config = {}) => {
@@ -11,21 +11,14 @@ export const postProblemSubmission = (problemId, answers, config = {}) => {
 		},
 	);
 
-	return useFetch(
-		`http://localhost:1337/api/problem-submissions?${query}`,
-		{
-			method: 'POST',
-			data: {
-				data: {
-					problem: {
-						connect: [problemId],
-					},
-					rawAnswers: answers,
-				},
+	return useFetchValidated(`http://localhost:1337/api/problem-submissions?${query}`).post({
+		data: {
+			problem: {
+				connect: [problemId],
 			},
+			rawAnswers: answers,
 		},
-		true,
-	);
+	}).json();
 };
 
 export const getProblemSubmissions = (config = {}) => {
@@ -38,13 +31,7 @@ export const getProblemSubmissions = (config = {}) => {
 		},
 	);
 
-	return useFetch(
-		`http://localhost:1337/api/problem-submissions?${query}`,
-		{
-			method: 'GET',
-		},
-		true,
-	);
+	return useFetchValidated(`http://localhost:1337/api/problem-submissions?${query}`).get().json();
 };
 
 export const getProblemSubmission = (id, config = {}) => {
@@ -57,13 +44,7 @@ export const getProblemSubmission = (id, config = {}) => {
 		},
 	);
 
-	return useFetch(
-		`http://localhost:1337/api/problem-submissions/${id}?${query}`,
-		{
-			method: 'GET',
-		},
-		true,
-	);
+	return useFetchValidated(`http://localhost:1337/api/problem-submissions/${id}?${query}`).get().json();
 };
 
 export const getQuestionSubmission = (id, config = {}) => {
@@ -76,11 +57,5 @@ export const getQuestionSubmission = (id, config = {}) => {
 		},
 	);
 
-	return useFetch(
-		`http://localhost:1337/api/question-submissions/${id}?${query}`,
-		{
-			method: 'GET',
-		},
-		true,
-	);
+	return useFetchValidated(`http://localhost:1337/api/question-submissions/${id}?${query}`).get().json();
 };

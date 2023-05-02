@@ -1,5 +1,5 @@
 import qs from 'qs';
-import { useFetch } from '@/utils/fetch.js';
+import { useFetchValidated } from '@/utils/fetch.js';
 
 export function getUser(username, config = {}) {
 	const query = qs.stringify(
@@ -16,13 +16,7 @@ export function getUser(username, config = {}) {
 		},
 	);
 
-	return useFetch(
-		`http://localhost:1337/api/users?${query}`,
-		{
-			method: 'GET',
-		},
-		true,
-	);
+	return useFetchValidated(`http://localhost:1337/api/users?${query}`).get().json();
 }
 
 export function getUserAvatar(id) {
@@ -36,11 +30,5 @@ export function getUserAvatar(id) {
 		},
 	);
 
-	return useFetch(
-		`http://localhost:1337/api/users/${id}?${query}`,
-		{
-			method: 'GET',
-		},
-		true,
-	);
+	return useFetchValidated(`http://localhost:1337/api/users/${id}?${query}`).get().json();
 }

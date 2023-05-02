@@ -1,46 +1,22 @@
-import { ref, unref, isRef, watchEffect } from 'vue';
-import axios from 'axios';
 import { getToken } from '@/api/auth.js';
+import { createFetch } from '@vueuse/core';
 
-export const useFetch = (url, config = {}, validate) => {
-	const data = ref();
-	const response = ref();
-	const error = ref();
-	const loading = ref();
-
-	const urlValue = unref(url);
-
-	if (validate) {
-		config['headers'] = {
-			Authorization: `Bearer ${getToken()}`,
-		};
-	}
-
-	const doFetch = async () => {
-		loading.value = true;
-		try {
-			const result = await axios({
-				url: urlValue,
-				...config,
-			});
-			response.value = result;
-			data.value = result.data;
-		} catch (e) {
-			error.value = e;
-		} finally {
-			loading.value = false;
-		}
-	};
-
-	if (isRef(url)) {
-		watchEffect(doFetch);
-	} else {
-		doFetch();
-	}
-
-	return { response, data, error, loading, retry: doFetch };
-};
-
+export const useFetchValidated = createFetch({
+	baseUrl: '',
+	options: {
+		beforeFetch({ options, cancel }) {
+			const token = getToken();
+			if (!token) {
+				cancel();
+			}
+			options.headers = {
+				...options.headers,
+				Authorization: `Bearer ${getToken()}`,
+			};
+			return { options };
+		},
+	},
+});
 // const cacheMap = reactive(new Map())
 // const useCachedFetch = (key, url, config) => {
 // 	const info = useFetch(url, {skip: true, ...config});
