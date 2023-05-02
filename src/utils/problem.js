@@ -3,49 +3,52 @@ import { getMe } from '@/api/me.js';
 import { computed, ref, watch } from 'vue';
 
 export function getMyNextProblem(topicId) {
-	const nextProblem = ref();
+	const id = ref();
 
 	const problemsResponse = getProblems({
-		fields: ['id'],
-		filters: {
+		fields: ['id'], filters: {
 			topic: topicId,
 		},
 	});
 	const problemsCompletedResponse = getMe({
-		fields: ['completedProblems'],
-		populate: {
+		fields: ['completedProblems'], populate: {
 			completedProblems: {
 				fields: ['id'],
 			},
 		},
 	});
 
+	const canAbort = computed(() => {
+		return problemsResponse.canAbort.value && problemsCompletedResponse.canAbort.value;
+	});
+
+	function abort() {
+		if (canAbort.value) {
+			if (problemsResponse.canAbort.value) {
+				problemsResponse.abort();
+			}
+			if (problemsCompletedResponse.canAbort.value) {
+				problemsCompletedResponse.abort();
+			}
+		}
+	}
+
 	const isLoading = computed(() => {
-		return (
-			problemsResponse.isFetching.value ||
-			problemsCompletedResponse.isFetching.value
-		);
+		return (problemsResponse.isFetching.value || problemsCompletedResponse.isFetching.value);
 	});
 
 	watch(isLoading, (newState) => {
 		if (!newState) {
 			const problems = problemsResponse.data.value.data;
-			const problemsCompleted =
-				problemsCompletedResponse.data.value.completedProblems;
-			const problemsUncompleted = problems.filter(
-				(problem) =>
-					!problemsCompleted.some(
-						(problemCompleted) =>
-							problemCompleted.id === problem.id,
-					),
-			);
+			const problemsCompleted = problemsCompletedResponse.data.value.completedProblems;
+			const problemsUncompleted = problems.filter((problem) => !problemsCompleted.some((problemCompleted) => problemCompleted.id === problem.id));
 			if (problemsUncompleted[0]) {
-				nextProblem.value = problemsUncompleted[0].id;
+				id.value = problemsUncompleted[0].id;
 			} else {
-				nextProblem.value = 0;
+				id.value = 0;
 			}
 		}
 	});
 
-	return nextProblem;
+	return { id, canAbort, abort };
 }
