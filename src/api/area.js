@@ -8,5 +8,5 @@ export function getAreas(config = {}) {
 		},
 	);
 
-	return useFetchValidated(`http://localhost:1337/api/areas?${query}`).get().json();
+	return useFetchValidated(`api/areas?${query}`).get().json();
 }

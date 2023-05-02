@@ -11,7 +11,7 @@ export const postProblemSubmission = (problemId, answers, config = {}) => {
 		},
 	);
 
-	return useFetchValidated(`http://localhost:1337/api/problem-submissions?${query}`).post({
+	return useFetchValidated(`api/problem-submissions?${query}`).post({
 		data: {
 			problem: {
 				connect: [problemId],
@@ -31,7 +31,7 @@ export const getProblemSubmissions = (config = {}) => {
 		},
 	);
 
-	return useFetchValidated(`http://localhost:1337/api/problem-submissions?${query}`).get().json();
+	return useFetchValidated(`api/problem-submissions?${query}`).get().json();
 };
 
 export const getProblemSubmission = (id, config = {}) => {
@@ -44,7 +44,7 @@ export const getProblemSubmission = (id, config = {}) => {
 		},
 	);
 
-	return useFetchValidated(`http://localhost:1337/api/problem-submissions/${id}?${query}`).get().json();
+	return useFetchValidated(`api/problem-submissions/${id}?${query}`).get().json();
 };
 
 export const getQuestionSubmission = (id, config = {}) => {
@@ -57,5 +57,5 @@ export const getQuestionSubmission = (id, config = {}) => {
 		},
 	);
 
-	return useFetchValidated(`http://localhost:1337/api/question-submissions/${id}?${query}`).get().json();
+	return useFetchValidated(`api/question-submissions/${id}?${query}`).get().json();
 };

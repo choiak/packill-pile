@@ -11,5 +11,5 @@ export function getQuestion(id, config = {}) {
 		},
 	);
 
-	return useFetchValidated(`http://localhost:1337/api/questions/${id}?${query}`).get().json();
+	return useFetchValidated(`api/questions/${id}?${query}`).get().json();
 }

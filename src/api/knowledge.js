@@ -11,5 +11,5 @@ export function getKnowledge(id, config) {
 		},
 	);
 
-	return useFetchValidated(`http://localhost:1337/api/knowledges/${id}?${query}`).get().json();
+	return useFetchValidated(`api/knowledges/${id}?${query}`).get().json();
 }

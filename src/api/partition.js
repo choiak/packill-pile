@@ -11,5 +11,5 @@ export function getPartition(id, config= {}) {
 		},
 	);
 
-	return useFetchValidated(`http://localhost:1337/api/partitions/${id}?${query}`).get().json();
+	return useFetchValidated(`api/partitions/${id}?${query}`).get().json();
 }

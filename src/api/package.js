@@ -12,7 +12,7 @@ export function getPackage(id, config = {}) {
 		},
 	);
 
-	return useFetchValidated(`http://localhost:1337/api/packages/${id}?${query}`).get().json();
+	return useFetchValidated(`api/packages/${id}?${query}`).get().json();
 }
 
 export function getPackages(config = {}) {
@@ -27,5 +27,5 @@ export function getPackages(config = {}) {
 		},
 	);
 
-	return useFetchValidated(`http://localhost:1337/api/packages/?${query}`).get().json();
+	return useFetchValidated(`api/packages/?${query}`).get().json();
 }

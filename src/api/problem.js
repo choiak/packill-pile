@@ -11,7 +11,7 @@ export function getProblem(id, config = {}) {
 		},
 	);
 
-	return useFetchValidated(`http://localhost:1337/api/problems/${id}?${query}`).get().json();
+	return useFetchValidated(`api/problems/${id}?${query}`).get().json();
 }
 
 export function getProblems(config = {}) {
@@ -24,5 +24,5 @@ export function getProblems(config = {}) {
 		},
 	);
 
-	return useFetchValidated(`http://localhost:1337/api/problems/?${query}`).get().json();
+	return useFetchValidated(`api/problems/?${query}`).get().json();
 }

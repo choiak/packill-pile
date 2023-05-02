@@ -9,5 +9,5 @@ export function getDifficulty(id, config = {}) {
 		},
 	);
 
-	return useFetchValidated(`http://localhost:1337/api/difficulties/${id}?${query}`).get().json();
+	return useFetchValidated(`api/difficulties/${id}?${query}`).get().json();
 }

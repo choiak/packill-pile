@@ -2,7 +2,7 @@ import { getToken } from '@/api/auth.js';
 import { createFetch } from '@vueuse/core';
 
 export const useFetchValidated = createFetch({
-	baseUrl: '',
+	baseUrl: 'http://localhost:1337',
 	options: {
 		beforeFetch({ options, cancel }) {
 			const token = getToken();

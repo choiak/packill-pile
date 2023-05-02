@@ -11,5 +11,5 @@ export function getTopic(id, config = {}) {
 		},
 	);
 
-	return useFetchValidated(`http://localhost:1337/api/topics/${id}?${query}`).get().json();
+	return useFetchValidated(`api/topics/${id}?${query}`).get().json();
 }

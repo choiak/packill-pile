@@ -16,7 +16,7 @@ export function getUser(username, config = {}) {
 		},
 	);
 
-	return useFetchValidated(`http://localhost:1337/api/users?${query}`).get().json();
+	return useFetchValidated(`api/users?${query}`).get().json();
 }
 
 export function getUserAvatar(id) {
@@ -30,5 +30,5 @@ export function getUserAvatar(id) {
 		},
 	);
 
-	return useFetchValidated(`http://localhost:1337/api/users/${id}?${query}`).get().json();
+	return useFetchValidated(`api/users/${id}?${query}`).get().json();
 }

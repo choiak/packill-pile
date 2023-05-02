@@ -17,7 +17,7 @@ export function getMyProgress(config = {}) {
 		...config,
 	});
 
-	return useFetchValidated(`http://localhost:1337/api/users/me?${query}`).get().json();
+	return useFetchValidated(`api/users/me?${query}`).get().json();
 }
 
 export function getMe(config = {}) {
@@ -25,7 +25,7 @@ export function getMe(config = {}) {
 		...config,
 	});
 
-	return useFetchValidated(`http://localhost:1337/api/users/me?${query}`).get().json();
+	return useFetchValidated(`api/users/me?${query}`).get().json();
 }
 
 export function updateMe(content, config = {}) {
@@ -37,7 +37,7 @@ export function updateMe(content, config = {}) {
 			encodeValuesOnly: true, // prettify URL
 		});
 
-	return useFetchValidated(`http://localhost:1337/api/users/${userStore.user.id}?${query}`).put({
+	return useFetchValidated(`api/users/${userStore.user.id}?${query}`).put({
 		...content,
 	}).json();
 }
@@ -50,7 +50,7 @@ export function updateMyPassword(currentPassword, newPassword, confirmationPassw
 			encodeValuesOnly: true, // prettify URL
 		});
 
-	return useFetchValidated(`http://localhost:1337/api/auth/change-password?${query}`).post({
+	return useFetchValidated(`api/auth/change-password?${query}`).post({
 		currentPassword: currentPassword,
 		password: newPassword,
 		passwordConfirmation: confirmationPassword,
@@ -86,7 +86,7 @@ export function updateMyPackage(id, config = {}) {
 		encodeValuesOnly: true,
 	});
 
-	return useFetchValidated(`http://localhost:1337/api/users/${userStore.user.id}?${query}`).put({
+	return useFetchValidated(`api/users/${userStore.user.id}?${query}`).put({
 		validationPassword: 'TODO',
 		currentPackage: {
 			set: [id],
