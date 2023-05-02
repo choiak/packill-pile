@@ -87,7 +87,7 @@ export function updateMyPackage(id, config = {}) {
 	});
 
 	return useFetchValidated(`http://localhost:1337/api/users/${userStore.user.id}?${query}`).put({
-		validationPassword: 'Anson914',
+		validationPassword: 'TODO',
 		currentPackage: {
 			set: [id],
 		},
