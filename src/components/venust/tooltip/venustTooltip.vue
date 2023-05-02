@@ -4,9 +4,9 @@
 			<div @mouseover='open' @mouseleave='close' ref='elReference'>
 				<slot name='reference' />
 			</div>
-			<transition name='fade'>
+			<transition name='fade' class='z-30'>
 				<div
-					class='flex items-center rounded-lg space-x-1 px-2 py-1 text-sm text-white bg-neutral-950/75 absolute max-w-[300px] w-max shadow'
+					class='flex items-center rounded-lg space-x-1 px-2 py-1 text-xs text-white bg-neutral-950/75 absolute max-w-[300px] w-max shadow'
 					v-show='isActive' ref='elTooltip'>
 					<slot name='tooltip' />
 				</div>
