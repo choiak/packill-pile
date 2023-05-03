@@ -1,34 +1,31 @@
 import qs from 'qs';
 import { useFetchValidated } from '@/utils/fetch.js';
+import { computed, unref } from 'vue';
 
-export function getUser(username, config = {}) {
-	const query = qs.stringify(
-		{
-			filters: {
-				username: {
-					$eq: username,
-				},
+export function getUserByUsername(username, config = {}) {
+	const query = qs.stringify({
+		filters: {
+			username: {
+				$eq: username,
 			},
-			...config,
-		},
-		{
-			encodeValuesOnly: true, // prettify URL
-		},
-	);
+		}, ...config,
+	}, {
+		encodeValuesOnly: true, // prettify URL
+	});
 
 	return useFetchValidated(`api/users?${query}`).get().json();
 }
 
-export function getUserAvatar(id) {
-	const query = qs.stringify(
-		{
-			populate: ['avatar'],
-			fields: [''],
-		},
-		{
-			encodeValuesOnly: true, // prettify URL
-		},
-	);
+export function getUserById(id, query = {}, config = {}) {
+	const queryString = qs.stringify({
+		...query,
+	}, {
+		encodeValuesOnly: true, // prettify URL
+	});
 
-	return useFetchValidated(`api/users/${id}?${query}`).get().json();
+	const url = computed(() => {
+		return `api/users/${unref(id)}?${queryString}`;
+	});
+
+	return useFetchValidated(url, { ...config }).get().json();
 }
