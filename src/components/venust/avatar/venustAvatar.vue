@@ -1,66 +1,98 @@
 <template>
 	<div
-		class="rounded-full border-2 border-transparent p-0.5"
-		v-if="isLoading"
+		class='rounded-full border-2 border-transparent p-0.5'
+		v-if='isLoading'
 	>
 		<div
-			class="h-[64px] w-[64px] animate-pulse rounded-full bg-slate-200"
+			class='animate-pulse rounded-full bg-slate-200' :class='sizeStyle'
 		/>
 	</div>
 	<div
-		class="rounded-full border-2 p-0.5"
+		class='rounded-full border-2 p-0.5 w-fit'
 		:class="{
 			'border-neutral-300 border-dashed': !isOnline,
 			'border-teal-600': isOnline,
 		}"
 		v-else
 	>
-		<div class="h-16 w-16 overflow-hidden rounded-full">
+		<div class='overflow-hidden rounded-full' :class='sizeStyle'>
 			<img
-				v-if="avatarUrlRelative"
-				:src="avatarUrlFull"
-				class="h-full w-full object-cover object-center"
+				v-if='avatarUrl'
+				:src='avatarUrlFull'
+				class='h-full w-full object-cover object-center'
+				:alt="`${displayName}'s Avatar`"
 			/>
 		</div>
 	</div>
 </template>
 
 <script setup>
-import { getUserAvatar } from '@/api/user.js';
+import { getUserById } from '@/api/user.js';
 import { computed, ref, watch } from 'vue';
 import { useInfoStore } from '@/store/index.js';
 
 const infoStore = useInfoStore();
 const props = defineProps({
 	userId: Number,
+	size: {
+		validator(value) {
+			return ['sm', 'lg', null].includes(value);
+		},
+	},
 });
 
-const userAvatar = ref();
+const propUserId = computed(() => {
+	return props.userId;
+});
+
+const userAvatarResponse = getUserById(propUserId, {
+	populate: ['avatar'],
+	fields: ['displayName'],
+}, { immediate: false });
 const isOnline = ref(false);
 
-if (props.userId) {
-	userAvatar.value = getUserAvatar(props.userId);
+if (propUserId.value) {
+	userAvatarResponse.execute();
 }
 
-watch(props, (newProps) => {
-	if (newProps.userId) {
-		userAvatar.value = getUserAvatar(newProps.userId);
+watch(propUserId, (oldUserId, newUserId) => {
+	if (newUserId !== oldUserId) {
+		userAvatarResponse.execute();
 	}
 });
 
 const isLoading = computed(() => {
-	return userAvatar.value?.loading || !props.userId;
+	return userAvatarResponse.isFetching.value || !propUserId.value;
 });
 
-const attributes = computed(() => {
-	return userAvatar.value?.data?.avatar;
+const user = computed(() => {
+	return userAvatarResponse.data.value;
 });
 
-const avatarUrlRelative = computed(() => {
-	return attributes.value?.url;
+const displayName = computed(() => {
+	return user.value?.displayName;
+});
+
+const avatar = computed(() => {
+	return user.value?.avatar;
+});
+
+const avatarUrl = computed(() => {
+	return avatar.value?.url;
 });
 
 const avatarUrlFull = computed(() => {
-	return infoStore.url.strapi + avatarUrlRelative.value;
+	return infoStore.url.strapi + avatarUrl.value;
+});
+
+const sizeStyle = computed(() => {
+	switch (props.size) {
+		case 'sm':
+			return 'h-12 w-12';
+		case 'lg':
+			return 'h-20 w-20';
+		default:
+			return 'h-16 w-16';
+	}
 });
 </script>
