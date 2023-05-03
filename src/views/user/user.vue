@@ -137,7 +137,7 @@
 <script setup>
 import Index from '@/layouts/utils/index.vue';
 import { useRoute } from 'vue-router';
-import { getUser } from '@/api/user.js';
+import { getUserByUsername } from '@/api/user.js';
 import Dock from '@/layouts/dock/dock.vue';
 import { ChartPieIcon } from '@heroicons/vue/24/solid/index.js';
 import {
@@ -152,7 +152,7 @@ import { computed, onUnmounted } from 'vue';
 const route = useRoute();
 const paramUsername = route.params.username;
 
-const userResponse = getUser(paramUsername, {
+const userResponse = getUserByUsername(paramUsername, {
 	populate: ['avatar', 'role', 'currentPackage'],
 });
 
