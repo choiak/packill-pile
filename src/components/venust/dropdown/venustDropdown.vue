@@ -1,6 +1,6 @@
 <template>
 	<div @click.prevent="toggle" class="relative">
-		<div ref='elToggler'>
+		<div ref='elToggler' class='cursor-pointer'>
 			<slot name="toggler" />
 		</div>
 		<transition name="fade">
