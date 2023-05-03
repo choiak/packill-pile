@@ -28,7 +28,7 @@
 
 <script setup>
 import { getUserById } from '@/api/user.js';
-import { computed, ref, watch } from 'vue';
+import { computed, onUnmounted, ref, watch } from 'vue';
 import { useInfoStore } from '@/store/index.js';
 
 const infoStore = useInfoStore();
@@ -45,28 +45,28 @@ const propUserId = computed(() => {
 	return props.userId;
 });
 
-const userAvatarResponse = getUserById(propUserId, {
+const userResponse = getUserById(propUserId, {
 	populate: ['avatar'],
 	fields: ['displayName'],
 }, { immediate: false });
 const isOnline = ref(false);
 
 if (propUserId.value) {
-	userAvatarResponse.execute();
+	userResponse.execute();
 }
 
 watch(propUserId, (oldUserId, newUserId) => {
 	if (newUserId !== oldUserId) {
-		userAvatarResponse.execute();
+		userResponse.execute();
 	}
 });
 
 const isLoading = computed(() => {
-	return userAvatarResponse.isFetching.value || !propUserId.value;
+	return userResponse.isFetching.value || !propUserId.value;
 });
 
 const user = computed(() => {
-	return userAvatarResponse.data.value;
+	return userResponse.data.value;
 });
 
 const displayName = computed(() => {
@@ -93,6 +93,12 @@ const sizeStyle = computed(() => {
 			return 'h-20 w-20';
 		default:
 			return 'h-16 w-16';
+	}
+});
+
+onUnmounted(() => {
+	if (userResponse.canAbort.value) {
+		userResponse.abort();
 	}
 });
 </script>

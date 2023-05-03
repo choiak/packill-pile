@@ -23,11 +23,11 @@
 						</div>
 					</div>
 					<div>
-						<div v-if='isLoading' class='animate-pulse bg-slate-200 rounded w-48 h-14'/>
+						<div v-if='isLoading' class='animate-pulse bg-slate-200 rounded w-48 h-14' />
 						<p class='text-xs text-justify' v-else>{{ bio }}</p>
 					</div>
 					<div>
-						<div class='animate-pulse bg-slate-200 rounded w-8 h-3.5' v-if='isLoading'/>
+						<div class='animate-pulse bg-slate-200 rounded w-8 h-3.5' v-if='isLoading' />
 						<div
 							class='rounded border px-1 text-xs font-medium text-neutral-500 w-fit'
 							v-else
@@ -51,7 +51,7 @@
 
 <script setup>
 import { getUserById } from '@/api/user.js';
-import { computed, watch } from 'vue';
+import { computed, onUnmounted, watch } from 'vue';
 import { AtSymbolIcon, ArrowUpRightIcon } from '@heroicons/vue/24/outline/index.js';
 import VenustAvatar from '@/components/venust/avatar/venustAvatar.vue';
 import VenustDropdown from '@/components/venust/dropdown/venustDropdown.vue';
@@ -108,5 +108,11 @@ const role = computed(() => {
 
 const roleName = computed(() => {
 	return role.value?.name;
+});
+
+onUnmounted(() => {
+	if (userResponse.canAbort.value) {
+		userResponse.abort();
+	}
 });
 </script>
