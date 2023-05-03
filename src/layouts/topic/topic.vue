@@ -9,7 +9,7 @@
 				<Knowledge
 					:order='index'
 					:id='knowledge.id'
-					class='mx-auto p-6 min-w-[300px] max-w-[900px]'
+					class='mx-auto p-8 min-w-[300px] max-w-[900px]'
 				/>
 			</div>
 		</div>
