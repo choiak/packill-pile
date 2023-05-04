@@ -2,10 +2,16 @@
 	<Index>
 		<div class='flex h-full w-full flex-col'>
 			<Dock>
-				<div>
-					<h5 class='font-medium'>{{ topicTitle }}</h5>
-					<p class="text-sm">Workspace</p>
-				</div>
+				<transition name='fade' mode='out-in'>
+					<div v-if='isLoading' class='space-y-1'>
+						<div class='rounded bg-slate-200 animate-pulse w-32 h-7'/>
+						<div class='rounded bg-slate-200 animate-pulse w-20 h-4'/>
+					</div>
+					<div v-else>
+						<h5 class='font-medium'>{{ topicTitle }}</h5>
+						<p class="text-sm">Workspace</p>
+					</div>
+				</transition>
 			</Dock>
 			<div class='flex w-full flex-1 divide-x overflow-auto'>
 				<Topic class='w-full flex-1 overflow-auto' />
@@ -21,6 +27,7 @@
 
 <script setup>
 import Index from '@/layouts/utils/index.vue';
+import Topic from '@/layouts/topic/topic.vue';
 import { computed, onUnmounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { getTopic } from '@/api/topic.js';
@@ -41,7 +48,16 @@ const topicResponse = getTopic(paramTopicId, {
 			fields: ['id'],
 		},
 	},
-});
+}, { immediate: false });
+
+if (paramTopicId) {
+	topicResponse.execute();
+}
+
+const isLoading = computed(() => {
+	return topicResponse.isFetching.value || (!topicResponse.isFetching.value && !topicResponse.isFinished.value) || !paramTopicId;
+})
+
 const topic = computed(() => {
 	return topicResponse.data.value?.data?.attributes;
 });
