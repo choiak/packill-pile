@@ -1,15 +1,18 @@
 import { useFetchValidated } from '@/utils/fetch.js';
 import qs from 'qs';
+import { computed, unref } from 'vue';
 
-export function getQuestion(id, config = {}) {
-	const query = qs.stringify(
-		{
-			...config,
-		},
+export function getQuestion(id, query = {}, config = {}) {
+	const queryString = qs.stringify(
+		query,
 		{
 			encodeValuesOnly: true, // prettify URL
 		},
 	);
 
-	return useFetchValidated(`api/questions/${id}?${query}`).get().json();
+	const url = computed(() => {
+		return `api/questions/${unref(id)}?${queryString}`;
+	})
+
+	return useFetchValidated(url, config).get().json();
 }
