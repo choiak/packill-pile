@@ -3,11 +3,11 @@
 		<div class='flex items-center justify-between'>
 			<transition name='fade' mode='out-in'>
 				<div v-if='isLoading' class='space-y-1'>
-					<div class='bg-slate-200 rounded w-48 h-5 animate-pulse' />
+					<div class='bg-slate-200 rounded w-48 h-6 animate-pulse' />
 					<div class='flex space-x-2'>
-						<div class='bg-slate-200 rounded w-16 h-3.5 animate-pulse' />
+						<div class='bg-slate-200 rounded w-16 h-5 animate-pulse' />
 						<p class='text-sm text-slate-400 animate-pulse'>•</p>
-						<div class='bg-slate-200 rounded w-16 h-3.5 animate-pulse' />
+						<div class='bg-slate-200 rounded w-16 h-5 animate-pulse' />
 					</div>
 				</div>
 				<div v-else>
@@ -31,42 +31,32 @@
 			</transition>
 			<DifficultyIndicator :difficulty-id='difficultyId' show-name />
 		</div>
-		<transition name='fade' mode='out-in'>
-			<div v-if='isLoading' class='space-y-8'>
-				<div class='bg-slate-200 rounded w-full h-[100px] animate-pulse' />
-				<div class='bg-slate-200 rounded w-full h-[200px] animate-pulse' />
-				<div class='flex items-center justify-between'>
-					<div class='bg-slate-200 rounded w-32 h-5 animate-pulse'/>
-					<div class='bg-slate-200 rounded-lg w-24 h-10 animate-pulse'/>
-				</div>
+		<div class='space-y-8'>
+			<div v-for='item in content' :key='`${item.__component}-${item.id}`'>
+				<p
+					v-if="item.__component === 'generic.rich-text'"
+					class='prose-article text-justify font-text'
+					v-html='item.text'
+				/>
+				<Question
+					v-if="item.__component === 'relation.question-connector'"
+					:questionId='item.question.data.id'
+					@model='getAnswer(item.question.data.id, $event)'
+				/>
 			</div>
-			<div class='space-y-8' v-else>
-				<div v-for='item in content' :key='`${item.__component}-${item.id}`'>
-					<p
-						v-if="item.__component === 'generic.rich-text'"
-						class='prose-article text-justify font-text'
-						v-html='item.text'
-					/>
-					<Question
-						v-if="item.__component === 'relation.question-connector'"
-						:questionId='item.question.data.id'
-						@model='getAnswer(item.question.data.id, $event)'
-					/>
-				</div>
-				<div class='flex items-center justify-between'>
-					<div></div>
-					<button
-						type='submit'
-						@click.prevent='handleSubmit'
-						class='btn-accent flex items-center space-x-1'
-						:disabled='!isCompleted || isWaitingResult'
-					>
-						<span>Submit</span>
-						<ChevronDoubleRightIcon class='h-4 w-4' />
-					</button>
-				</div>
+			<div class='flex items-center justify-between'>
+				<div></div>
+				<button
+					type='submit'
+					@click.prevent='handleSubmit'
+					class='btn-accent flex items-center space-x-1'
+					:disabled='!isCompleted || isWaitingResult'
+				>
+					<span>Submit</span>
+					<ChevronDoubleRightIcon class='h-4 w-4' />
+				</button>
 			</div>
-		</transition>
+		</div>
 	</form>
 </template>
 
