@@ -1,50 +1,72 @@
 <template>
 	<form class='space-y-8' @keydown.enter.prevent='handleSubmit'>
 		<div class='flex items-center justify-between'>
-			<div>
-				<h5 class='font-semibold'>{{ attributes?.name }}</h5>
-				<div class='flex space-x-2'>
-					<p class='text-sm text-neutral-500'>
-						Published on
-						<span class='font-medium'>
+			<transition name='fade' mode='out-in'>
+				<div v-if='isLoading' class='space-y-1'>
+					<div class='bg-slate-200 rounded w-48 h-5 animate-pulse' />
+					<div class='flex space-x-2'>
+						<div class='bg-slate-200 rounded w-16 h-3.5 animate-pulse' />
+						<p class='text-sm text-slate-400 animate-pulse'>•</p>
+						<div class='bg-slate-200 rounded w-16 h-3.5 animate-pulse' />
+					</div>
+				</div>
+				<div v-else>
+					<h5 class='font-semibold'>{{ name }}</h5>
+					<div class='flex space-x-2'>
+						<p class='text-sm text-neutral-500'>
+							Published on
+							<span class='font-medium'>
 							{{ publishedAtString }}
 						</span>
-					</p>
-					<p class='text-sm text-neutral-500'>•</p>
-					<p class='text-sm text-neutral-500'>
-						Updated on
-						<span class='font-medium'>
+						</p>
+						<p class='text-sm text-neutral-500'>•</p>
+						<p class='text-sm text-neutral-500'>
+							Updated on
+							<span class='font-medium'>
 							{{ updatedAtString }}
 						</span>
-					</p>
+						</p>
+					</div>
 				</div>
-			</div>
+			</transition>
 			<DifficultyIndicator :difficulty-id='difficultyId' show-name />
 		</div>
-		<div v-for='item in content' :key='`${item.__component}-${item.id}`'>
-			<p
-				v-if="item.__component === 'generic.rich-text'"
-				class='prose-article text-justify font-text'
-				v-html='item.text'
-			/>
-			<Question
-				v-if="item.__component === 'relation.question-connector'"
-				:questionId='item.question.data.id'
-				@model='getAnswer(item.question.data.id, $event)'
-			/>
-		</div>
-		<div class='flex items-center justify-between'>
-			<div></div>
-			<button
-				type='submit'
-				@click.prevent='handleSubmit'
-				class='btn-accent flex items-center space-x-1'
-				:disabled='!isCompleted || isWaitingResult'
-			>
-				<span>Submit</span>
-				<ChevronDoubleRightIcon class='h-4 w-4' />
-			</button>
-		</div>
+		<transition name='fade' mode='out-in'>
+			<div v-if='isLoading' class='space-y-8'>
+				<div class='bg-slate-200 rounded w-full h-[100px] animate-pulse' />
+				<div class='bg-slate-200 rounded w-full h-[200px] animate-pulse' />
+				<div class='flex items-center justify-between'>
+					<div class='bg-slate-200 rounded w-32 h-5 animate-pulse'/>
+					<div class='bg-slate-200 rounded-lg w-24 h-10 animate-pulse'/>
+				</div>
+			</div>
+			<div class='space-y-8' v-else>
+				<div v-for='item in content' :key='`${item.__component}-${item.id}`'>
+					<p
+						v-if="item.__component === 'generic.rich-text'"
+						class='prose-article text-justify font-text'
+						v-html='item.text'
+					/>
+					<Question
+						v-if="item.__component === 'relation.question-connector'"
+						:questionId='item.question.data.id'
+						@model='getAnswer(item.question.data.id, $event)'
+					/>
+				</div>
+				<div class='flex items-center justify-between'>
+					<div></div>
+					<button
+						type='submit'
+						@click.prevent='handleSubmit'
+						class='btn-accent flex items-center space-x-1'
+						:disabled='!isCompleted || isWaitingResult'
+					>
+						<span>Submit</span>
+						<ChevronDoubleRightIcon class='h-4 w-4' />
+					</button>
+				</div>
+			</div>
+		</transition>
 	</form>
 </template>
 
@@ -63,57 +85,55 @@ const props = defineProps({
 	problemId: Number,
 });
 
-const problemResponse = ref();
+const propProblemId = computed(() => {
+	return props.problemId;
+});
 
-watch(props, (newProps) => {
-	if (newProps.problemId) {
-		problemResponse.value = getProblem(props.problemId, {
+const problemResponse = getProblem(propProblemId, {
+	populate: {
+		content: {
 			populate: {
-				content: {
-					populate: {
-						question: {
-							fields: ['id'],
-						},
-					},
+				question: {
+					fields: ['id'],
 				},
-				difficulty: true,
 			},
-		});
-	} else if (newProps.problemId === null) {
-		problemResponse.value = null;
+		},
+		difficulty: true,
+	},
+}, { immediate: false });
+
+if (propProblemId.value) {
+	problemResponse.execute();
+}
+
+watch(propProblemId, (newProblemId) => {
+	if (newProblemId) {
+		problemResponse.execute();
 	}
 });
 
-if (props.problemId) {
-	problemResponse.value = getProblem(props.problemId, {
-		populate: {
-			content: {
-				populate: {
-					question: {
-						fields: ['id'],
-					},
-				},
-			},
-			difficulty: true,
-		},
-	});
-}
+const isLoading = computed(() => {
+	return problemResponse.isFetching.value || (!problemResponse.isFetching.value && !problemResponse.isFinished.value) || !propProblemId.value;
+});
 
-// if there are new refs , the inner ref is destructed
-const attributes = computed(() => {
-	return problemResponse.value?.data?.data?.attributes;
+const problem = computed(() => {
+	return problemResponse.data.value?.data?.attributes;
+});
+
+const name = computed(() => {
+	return problem.value?.name;
 });
 
 const content = computed(() => {
-	return attributes.value?.content;
+	return problem.value?.content;
 });
 
 const difficultyId = computed(() => {
-	return attributes.value?.difficulty.data.id;
+	return problem.value?.difficulty.data.id;
 });
 
 const publishedAtString = computed(() => {
-	return new Date(attributes.value?.publishedAt).toLocaleString('en-GB', {
+	return new Date(problem.value?.publishedAt).toLocaleString('en-GB', {
 		day: 'numeric',
 		month: 'short',
 		year: 'numeric',
@@ -121,7 +141,7 @@ const publishedAtString = computed(() => {
 });
 
 const updatedAtString = computed(() => {
-	return new Date(attributes.value?.updatedAt).toLocaleString('en-GB', {
+	return new Date(problem.value?.updatedAt).toLocaleString('en-GB', {
 		day: 'numeric',
 		month: 'short',
 		year: 'numeric',
@@ -183,7 +203,6 @@ provide('isWaitingResult', isWaitingResult);
 
 function handleSubmit() {
 	if (isCompleted) {
-		previousProblemSubmissionIdResponse.value = undefined;
 		previousProblemSubmissionIdResponse.value = postProblemSubmission(
 			props.problemId,
 			answers.value,
@@ -203,7 +222,6 @@ watch(previousProblemSubmissionId, (newId) => {
 });
 
 watch(previousProblemSubmission, (newSubmission) => {
-	console.log(newSubmission);
 	if (
 		newSubmission &&
 		newSubmission?.attributes?.state === 'NA' &&
