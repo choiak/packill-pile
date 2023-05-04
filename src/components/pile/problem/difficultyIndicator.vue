@@ -3,24 +3,39 @@
 		<template #reference>
 			<div class="flex flex-col items-center space-y-1">
 				<div class="relative">
-					<cube-transparent-icon
-						class="h-6 w-6"
-						:style="{ color: secondaryColor }"
-					/>
+					<div v-if='isLoading'>
+						<cube-transparent-icon
+							class="h-6 w-6 text-slate-200 animate-pulse"
+						/>
+						<p
+							class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-bold text-slate-400 animate-pulse"
+						>
+							?
+						</p>
+					</div>
+					<div v-else>
+						<cube-transparent-icon
+							class="h-6 w-6"
+							:style="{ color: secondaryColor }"
+						/>
+						<p
+							class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-bold"
+							:style="{ color: primaryColor }"
+						>
+							{{ difficultyId }}
+						</p>
+					</div>
+				</div>
+				<div v-if="showName">
+					<div v-if='isLoading' class='rounded bg-slate-200 animate-pulse w-6 h-3'/>
 					<p
-						class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-bold"
+						v-else
+						class="text-center text-xs font-medium"
 						:style="{ color: primaryColor }"
 					>
-						{{ difficultyId }}
+						{{ name }}
 					</p>
 				</div>
-				<p
-					v-if="showName"
-					class="text-center text-xs font-medium"
-					:style="{ color: primaryColor }"
-				>
-					{{ name }}
-				</p>
 			</div>
 		</template>
 		<template #tooltip>
@@ -31,7 +46,7 @@
 
 <script setup>
 import { CubeTransparentIcon } from '@heroicons/vue/24/outline/index.js';
-import { computed, ref, watch } from 'vue';
+import { computed, watch } from 'vue';
 import { getDifficulty } from '@/api/difficulty.js';
 import VenustTooltip from '@/components/venust/tooltip/venustTooltip.vue';
 
@@ -40,20 +55,28 @@ const props = defineProps({
 	difficultyId: Number,
 });
 
-const difficultyResponse = ref();
+const propDifficultyId = computed(() => {
+	return props.difficultyId;
+});
 
-if (props.difficultyId) {
-	difficultyResponse.value = getDifficulty(props.difficultyId);
+const difficultyResponse = getDifficulty(propDifficultyId, {}, { immediate: false });
+
+if (propDifficultyId.value) {
+	difficultyResponse.execute();
 }
 
-watch(props, (newProps) => {
-	if (newProps.difficultyId) {
-		difficultyResponse.value = getDifficulty(newProps.difficultyId);
+watch(propDifficultyId, (newDifficultyId) => {
+	if (newDifficultyId) {
+		difficultyResponse.execute();
 	}
 });
 
+const isLoading = computed(() => {
+	return difficultyResponse.isFetching.value || (!difficultyResponse.isFetching.value && !difficultyResponse.isFinished.value) || !propDifficultyId.value;
+})
+
 const difficulty = computed(() => {
-	return difficultyResponse.value?.data?.data?.attributes;
+	return difficultyResponse.data.value?.data?.attributes;
 });
 
 const name = computed(() => {
