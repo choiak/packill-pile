@@ -3,66 +3,107 @@
 		class='flex flex-col items-center space-y-4'
 	>
 		<div class='flex w-full items-center justify-between space-x-4'>
-			<div class='space-y-2'>
-				<h5
-					class='w-fit rounded-lg bg-blue-600 px-2 font-semibold uppercase tracking-widest text-white'
-				>
-					{{ order + 1 }}. {{ title }}
-				</h5>
-				<div class='flex items-center space-x-1'>
-					<div v-for='area in areas'>
-						<div
-							class='rounded border px-1 text-xs font-medium text-neutral-500'
-						>
-							{{ area?.attributes?.name }}
+			<transition name='fade' mode='out-in'>
+				<div v-if='isLoading' class='space-y-2'>
+					<div class='h-7 bg-blue-600 rounded-lg animate-pulse w-48' />
+					<div class='flex items-center space-x-1'>
+						<div class='h-[18px] bg-slate-200 rounded animate-pulse w-16' />
+						<div class='h-[18px] bg-slate-200 rounded animate-pulse w-16' />
+					</div>
+				</div>
+				<div class='space-y-2' v-else>
+					<h5
+						class='w-fit rounded-lg bg-blue-600 px-2 font-semibold uppercase tracking-widest text-white'
+					>
+						{{ order + 1 }}. {{ title }}
+					</h5>
+					<div class='flex items-center space-x-1'>
+						<div v-for='area in areas'>
+							<div
+								class='rounded border px-1 text-xs font-medium text-neutral-500'
+							>
+								{{ area?.attributes?.name }}
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
+			</transition>
 			<ProfileCard :user-id='authorId'>
-				<div class='flex flex-col items-end space-y-1 text-right'>
-					<div class='flex items-center space-x-2'>
-						<div
-							class='rounded border px-1 text-xs font-medium text-neutral-500 w-fit'
-						>
-							BY
-						</div>
-						<p class='font-bold'>{{ authorDisplayName }}</p>
+				<transition name='fade' mode='out-in'>
+					<div v-if='isLoading' class='flex flex-col items-end space-y-1'>
+						<div class='rounded bg-slate-200 h-6 w-20 animate-pulse' />
+						<div class='rounded bg-slate-200 h-5 w-32 animate-pulse' />
 					</div>
-					<p class='text-sm text-neutral-500'>
-						Published on
-						<span class='font-medium'>
+					<div class='flex flex-col items-end space-y-1 text-right' v-else>
+						<div class='flex items-center space-x-2'>
+							<div
+								class='rounded border px-1 text-xs font-medium text-neutral-500 w-fit'
+							>
+								BY
+							</div>
+							<p class='font-bold'>{{ authorDisplayName }}</p>
+						</div>
+						<p class='text-sm text-neutral-500'>
+							Published on
+							<span class='font-medium'>
 							{{ publishedAtString }}
 						</span>
-					</p>
-				</div>
+						</p>
+					</div>
+				</transition>
 			</ProfileCard>
 		</div>
-		<div
-			v-html='content'
-			class='prose-article w-full text-justify font-text'
-		/>
+		<transition name='fade' mode='out-in'>
+			<div v-if='isLoading' class='w-full space-y-5'>
+				<div class='rounded bg-gradient-to-tr from-blue-50 to-purple-50 h-[300px] w-full animate-pulse' />
+				<div class='rounded bg-slate-200 h-[500px] w-full animate-pulse' />
+				<div class='rounded bg-orange-200 h-[200px] w-full animate-pulse' />
+			</div>
+			<div
+				v-else
+				v-html='content'
+				class='prose-article w-full text-justify font-text'
+			/>
+		</transition>
 	</div>
 </template>
 
 <script setup>
 import 'highlight.js/styles/a11y-dark.css';
-import { computed, onUnmounted } from 'vue';
+import { computed, onUnmounted, watch } from 'vue';
 import { getKnowledge } from '@/api/knowledge.js';
 import ProfileCard from '@/layouts/user/profileCard.vue';
 
 const props = defineProps({
-	id: Number,
+	knowledgeId: Number,
 	order: Number,
 });
 
-const knowledgeResponse = getKnowledge(props.id, {
+const propKnowledgeId = computed(() => {
+	return props.knowledgeId;
+});
+
+const knowledgeResponse = getKnowledge(propKnowledgeId, {
 	populate: {
 		author: {
 			populate: ['avatar'],
 		},
 		areas: true,
 	},
+}, { immediate: false });
+
+if (propKnowledgeId.value) {
+	knowledgeResponse.execute();
+}
+
+watch(propKnowledgeId, (newKnowledgeId) => {
+	if (newKnowledgeId) {
+		knowledgeResponse.execute();
+	}
+});
+
+const isLoading = computed(() => {
+	return knowledgeResponse.isFetching.value || (!knowledgeResponse.isFetching.value && !knowledgeResponse.isFinished.value) || !propKnowledgeId.value;
 });
 
 const knowledge = computed(() => {
