@@ -27,7 +27,7 @@
 					</div>
 				</div>
 				<div v-if="showName">
-					<div v-if='isLoading' class='rounded bg-slate-200 animate-pulse w-6 h-3'/>
+					<div v-if='isLoading' class='rounded bg-slate-200 animate-pulse w-6 h-4'/>
 					<p
 						v-else
 						class="text-center text-xs font-medium"
@@ -73,7 +73,7 @@ watch(propDifficultyId, (newDifficultyId) => {
 
 const isLoading = computed(() => {
 	return difficultyResponse.isFetching.value || (!difficultyResponse.isFetching.value && !difficultyResponse.isFinished.value) || !propDifficultyId.value;
-})
+});
 
 const difficulty = computed(() => {
 	return difficultyResponse.data.value?.data?.attributes;
@@ -85,7 +85,7 @@ const name = computed(() => {
 
 const description = computed(() => {
 	return difficulty.value?.description;
-})
+});
 
 const primaryColor = computed(() => {
 	return difficulty.value?.primaryColor;
