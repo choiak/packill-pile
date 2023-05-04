@@ -24,7 +24,6 @@ import Index from '@/layouts/utils/index.vue';
 import { computed, onUnmounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { getTopic } from '@/api/topic.js';
-import Topic from '@/layouts/topic/topic.vue';
 import Dock from '@/layouts/dock/dock.vue';
 import { getMyNextProblem } from '@/utils/problem.js';
 import router from '@/router/index.js';
@@ -58,7 +57,7 @@ const problemIdSuggested = computed(() => {
 
 watch(problemIdSuggested, (newId) => {
 	if (!paramProblemId.value || (paramProblemId.value === '0' && newId !== 0)) {
-		router.push(`/workspace/${paramTopicId}/${newId}`);
+		router.replace(`/workspace/${paramTopicId}/${newId}`);
 	}
 });
 
