@@ -18,6 +18,10 @@
 						{{ order + 1 }}. {{ title }}
 					</h5>
 					<div class='flex items-center space-x-1'>
+						<div class='rounded border px-1 text-xs font-medium text-white bg-orange-600 border-orange-600'
+							 v-if='type'>
+							<p>{{ type }}</p>
+						</div>
 						<div v-for='area in areas'>
 							<div
 								class='rounded border px-1 text-xs font-medium text-neutral-500'
@@ -54,9 +58,18 @@
 			</ProfileCard>
 		</div>
 		<transition name='fade' mode='out-in'>
+			<div v-if='isLoading' class='w-full'>
+				<div class='h-5 animate-pulse bg-slate-200 rounded w-3/5 mr-auto ml-auto'/>
+			</div>
+			<div class='flex items-center space-x-2' v-else-if='purpose'>
+				<FireIcon class='h-4 w-4 text-neutral-500' />
+				<p class='font-medium text-sm text-neutral-500 italic'>This knowledge aims to {{ purpose }}.</p>
+			</div>
+		</transition>
+		<transition name='fade' mode='out-in'>
 			<div v-if='isLoading' class='w-full space-y-5'>
-				<div class='rounded bg-gradient-to-tr from-blue-50 to-purple-50 h-[300px] w-full animate-pulse' />
 				<div class='rounded bg-slate-200 h-[500px] w-full animate-pulse' />
+				<div class='rounded bg-gradient-to-tr from-blue-50 to-purple-50 h-[300px] w-full animate-pulse' />
 				<div class='rounded bg-orange-200 h-[200px] w-full animate-pulse' />
 			</div>
 			<div
@@ -69,6 +82,7 @@
 </template>
 
 <script setup>
+import { FireIcon } from '@heroicons/vue/24/outline/index.js';
 import 'highlight.js/styles/a11y-dark.css';
 import { computed, onUnmounted, watch } from 'vue';
 import { getKnowledge } from '@/api/knowledge.js';
@@ -120,6 +134,14 @@ const areas = computed(() => {
 
 const content = computed(() => {
 	return knowledge.value?.content;
+});
+
+const type = computed(() => {
+	return knowledge.value?.type;
+});
+
+const purpose = computed(() => {
+	return knowledge.value?.purpose;
 });
 
 const authorId = computed(() => {
