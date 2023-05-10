@@ -15,7 +15,7 @@
 						</button>
 					</template>
 					<template #container>
-						<ProblemList :topic-id="topicId" />
+						<ProblemList :topic-id="paramTopicId" />
 					</template>
 				</VenustDropdown>
 			</div>
@@ -48,8 +48,8 @@ import VenustDropdown from '@/components/venust/dropdown/venustDropdown.vue';
 import { ListBulletIcon } from '@heroicons/vue/24/outline/index.js';
 import ProblemList from '@/layouts/problem/problemList.vue';
 import { PencilIcon } from '@heroicons/vue/24/solid/index.js';
+import { useRoute } from 'vue-router';
 
-const props = defineProps({
-	topicId: Number,
-});
+const route = useRoute();
+const paramTopicId = Number(route.params.topicId) || null;
 </script>
