@@ -18,12 +18,18 @@ export function getProblem(id, query = {}, config = {}) {
 }
 
 export function getProblems(query = {}, config = {}) {
-	const queryString = qs.stringify(
-		query,
-		{
-			encodeValuesOnly: true, // prettify URL
-		},
-	);
+	const queryString = computed(() => {
+		return qs.stringify(
+			unref(query),
+			{
+				encodeValuesOnly: true, // prettify URL
+			},
+		);
+	});
 
-	return useFetchValidated(`api/problems/?${queryString}`, config).get().json();
+	const url = computed(() => {
+		return `api/problems/?${queryString.value}`;
+	});
+
+	return useFetchValidated(url, config).get().json();
 }
