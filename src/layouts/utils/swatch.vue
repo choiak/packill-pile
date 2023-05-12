@@ -3,7 +3,6 @@
 		<template #toggler>
 			<button class="btn-menu flex items-center space-x-4">
 				<SwatchIcon class="h-5 w-5" />
-				<label>Swatch</label>
 			</button>
 		</template>
 		<template #container>
