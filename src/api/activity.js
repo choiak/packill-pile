@@ -3,20 +3,25 @@ import { useFetchValidated } from '@/utils/fetch.js';
 import { computed, unref } from 'vue';
 
 export function getActivities(query = {}, config = {}) {
-	const queryString = qs.stringify(query,
-		{ encodeValuesOnly: true },
-	);
+	const queryString = computed(() => {
+		return qs.stringify(unref(query),
+			{ encodeValuesOnly: true });
+	});
 
-	return useFetchValidated(`api/activities?${queryString}`, config).get().json();
+	const url = computed(() => {
+		return `api/activities?${queryString.value}`
+	});
+
+	return useFetchValidated(url, config).get().json();
 }
 
 export function getActivity(id, query = {}, config = {}) {
-	const queryString = qs.stringify(query,
-		{ encodeValuesOnly: true },
-	);
+	const queryString = computed(() => {
+		return qs.stringify(unref(query), { encodeValuesOnly: true });
+	});
 
 	const url = computed(() => {
-		return `api/activities/${unref(id)}?${queryString}`
+		return `api/activities/${unref(id)}?${queryString.value}`;
 	});
 
 	return useFetchValidated(url, config).get().json();
