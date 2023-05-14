@@ -8,7 +8,7 @@
 			<div v-for='(knowledge, index) in knowledges'>
 				<Knowledge
 					:order='index'
-					:id='knowledge.id'
+					:knowledge-id='knowledge.id'
 					class='mx-auto p-8 min-w-[300px] max-w-[900px]'
 				/>
 			</div>
@@ -21,10 +21,12 @@ import { DocumentTextIcon } from '@heroicons/vue/24/solid';
 import { useRoute } from 'vue-router';
 import { getTopic } from '@/api/topic.js';
 import Knowledge from '@/layouts/knowledge/knowledge.vue';
-import { computed, onUnmounted } from 'vue';
+import { computed, onUnmounted, watch } from 'vue';
 
 const route = useRoute();
-const paramTopicId = route.params.topicId;
+const paramTopicId = computed(() => {
+	return route.params.topicId|| null;
+});
 
 const topicResponse = getTopic(paramTopicId, {
 	populate: {
@@ -33,6 +35,16 @@ const topicResponse = getTopic(paramTopicId, {
 			fields: ['id'],
 		},
 	},
+}, { immediate: false });
+
+if (paramTopicId.value) {
+	topicResponse.execute();
+}
+
+watch(paramTopicId, (newTopicId) => {
+	if (newTopicId) {
+		topicResponse.execute();
+	}
 });
 
 const topic = computed(() => {
