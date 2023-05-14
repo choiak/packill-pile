@@ -36,23 +36,31 @@ import { getMyNextProblem } from '@/utils/problem.js';
 import router from '@/router/index.js';
 
 const route = useRoute();
-const paramTopicId = Number(route.params.topicId) || null;
+const paramTopicId = computed(() => {
+	return Number(route.params.topicId) || null;
+});
+
 const paramProblemId = computed(() => {
 	return Number(route.params.problemId) || null;
 });
 
 const topicResponse = getTopic(paramTopicId, {
 	populate: {
-		knowledges: true,
 		problems: {
 			fields: ['id'],
 		},
 	},
 }, { immediate: false });
 
-if (paramTopicId) {
+if (paramTopicId.value) {
 	topicResponse.execute();
 }
+
+watch(paramTopicId, (newTopicId) => {
+	if (newTopicId) {
+		topicResponse.execute();
+	}
+});
 
 const isLoading = computed(() => {
 	return topicResponse.isFetching.value || (!topicResponse.isFetching.value && !topicResponse.isFinished.value) || !paramTopicId;
@@ -71,9 +79,21 @@ const problemIdSuggested = computed(() => {
 	return problemSuggested.id.value;
 });
 
+const problemSuggestedIsLoading = computed(() => {
+	return 	problemSuggested.isLoading.value;
+});
+
+watch(problemSuggestedIsLoading, (newIsLoading, oldIsLoading) => {
+	if (oldIsLoading && !newIsLoading) {
+		if (!paramProblemId.value || (paramProblemId.value === '0' && problemIdSuggested.value !== 0)) {
+			router.replace(`/workspace/${paramTopicId.value}/${problemIdSuggested.value}`);
+		}
+	}
+});
+
 watch(problemIdSuggested, (newId) => {
 	if (!paramProblemId.value || (paramProblemId.value === '0' && newId !== 0)) {
-		router.replace(`/workspace/${paramTopicId}/${newId}`);
+		router.replace(`/workspace/${paramTopicId.value}/${newId}`);
 	}
 });
 
