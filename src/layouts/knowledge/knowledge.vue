@@ -48,7 +48,7 @@
 							<p class='font-bold'>{{ authorDisplayName }}</p>
 						</div>
 						<p class='text-sm text-neutral-500'>
-							Published on
+							Published at
 							<span class='font-medium'>
 							{{ publishedAtString }}
 						</span>
