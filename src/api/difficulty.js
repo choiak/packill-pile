@@ -12,7 +12,7 @@ export function getDifficulty(id, query = {}, config = {}) {
 
 	const url = computed(() => {
 		return `api/difficulties/${unref(id)}?${queryString}`;
-	})
+	});
 
 	return useFetchValidated(url, config).get().json();
 }
