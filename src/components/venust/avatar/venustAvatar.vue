@@ -36,7 +36,7 @@ const props = defineProps({
 	userId: Number,
 	size: {
 		validator(value) {
-			return ['sm', 'lg', null].includes(value);
+			return ['xs', 'sm', 'lg', null].includes(value);
 		},
 	},
 });
@@ -87,6 +87,8 @@ const avatarUrlFull = computed(() => {
 
 const sizeStyle = computed(() => {
 	switch (props.size) {
+		case 'xs':
+			return 'h-10 w-10'
 		case 'sm':
 			return 'h-12 w-12';
 		case 'lg':
