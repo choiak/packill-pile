@@ -2,30 +2,36 @@ import qs from 'qs';
 import { useFetchValidated } from '@/utils/fetch.js';
 import { computed, unref } from 'vue';
 
-export function getUserByUsername(username, config = {}) {
-	const query = qs.stringify({
-		filters: {
-			username: {
-				$eq: username,
-			},
-		}, ...config,
-	}, {
-		encodeValuesOnly: true, // prettify URL
-	});
-
-	return useFetchValidated(`api/users?${query}`).get().json();
-}
-
-export function getUserById(id, query = {}, config = {}) {
-	const queryString = qs.stringify({
-		...query,
-	}, {
-		encodeValuesOnly: true, // prettify URL
+export function getUserByUsername(username, query = {}, config = {}) {
+	const queryString = computed(() => {
+		return qs.stringify({
+			filters: {
+				username: {
+					$eq: unref(username),
+				},
+			}, ...unref(query),
+		}, {
+			encodeValuesOnly: true, // prettify URL
+		});
 	});
 
 	const url = computed(() => {
-		return `api/users/${unref(id)}?${queryString}`;
+		return `api/users?${unref(queryString)}`;
 	});
 
-	return useFetchValidated(url, { ...config }).get().json();
+	return useFetchValidated(url, config).get().json();
+}
+
+export function getUserById(id, query = {}, config = {}) {
+	const queryString = computed(() => {
+		return qs.stringify(unref(query), {
+			encodeValuesOnly: true, // prettify URL
+		});
+	});
+
+	const url = computed(() => {
+		return `api/users/${unref(id)}?${unref(queryString)}`;
+	});
+
+	return useFetchValidated(url, config).get().json();
 }
