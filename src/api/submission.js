@@ -10,14 +10,14 @@ export const postProblemSubmission = (problemId, answers, query = {}, config = {
 		},
 	);
 
-	return useFetchValidated(`api/problem-submissions?${queryString}`).post({
+	return useFetchValidated(`api/problem-submissions?${queryString}`, config).post({
 		data: {
 			problem: {
 				connect: [problemId],
 			},
 			rawAnswers: answers,
 		},
-	}, config).json();
+	}).json();
 };
 
 export const getProblemSubmissions = (query = {}) => {
