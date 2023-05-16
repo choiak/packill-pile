@@ -12,9 +12,9 @@
 					</div>
 				</div>
 			</Dock>
-			<div class='flex space-x-4 overflow-auto p-6'>
+			<div class='flex-1 flex space-x-4 overflow-auto p-6'>
 				<div
-					class='w-[500px] overflow-auto rounded-xl border bg-white p-8'
+					class='h-fit w-[500px] overflow-auto rounded-xl border bg-white p-8'
 				>
 					<div class='space-y-8'>
 						<img
@@ -31,7 +31,7 @@
 								<a
 									target='_blank'
 									class='text-sm font-medium text-sky-800'
-									:href='`https://www.google.com.hk/maps/search/${location}`'
+									:href='`https://www.google.com/maps/search/${location}`'
 								>
 									{{ location }}
 								</a>
@@ -61,7 +61,7 @@
 								</a>
 							</div>
 						</div>
-						<div class='space-y-2'>
+						<div class='space-y-2' v-if='bio'>
 							<h6
 								class='text-sm font-semibold uppercase text-neutral-500'
 							>
@@ -69,7 +69,7 @@
 							</h6>
 							<p>{{ bio }}</p>
 						</div>
-						<div class='space-y-2'>
+						<div class='space-y-2' v-if='birthday'>
 							<h6
 								class='text-sm font-semibold uppercase text-neutral-500'
 							>
@@ -113,7 +113,7 @@
 							Projects
 						</router-link>
 					</div>
-					<router-view />
+					<router-view :user-id='id'/>
 				</div>
 				<div class='h-fit w-[250px] rounded-xl border bg-white'>
 					<div
@@ -149,6 +149,7 @@ import {
 	ChevronRightIcon,
 } from '@heroicons/vue/24/outline';
 import { computed, onUnmounted, watch } from 'vue';
+import moment from 'moment';
 
 const route = useRoute();
 const paramUsername = computed(() => {
@@ -175,6 +176,10 @@ const user = computed(() => {
 	}
 });
 
+const id = computed(() => {
+	return user.value?.id;
+});
+
 const username = computed(() => {
 	return user.value?.username;
 });
@@ -196,12 +201,15 @@ const bio = computed(() => {
 });
 
 const birthday = computed(() => {
-	return user.value?.birthday;
+	if (user.value?.birthday) {
+		return new Date(user.value.birthday);
+	}
 });
 
 const birthdayDateString = computed(() => {
-	const date = new Date(birthday.value);
-	return date.toLocaleDateString();
+	if (birthday.value) {
+		return moment(birthday.value).format('L');
+	}
 });
 
 onUnmounted(() => {
