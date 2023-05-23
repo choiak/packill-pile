@@ -576,7 +576,7 @@ function selectLi(id) {
 
 onKeyStroke('ArrowDown', (e) => {
 	e.preventDefault();
-	const resultsLi = document.querySelectorAll('li');
+	const resultsLi = document.querySelectorAll('[id^="result-"]');
 	if (resultsLi.length >= 0) {
 		if (resultsLiIndexSelected.value >= resultsLi.length - 1) {
 			resultsLiIndexSelected.value = 0;
@@ -591,7 +591,7 @@ onKeyStroke('ArrowDown', (e) => {
 
 onKeyStroke('ArrowUp', (e) => {
 	e.preventDefault();
-	const resultsLi = document.querySelectorAll('li');
+	const resultsLi = document.querySelectorAll('[id^="result-"]');
 	if (resultsLi.length >= 0) {
 		if (resultsLiIndexSelected.value <= 0) {
 			resultsLiIndexSelected.value = resultsLi.length - 1;
