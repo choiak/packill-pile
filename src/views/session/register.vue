@@ -35,6 +35,12 @@
 				<!--          </div>-->
 				<!--        </div>-->
 				<Textbox
+					placeholder="Display Name"
+					default-type="text"
+					input-class="rounded-lg"
+					@model="getDisplayName"
+				/>
+				<Textbox
 					placeholder="Email"
 					default-type="email"
 					autocomplete="email"
@@ -100,9 +106,10 @@ import { ref } from 'vue';
 import { register } from '@/api/auth.js';
 import router from '@/router/index.js';
 
-const email = ref('');
-const password = ref('');
-const username = ref('');
+const email = ref();
+const password = ref();
+const username = ref();
+const displayName = ref();
 
 function getEmail(value) {
 	email.value = value;
@@ -116,7 +123,11 @@ function getUsername(value) {
 	username.value = value;
 }
 
+function getDisplayName(value) {
+	displayName.value = value;
+}
+
 async function registerHandler() {
-	await register(username.value, email.value, password.value);
+	await register(username.value, displayName.value, email.value, password.value);
 }
 </script>
