@@ -1,19 +1,17 @@
 import router from '@/router/index.js';
 import { useUserStore } from '@/store/index.js';
-import { request, requestWIthValidation } from '@/utils/request.js';
+import { useFetch, useFetchValidated } from '@/utils/fetch.js';
 
 export async function login(identifier, password) {
-	await request
-		.post('/api/auth/local', {
-			identifier: identifier,
-			password: password,
-		})
-		.then((res) => {
-			localStorage.setItem('token', res.data.jwt);
+	await useFetch('api/auth/local').post({
+		identifier: identifier,
+		password: password,
+	})
+		.json()
+		.then((response) => {
+			console.log(response);
+			localStorage.setItem('token', response.data.value.jwt);
 			return router.push('/dashboard');
-		})
-		.catch((err) => {
-			console.log(err);
 		});
 }
 
@@ -22,66 +20,34 @@ export async function logout() {
 	return router.push('/login');
 }
 
-export async function register(username, email, password) {
-	await request
-		.post('/api/auth/local/register', {
-			username: username,
-			email: email,
-			password: password,
-		})
-		.then((res) => {
+export async function register(username, displayName, email, password) {
+	await useFetch('api/auth/local/register').post({
+		username: username,
+		displayName: displayName,
+		email: email,
+		password: password,
+	})
+		.json()
+		.then((response) => {
 			const userStore = useUserStore();
-			localStorage.setItem('token', res.data.jwt);
-			userStore.user.name = res.data.user.username;
+			localStorage.setItem('token', response.data.value.jwt);
+			userStore.user.name = response.data.value.user.username;
 			return router.push('dashboard');
-		})
-		.catch((err) => {
-			console.log(err);
 		});
 }
 
 export async function validateToken() {
 	let isValid = false;
-	await requestWIthValidation
-		.get('/api/users/me')
-		.then((res) => {
+	await useFetchValidated('api/users/me')
+		.get()
+		.then((response) => {
 			const userStore = useUserStore();
-			userStore.user.id = res.data.id;
-			userStore.user.username = res.data.username;
-			userStore.user.displayName = res.data.displayName;
-			return (isValid = true);
-		})
-		.catch((err) => {
-			console.log(err);
+			userStore.user.id = response.data.id;
+			userStore.user.username = response.data.username;
+			userStore.user.displayName = response.data.displayName;
+			isValid = true;
 		});
 	return isValid;
-}
-
-export async function doubleValidate(password) {
-	const userStore = useUserStore();
-
-	const tokenIsValid = await requestWIthValidation
-		.get('/api/users/me')
-		.then((res) => {
-			return true;
-		})
-		.catch((err) => {
-			return false;
-		});
-
-	const passwordIsValid = await request
-		.post('/api/auth/local', {
-			identifier: userStore.user.username,
-			password: password,
-		})
-		.then((res) => {
-			return true;
-		})
-		.catch((err) => {
-			return false;
-		});
-
-	return tokenIsValid && passwordIsValid;
 }
 
 export function getToken() {
