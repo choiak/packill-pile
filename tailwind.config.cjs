@@ -39,6 +39,7 @@ module.exports = {
 			text: ['Supreme'],
 			mono: ['Azeret\\ Mono'],
 			serif: ['Zodiak'],
+			display: ['Clash\\ Display']
 		},
 		extend: {},
 	},
