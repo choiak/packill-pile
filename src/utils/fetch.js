@@ -1,8 +1,20 @@
 import { getToken } from '@/api/auth.js';
 import { createFetch } from '@vueuse/core';
+import { handleApiError } from '@/utils/error.js';
+
+export const useFetch = createFetch({
+	baseUrl: '/devServer',
+	timeout: 5000,
+	options: {
+		onFetchError(ctx) {
+
+		},
+	},
+})
 
 export const useFetchValidated = createFetch({
-	baseUrl: 'http://localhost:1337',
+	baseUrl: '/devServer',
+	timeout: 5000,
 	options: {
 		beforeFetch({ options, cancel }) {
 			const token = getToken();
@@ -14,6 +26,9 @@ export const useFetchValidated = createFetch({
 				Authorization: `Bearer ${getToken()}`,
 			};
 			return { options };
+		},
+		onFetchError(ctx) {
+			handleApiError(ctx);
 		},
 	},
 });

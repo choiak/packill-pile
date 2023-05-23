@@ -10,4 +10,14 @@ export default defineConfig({
 			'@': path.resolve(__dirname, './src'),
 		},
 	},
+	server: {
+		proxy: {
+			'/devServer': {
+				target: 'http://127.0.0.1:1337',
+				changeOrigin: true,
+				secure: false,
+				rewrite: path => path.replace(/^\/devServer/, '')
+			},
+		},
+	},
 });
