@@ -1,40 +1,34 @@
 import { useErrorStore } from '@/store/error.js';
 import router from '@/router/index.js';
+import { ErrorInstance } from '@/utils/classes/errorInstance.js';
+import { ErrorType } from '@/utils/classes/errorType.js';
 
 export function handleError(error, message, source, line, column) {
 	const errorStore = useErrorStore();
-	let errorObject = {
-		type: errorStore.Type.global,
-	};
+	let errorObject;
 
 	if (error instanceof Error) {
 		const { name } = error;
-		errorObject = {
-			...errorObject, name: name, error: message, source, line, column,
-		};
+		errorObject = new ErrorInstance(ErrorType.GLOBAL, name, message, {
+			source, line, column,
+		});
 	} else {
-		errorObject = {
-			...errorObject, name: 'GlobalError', error: JSON.stringify(error), source, line, column,
-		};
+		errorObject = new ErrorInstance(ErrorType.GLOBAL, 'GlobalError', JSON.stringify(error), {
+			source, line, column,
+		});
 	}
 	errorStore.push(errorObject);
 }
 
 export function handleVueError(error, info) {
 	const errorStore = useErrorStore();
-	let errorObject = {
-		type: errorStore.Type.vue,
-	};
+	let errorObject;
 
 	if (error instanceof Error) {
 		const { name, message } = error;
-		errorObject = {
-			...errorObject, name: name, error: message, info,
-		};
+		errorObject = new ErrorInstance(ErrorType.VUE, name, message, { info });
 	} else {
-		errorObject = {
-			...errorObject, name: 'VueError', error: JSON.stringify(error), info,
-		};
+		errorObject = new ErrorInstance(ErrorType.VUE, 'VueError', JSON.stringify(error), { info });
 	}
 	errorStore.push(errorObject);
 }
@@ -56,7 +50,5 @@ export function handleApiError(ctx) {
 			break;
 	}
 
-	errorStore.push({
-		type: errorStore.Type.api, url, status, name: error.name, error: error?.message || JSON.stringify(error), data,
-	});
+	errorStore.push(new ErrorInstance(ErrorType.API, error.name, error?.message || JSON.stringify(error), { url, status, data }));
 }
