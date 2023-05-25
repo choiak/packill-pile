@@ -17,7 +17,7 @@
 					<h1 class="font-semibold drop-shadow-xl text-white">{{ code }}</h1>
 					<h5 class="font-medium uppercase drop-shadow-xl text-white">{{ statusText }}</h5>
 				</div>
-				<h6 class="leading-5 drop-shadow-xl text-white">{{ description }}</h6>
+				<p class="leading-5 drop-shadow-xl text-white">{{ description }}</p>
 			</div>
 			<div class="max-w-[25%] space-y-4">
 				<slot />
