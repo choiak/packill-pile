@@ -4,8 +4,8 @@ import { useSessionStorage } from '@vueuse/core';
 export const useErrorStore = defineStore('error', () => {
 	const errors = useSessionStorage('errors', []);
 
-	function push(errorObject) {
-		errors.value.push(errorObject);
+	function push(errorInstance) {
+		errors.value.push(errorInstance);
 	}
 
 	function clear() {
