@@ -1,6 +1,6 @@
 import qs from 'qs';
 import { useFetchValidated } from '@/utils/fetch.js';
-import { useUserStore } from '@/store/index.js';
+import { useUserStore } from '@/store/user.js';
 
 export function getMe(query = {}, config = {}) {
 	const queryString = qs.stringify(query, {
@@ -16,7 +16,7 @@ export function updateMe(content, query = {}, config = {}) {
 		encodeValuesOnly: true, // prettify URL
 	});
 
-	return useFetchValidated(`api/users/${userStore.user.id}?${queryString}`, config).put({
+	return useFetchValidated(`api/users/${userStore.id}?${queryString}`, config).put({
 		...content,
 	}).json();
 }
@@ -27,34 +27,14 @@ export function updateMyPassword(currentPassword, newPassword, confirmationPassw
 	}).json();
 }
 
-// export function deleteMe(password, config = {}) {
-// 	const userStore = useUserStore();
-// 	const query = qs.stringify({
-// 		...config,
-// 	}, {
-// 		encodeValuesOnly: true, // prettify URL
-// 	});
-//
-// 	return useFetch(
-// 		`http://localhost:1337/api/users/${userStore.user.id}?${query}`,
-// 		{
-// 			method: 'DELETE',
-// 			data: {
-// 				validationPassword: password,
-// 			},
-// 		},
-// 		true,
-// 	);
-// }
-
 export function updateMyPackage(id, query = {}, config = {}) {
 	const userStore = useUserStore();
 	const queryString = qs.stringify(query, {
 		encodeValuesOnly: true,
 	});
 
-	return useFetchValidated(`api/users/${userStore.user.id}?${queryString}`, config).put({
-		validationPassword: 'TODO', currentPackage: {
+	return useFetchValidated(`api/users/${userStore.id}?${queryString}`, config).put({
+		currentPackage: {
 			set: [id],
 		},
 	}).json();

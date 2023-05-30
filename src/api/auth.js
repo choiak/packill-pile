@@ -1,5 +1,5 @@
 import router from '@/router/index.js';
-import { useUserStore } from '@/store/index.js';
+import { useUserStore } from '@/store/user.js';
 import { useFetch, useFetchValidated } from '@/utils/fetch.js';
 
 export async function login(identifier, password) {
@@ -31,7 +31,9 @@ export async function register(username, displayName, email, password) {
 		.then((response) => {
 			const userStore = useUserStore();
 			localStorage.setItem('token', response.data.value.jwt);
-			userStore.user.name = response.data.value.user.username;
+			userStore.$patch({
+				username: response.data.value.user.username,
+			});
 			return router.push('dashboard');
 		});
 }
@@ -40,11 +42,14 @@ export async function validateToken() {
 	let isValid = false;
 	await useFetchValidated('api/users/me')
 		.get()
+		.json()
 		.then((response) => {
 			const userStore = useUserStore();
-			userStore.user.id = response.data.id;
-			userStore.user.username = response.data.username;
-			userStore.user.displayName = response.data.displayName;
+			userStore.$patch({
+				id: response.data.value.id,
+				username: response.data.value.username,
+				displayName: response.data.value.displayName
+			});
 			isValid = true;
 		});
 	return isValid;
