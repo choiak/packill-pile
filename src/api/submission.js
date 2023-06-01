@@ -20,42 +20,53 @@ export const postProblemSubmission = (problemId, answers, query = {}, config = {
 	}).json();
 };
 
-export const getProblemSubmissions = (query = {}) => {
-	const queryString = qs.stringify(
-		query,
-		{
-			encodeValuesOnly: true, // prettify URL
-		},
-	);
+export const getProblemSubmissions = (query = {}, config  = {}) => {
+	const queryString = computed(() => {
+		return qs.stringify(
+			unref(query),
+			{
+				encodeValuesOnly: true, // prettify URL
+			},
+		);
+	});
 
-	return useFetchValidated(`api/problem-submissions?${queryString}`).get().json();
+	const url = computed(() => {
+		return `api/problem-submissions?${unref(queryString)}`;
+	});
+
+
+	return useFetchValidated(url, config).get().json();
 };
 
 export const getProblemSubmission = (id, query = {}, config = {}) => {
-	const queryString = qs.stringify(
-		query,
-		{
-			encodeValuesOnly: true, // prettify URL
-		},
-	);
+	const queryString = computed(() => {
+		return qs.stringify(
+			unref(query),
+			{
+				encodeValuesOnly: true, // prettify URL
+			},
+		);
+	});
 
 	const url = computed(() => {
-		return `api/problem-submissions/${unref(id)}?${queryString}`;
+		return `api/problem-submissions/${unref(id)}?${unref(queryString)}`;
 	});
 
 	return useFetchValidated(url, config).get().json();
 };
 
 export const getQuestionSubmission = (id, query = {}, config = {}) => {
-	const queryString = qs.stringify(
-		query,
-		{
-			encodeValuesOnly: true, // prettify URL
-		},
-	);
+	const queryString = computed(() => {
+		return qs.stringify(
+			unref(query),
+			{
+				encodeValuesOnly: true, // prettify URL
+			},
+		);
+	});
 
 	const url = computed(() => {
-		return `api/question-submissions/${unref(id)}?${queryString}`;
+		return `api/question-submissions/${unref(id)}?${unref(queryString)}`;
 	});
 
 	return useFetchValidated(url, config).get().json();
