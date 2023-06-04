@@ -3,24 +3,34 @@ import qs from 'qs';
 import { computed, unref } from 'vue';
 
 export const postProblemSubmission = (problemId, answers, query = {}, config = {}) => {
-	const queryString = qs.stringify(
-		query,
-		{
-			encodeValuesOnly: true,
-		},
-	);
-
-	return useFetchValidated(`api/problem-submissions?${queryString}`, config).post({
-		data: {
-			problem: {
-				connect: [problemId],
+	const queryString = computed(() => {
+		return qs.stringify(
+			unref(query),
+			{
+				encodeValuesOnly: true,
 			},
-			rawAnswers: answers,
-		},
-	}).json();
+		);
+	});
+
+	const url = computed(() => {
+		return `api/problem-submissions?${unref(queryString)}`;
+	});
+
+	const payload = computed(() => {
+		return {
+			data: {
+				problem: {
+					connect: [unref(problemId)],
+				},
+				rawAnswers: unref(answers),
+			},
+		};
+	});
+
+	return useFetchValidated(url, config).post(payload).json();
 };
 
-export const getProblemSubmissions = (query = {}, config  = {}) => {
+export const getProblemSubmissions = (query = {}, config = {}) => {
 	const queryString = computed(() => {
 		return qs.stringify(
 			unref(query),
