@@ -7,7 +7,7 @@ export const useFetch = createFetch({
 	timeout: 5000,
 	options: {
 		onFetchError(ctx) {
-
+			handleApiError(ctx);
 		},
 	},
 })
