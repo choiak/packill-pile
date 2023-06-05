@@ -36,17 +36,20 @@ export function getMyNextProblem(topicId) {
 		}
 	}
 
-	if (unref(topicId)) {
-		abort();
+	function execute() {
 		problemsResponse.execute();
 		problemsCompletedResponse.execute();
+	}
+
+	if (unref(topicId)) {
+		abort();
+		execute();
 	}
 
 	watch(problemsQuery, () => {
 		if (unref(topicId)) {
 			abort();
-			problemsResponse.execute();
-			problemsCompletedResponse.execute();
+			execute();
 		}
 	});
 
@@ -82,5 +85,5 @@ export function getMyNextProblem(topicId) {
 		}
 	});
 
-	return { id: nextProblemId, isLoading, canAbort, abort };
+	return { id: nextProblemId, isLoading, canAbort, abort, execute };
 }
