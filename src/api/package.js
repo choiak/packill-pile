@@ -1,31 +1,37 @@
 import qs from 'qs';
 import { useFetchValidated } from '@/utils/fetch.js';
+import { computed, unref } from 'vue';
 
-export function getPackage(id, config = {}) {
-	const query = qs.stringify(
-		{
-			populate: ['areas'],
-			...config,
-		},
-		{
-			encodeValuesOnly: true, // prettify URL
-		},
-	);
+export function getPackage(id, query= {}, config = {}) {
+	const queryString = computed(() => {
+		return qs.stringify(
+			unref(query),
+			{
+				encodeValuesOnly: true, // prettify URL
+			},
+		);
+	});
 
-	return useFetchValidated(`api/packages/${id}?${query}`).get().json();
+	const url = computed(() => {
+		return `api/packages/${unref(id)}?${unref(queryString)}`;
+	});
+
+	return useFetchValidated(url, config).get().json();
 }
 
-export function getPackages(config = {}) {
-	const query = qs.stringify(
-		{
-			populate: ['areas'],
-			fields: ['name', 'description', 'areas', 'certificated'],
-			...config,
-		},
-		{
-			encodeValuesOnly: true, // prettify URL
-		},
-	);
+export function getPackages(query= {}, config = {}) {
+	const queryString = computed(() => {
+		return qs.stringify(
+			unref(query),
+			{
+				encodeValuesOnly: true, // prettify URL
+			},
+		);
+	});
 
-	return useFetchValidated(`api/packages/?${query}`).get().json();
+	const url = computed(() => {
+		return `api/packages/?${unref(queryString)}`;
+	});
+
+	return useFetchValidated(url, config).get().json();
 }

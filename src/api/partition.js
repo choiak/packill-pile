@@ -1,15 +1,20 @@
 import qs from 'qs';
 import { useFetchValidated } from '@/utils/fetch.js';
+import { computed, unref } from 'vue';
 
-export function getPartition(id, config= {}) {
-	const query = qs.stringify(
-		{
-			...config
-		},
-		{
-			encodeValuesOnly: true, // prettify URL
-		},
-	);
+export function getPartition(id, query = {}, config = {}) {
+	const queryString = computed(() => {
+		return qs.stringify(
+			unref(query),
+			{
+				encodeValuesOnly: true, // prettify URL
+			},
+		);
+	});
 
-	return useFetchValidated(`api/partitions/${id}?${query}`).get().json();
+	const url = computed(() => {
+		return `api/partitions/${unref(id)}?${unref(queryString)}`;
+	});
+
+	return useFetchValidated(url, config).get().json();
 }
