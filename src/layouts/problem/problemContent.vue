@@ -44,33 +44,75 @@
 					@model='getAnswer(item.question.data.id, $event)'
 				/>
 			</div>
-			<div class='flex items-center justify-between'>
-				<div></div>
-				<button
-					type='submit'
-					@click.prevent='handleSubmit'
-					class='btn-accent flex items-center space-x-1'
-					:disabled='!isCompleted || isWaitingResult'
+		</div>
+		<div class='flex justify-between items-center' v-if='!isLoading'>
+			<div class='space-y-1'>
+				<div
+					class='rounded-full px-2 py-1 h-fit w-fit'
+					:class='{"bg-neutral-300": isWaitingResult, "bg-blue-100": previousProblemSubmissionState === "AC", "bg-yellow-100": previousProblemSubmissionState === "WA"}'
 				>
-					<span>Submit</span>
-					<ChevronDoubleRightIcon class='h-4 w-4' />
-				</button>
+					<transition name='fade' mode='out-in'>
+						<VenustTooltip v-if='isWaitingResult'>
+							<template #reference>
+								<div class='flex items-center space-x-1'>
+									<div class='rounded-full h-1.5 w-1.5 bg-neutral-500 animate-pulse' />
+									<p class='text-neutral-500 font-semibold text-xs'>
+										{{ $t('submission.waitingForResult') }}</p>
+								</div>
+							</template>
+							<template #tooltip>{{ $t('submission.waitingForResultDescription') }}</template>
+						</VenustTooltip>
+						<VenustTooltip v-else-if='previousProblemSubmissionState === "AC"'>
+							<template #reference>
+								<div class='flex items-center space-x-1'>
+									<CheckIcon class='w-3.5 h-3.5 text-blue-600 stroke-2 min-w-fit' />
+									<p class='text-blue-600 font-semibold text-xs'>{{ $t('submission.accepted') }}</p>
+								</div>
+							</template>
+							<template #tooltip>{{ $t('submission.acceptedDescription') }}</template>
+						</VenustTooltip>
+						<VenustTooltip v-else-if='previousProblemSubmissionState === "WA"'>
+							<template #reference>
+								<div class='flex items-center space-x-1'>
+									<XMarkIcon class='w-3.5 h-3.5 text-yellow-600 stroke-2 min-w-fit' />
+									<p class='text-yellow-600 font-semibold text-xs'>{{ $t('submission.wrongAnswer') }}</p>
+								</div>
+							</template>
+							<template #tooltip>{{ $t('submission.wrongAnswerDescription') }}</template>
+						</VenustTooltip>
+					</transition>
+				</div>
+				<p class='text-neutral-500 text-xs font-medium' v-if='previousProblemSubmissionCreatedAtString'>
+					Submitted at <span
+					class='font-semibold'>{{ previousProblemSubmissionCreatedAtString }}</span></p>
 			</div>
+			<button
+				type='submit'
+				@click.prevent='handleSubmit'
+				class='btn-accent flex items-center space-x-1 ml-auto'
+				:disabled='!isCompleted || isWaitingResult'
+			>
+				<span class='capitalize'>{{ $t('submission.submit') }}</span>
+				<ChevronDoubleRightIcon class='h-4 w-4' />
+			</button>
 		</div>
 	</form>
 </template>
 
 <script setup>
 import DifficultyIndicator from '@/components/pile/problem/difficultyIndicator.vue';
-import { ChevronDoubleRightIcon } from '@heroicons/vue/24/outline/index.js';
-import { computed, provide, ref, watch } from 'vue';
+import { ChevronDoubleRightIcon, CheckIcon, XMarkIcon } from '@heroicons/vue/24/outline/index.js';
+import { computed, onUnmounted, provide, ref, watch } from 'vue';
 import { getProblem } from '@/api/problem.js';
 import {
 	getProblemSubmission,
 	postProblemSubmission,
 } from '@/api/submission.js';
 import Question from '@/layouts/question/question.vue';
+import moment from 'moment';
+import VenustTooltip from '@/components/venust/tooltip/venustTooltip.vue';
 
+const emit = defineEmits(['previousProblemSubmissionChange']);
 const props = defineProps({
 	problemId: Number,
 });
@@ -122,20 +164,28 @@ const difficultyId = computed(() => {
 	return problem.value?.difficulty.data.id;
 });
 
+const publishedAt = computed(() => {
+	if (problem.value?.publishedAt) {
+		return new Date(problem.value?.publishedAt);
+	}
+});
+
 const publishedAtString = computed(() => {
-	return new Date(problem.value?.publishedAt).toLocaleString('en-GB', {
-		day: 'numeric',
-		month: 'short',
-		year: 'numeric',
-	});
+	if (publishedAt.value) {
+		return moment(publishedAt.value).format('L');
+	}
+});
+
+const updatedAt = computed(() => {
+	if (problem.value?.updatedAt) {
+		return new Date(problem.value?.updatedAt);
+	}
 });
 
 const updatedAtString = computed(() => {
-	return new Date(problem.value?.updatedAt).toLocaleString('en-GB', {
-		day: 'numeric',
-		month: 'short',
-		year: 'numeric',
-	});
+	if (updatedAt.value) {
+		return moment(updatedAt.value).format('L');
+	}
 });
 
 const answers = ref([]);
@@ -170,58 +220,81 @@ const isCompleted = computed(() => {
 	);
 });
 
-const previousProblemSubmissionIdResponse = ref(null);
+const previousProblemSubmissionIdResponse = postProblemSubmission(
+	props.problemId,
+	answers,
+	{
+		fields: ['id'],
+	},
+	{
+		immediate: false,
+	},
+);
+
 const previousProblemSubmissionId = computed(() => {
-	return previousProblemSubmissionIdResponse.value?.data?.data?.id;
+	return previousProblemSubmissionIdResponse.data.value?.data?.id;
 });
 
-const previousProblemSubmissionResponse = ref(null);
+const previousProblemSubmissionResponse = getProblemSubmission(previousProblemSubmissionId, {}, { immediate: false });
+
 const previousProblemSubmission = computed(() => {
-	return previousProblemSubmissionResponse.value?.data?.data;
+	return previousProblemSubmissionResponse.data.value?.data?.attributes;
+});
+
+const previousProblemSubmissionState = computed(() => {
+	return previousProblemSubmission.value?.state;
+});
+
+const previousProblemSubmissionCreatedAt = computed(() => {
+	if (previousProblemSubmission.value?.createdAt) {
+		return new Date(previousProblemSubmission.value?.createdAt);
+	} else {
+		return null;
+	}
+});
+
+const previousProblemSubmissionCreatedAtString = computed(() => {
+	if (previousProblemSubmissionCreatedAt.value) {
+		return moment(previousProblemSubmissionCreatedAt.value).format('LLL');
+	} else {
+		return null;
+	}
 });
 
 const isWaitingResult = computed(() => {
-	return (
-		previousProblemSubmission.value?.attributes?.state === 'NA' ||
-		(previousProblemSubmissionResponse.value &&
-			previousProblemSubmission.value === undefined) ||
-		previousProblemSubmissionIdResponse.value === undefined
-	);
+	return (previousProblemSubmissionIdResponse.isFetching.value || previousProblemSubmissionIdResponse.isFetching.value || previousProblemSubmissionState.value === 'NA');
 });
 
 provide('isWaitingResult', isWaitingResult);
 
 function handleSubmit() {
 	if (isCompleted) {
-		previousProblemSubmissionIdResponse.value = postProblemSubmission(
-			props.problemId,
-			answers.value,
-			{
-				fields: ['id'],
-			},
-		);
+		previousProblemSubmissionIdResponse.execute();
 	}
 }
 
 watch(previousProblemSubmissionId, (newId) => {
 	if (newId) {
-		previousProblemSubmissionResponse.value = getProblemSubmission(
-			previousProblemSubmissionId.value,
-		);
+		previousProblemSubmissionResponse.execute();
 	}
 });
 
 watch(previousProblemSubmission, (newSubmission) => {
-	if (
-		newSubmission &&
-		newSubmission?.attributes?.state === 'NA' &&
-		previousProblemSubmissionId.value
-	) {
-		setTimeout(() => {
-			previousProblemSubmissionResponse.value = getProblemSubmission(
-				previousProblemSubmissionId.value,
-			);
-		}, 1 * 1000);
+	emit('previousProblemSubmissionChange', newSubmission);
+	if ((previousProblemSubmissionState.value === 'NA' || !previousProblemSubmissionState.value) && previousProblemSubmissionId.value) {
+		previousProblemSubmissionResponse.execute();
+	}
+});
+
+onUnmounted(() => {
+	if (problemResponse.canAbort.value) {
+		problemResponse.abort();
+	}
+	if (previousProblemSubmissionResponse.canAbort.value) {
+		previousProblemSubmissionResponse.abort();
+	}
+	if (previousProblemSubmissionIdResponse.canAbort.value) {
+		previousProblemSubmissionIdResponse.abort();
 	}
 });
 </script>

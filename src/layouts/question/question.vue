@@ -1,17 +1,17 @@
 <template>
 	<transition name='fade' mode='out-in'>
-		<div v-if='isLoading' class="rounded-lg border bg-slate-50 w-full animate-pulse h-[200px]"/>
+		<div v-if='isLoading' class='rounded-lg border bg-slate-50 w-full animate-pulse h-[200px]' />
 		<div v-else>
-			<div v-for="item in content">
+			<div v-for='item in content'>
 				<Choice
 					v-if="item.__component === 'question.multiple-choice'"
-					:question="item"
-					@model="sendParent"
+					:question='item'
+					@model='sendParent'
 				/>
 				<Short
 					v-if="item.__component === 'question.short-question'"
-					:question="item"
-					@model="sendParent"
+					:question='item'
+					@model='sendParent'
 				/>
 			</div>
 		</div>
@@ -27,11 +27,12 @@ import Short from '@/layouts/question/short.vue';
 const emit = defineEmits(['model']);
 const props = defineProps({
 	questionId: Number,
+	isCompleted: Boolean,
 });
 
 const propQuestionId = computed(() => {
 	return props.questionId;
-})
+});
 
 const questionResponse = getQuestion(propQuestionId, {
 	populate: {
@@ -53,7 +54,7 @@ watch(propQuestionId, (newQuestionId) => {
 
 const isLoading = computed(() => {
 	return questionResponse.isFetching.value || (!questionResponse.isFetching.value && !questionResponse.isFinished.value) || !propQuestionId.value;
-})
+});
 
 const question = computed(() => {
 	return questionResponse.data.value?.data?.attributes;

@@ -1,33 +1,45 @@
 <template>
-	<div class="space-y-8 rounded-lg border bg-slate-50 px-6 py-4">
-		<div class="space-y-2">
+	<div class='space-y-8 rounded-lg border bg-slate-50 px-6 py-4 transition'>
+		<div class='space-y-2'>
 			<div
-				class="w-fit rounded border px-1 text-sm font-medium text-neutral-500"
+				class='w-fit rounded border px-1 text-sm font-medium text-neutral-500'
 			>
 				Multiple Choice
 			</div>
-			<p class="flex-1 text-justify font-medium">{{ description }}</p>
+			<p class='flex-1 text-justify font-medium'>{{ description }}</p>
 		</div>
-		<div class="space-y-2">
-			<div v-for="option in options">
+		<div class='space-y-2'>
+			<div v-for='option in options'>
 				<input
-					:id="`option-${option?.id}`"
-					type="checkbox"
-					class="peer hidden"
-					v-model="input"
-					:value="option?.id"
-					@change="sendParent"
-					:disabled="isWaitingResult"
+					:id='`option-${option?.id}`'
+					type='checkbox'
+					class='peer hidden'
+					v-model='input'
+					:value='option?.id'
+					@change='sendParent'
+					:disabled='isWaitingResult'
 				/>
 				<label
-					:for="`option-${option?.id}`"
-					tabindex="0"
-					class="block rounded-lg border bg-neutral-50 px-4 py-2 font-medium shadow-sm transition hover:brightness-95 active:scale-95 peer-checked:border-blue-600 peer-checked:bg-blue-600 peer-checked:text-white peer-checked:shadow-lg peer-checked:shadow-blue-100"
+					:for='`option-${option?.id}`'
+					tabindex='0'
+					class='block rounded-lg border bg-neutral-50 px-4 py-2 font-medium shadow-sm transition hover:brightness-95 active:scale-95 peer-checked:border-blue-600 peer-checked:bg-blue-600 peer-checked:text-white peer-checked:shadow-lg peer-checked:shadow-blue-100'
 				>
 					{{ option.statement }}
 				</label>
 			</div>
 		</div>
+		<details class='space-y-4' v-if='correctOptions.length'>
+			<summary class='text-sm text-neutral-500 underline font-medium'>Show answer</summary>
+			<div class='space-y-1'>
+				<p class='text-xs text-neutral-500'>Solution</p>
+				<div
+					v-for='option in correctOptions'
+					class='rounded-lg border bg-gradient-to-r from-blue-600 to-emerald-500 px-4 py-2 font-medium shadow-sm text-white'
+				>
+					{{ option.statement }}
+				</div>
+			</div>
+		</details>
 	</div>
 </template>
 
@@ -46,6 +58,10 @@ const description = computed(() => {
 
 const options = computed(() => {
 	return props.question?.options;
+});
+
+const correctOptions = computed(() => {
+	return options.value.filter(option => option.isAnswer);
 });
 
 const input = ref([]);

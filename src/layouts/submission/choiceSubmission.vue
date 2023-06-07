@@ -22,16 +22,16 @@
 		<div class="space-y-1">
 			<p class="text-xs text-neutral-500">You answered</p>
 			<div class="space-y-2">
-				<label
+				<div
 					v-for="selectedOption in selectedOptions"
-					class="block rounded-lg border bg-neutral-50 px-4 py-2 font-medium shadow-sm transition"
+					class="rounded-lg border bg-neutral-50 px-4 py-2 font-medium shadow-sm transition"
 					:class="{
 						'border-blue-300': stateIsAC,
 						'border-yellow-400': stateIsWA,
 					}"
 				>
 					{{ selectedOption.statement }}
-				</label>
+				</div>
 			</div>
 		</div>
 	</div>

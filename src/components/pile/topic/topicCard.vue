@@ -23,10 +23,10 @@
 				<p class='text-neutral-500 text-xs font-medium'>This topic includes:</p>
 				<ol class='list-decimal'>
 					<li v-for='knowledge in knowledges' class='marker:font-medium'>
-						<div class='flex items-center justify-between underline-offset-2 decoration-1'>
+						<div class='flex items-center justify-between'>
 							<VenustTooltip>
 								<template #reference>
-									<p class='font-medium underline decoration-dashed'>{{ knowledge.attributes.title
+									<p class='font-medium underline decoration-dashed underline-offset-2 decoration-1'>{{ knowledge.attributes.title
 										}}</p>
 								</template>
 								<template #tooltip>
@@ -57,11 +57,11 @@ const props = defineProps({
 	accent: Boolean,
 });
 
-const topicId = computed(() => {
+const propTopicId = computed(() => {
 	return props.topicId;
 });
 
-const topicResponse = getTopic(topicId, {
+const topicResponse = getTopic(propTopicId, {
 	populate: {
 		areas: true,
 		knowledges: {
@@ -70,11 +70,11 @@ const topicResponse = getTopic(topicId, {
 	},
 }, { immediate: false });
 
-if (topicId.value) {
+if (propTopicId.value) {
 	topicResponse.execute();
 }
 
-watch(topicId, (newTopicId) => {
+watch(propTopicId, (newTopicId) => {
 	if (newTopicId) {
 		topicResponse.execute();
 	}
@@ -94,5 +94,4 @@ const areas = computed(() => {
 const knowledges = computed(() => {
 	return topic.value?.knowledges?.data;
 });
-
 </script>

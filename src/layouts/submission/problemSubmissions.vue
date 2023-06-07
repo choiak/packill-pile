@@ -1,51 +1,60 @@
 <template>
-	<div class="space-y-8">
+	<div class='space-y-8'>
 		<ProblemSubmission
-			v-for="problemSubmission in problemSubmissions"
-			:problem-submission-id="problemSubmission.id"
+			v-for='problemSubmission in problemSubmissions'
+			:key='problemSubmission.id'
+			:problem-submission-id='problemSubmission.id'
 		/>
 	</div>
 </template>
 
 <script setup>
 import { getProblemSubmissions } from '@/api/submission.js';
-import { computed, ref, watch } from 'vue';
+import { computed, onUnmounted, toRefs, watch } from 'vue';
 import ProblemSubmission from '@/layouts/submission/problemSubmission.vue';
 
 const props = defineProps({
 	problemId: Number,
+	previousProblemSubmission: Object,
 });
 
-const problemSubmissionsResponse = ref();
+const { problemId, previousProblemSubmission } = toRefs(props);
 
-watch(props, (newProps) => {
-	if (newProps.problemId) {
-		problemSubmissionsResponse.value = getProblemSubmissions({
-			sort: ['id:desc'],
-			filters: {
-				problem: props.problemId,
-			},
-		});
-	} else if (newProps.problemId === null) {
-		problemSubmissionsResponse.value = null;
-	}
-});
-
-if (props.problemId) {
-	problemSubmissionsResponse.value = getProblemSubmissions({
-		fields: ['id'],
+const query = computed(() => {
+	return {
 		sort: ['id:desc'],
 		filters: {
 			problem: props.problemId,
 		},
-		pagination: {
-			page: 1,
-			pageSize: 10,
-		},
-	});
+	};
+});
+
+const problemSubmissionsResponse = getProblemSubmissions({
+	sort: ['id:desc'],
+	filters: {
+		problem: props.problemId,
+	},
+}, { immediate: false });
+
+if (problemId) {
+	problemSubmissionsResponse.execute();
 }
 
+watch(problemId, () => {
+	problemSubmissionsResponse.execute();
+});
+
+watch(previousProblemSubmission, () => {
+	problemSubmissionsResponse.execute();
+});
+
 const problemSubmissions = computed(() => {
-	return problemSubmissionsResponse.value?.data?.data;
+	return problemSubmissionsResponse.data.value?.data;
+});
+
+onUnmounted(() => {
+	if (problemSubmissionsResponse.canAbort.value) {
+		problemSubmissionsResponse.abort();
+	}
 });
 </script>

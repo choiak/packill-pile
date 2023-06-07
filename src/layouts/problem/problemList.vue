@@ -7,13 +7,23 @@
 		<div v-if='problemsCount' class='p-1'>
 			<router-link
 				v-for='problem in problems'
-				class='flex items-center space-x-2 rounded bg-white px-2 py-1 hover:brightness-95'
+				class='flex items-center justify-between rounded bg-white px-2 py-1 hover:brightness-95'
 				:to='problem.id.toString()'
 			>
-				<DifficultyIndicator
-					:difficulty-id='problem.attributes.difficulty.data.id'
-				/>
-				<p class='text-sm font-medium'>{{ problem.attributes.name }}</p>
+				<div class='flex items-center space-x-2'>
+					<DifficultyIndicator
+						:difficulty-id='problem.attributes.difficulty.data.id'
+					/>
+					<p class='text-sm font-medium'>
+						{{ problem.attributes.name }}
+					</p>
+				</div>
+				<VenustTooltip v-if='checkIsCompleted(problem.id)'>
+					<template #reference>
+						<CheckIcon class='w-4 h-4 w-fit text-blue-600 stroke-2' />
+					</template>
+					<template #tooltip>Completed</template>
+				</VenustTooltip>
 			</router-link>
 		</div>
 		<div v-else class='flex flex-col items-center justify-center p-4'>
@@ -33,11 +43,14 @@
 </template>
 
 <script setup>
+import { CheckIcon } from '@heroicons/vue/24/outline/index.js';
 import { getProblems } from '@/api/problem.js';
 import { computed, onUnmounted, watch } from 'vue';
 import DifficultyIndicator from '@/components/pile/problem/difficultyIndicator.vue';
 import VenustBadge from '@/components/venust/badge/venustBadge.vue';
 import { FaceFrownIcon } from '@heroicons/vue/24/solid/index.js';
+import VenustTooltip from '@/components/venust/tooltip/venustTooltip.vue';
+import { getMe } from '@/api/me.js';
 
 const props = defineProps({
 	topicId: Number,
@@ -86,7 +99,34 @@ const problemsCount = computed(() => {
 	return pagination.value?.total;
 });
 
+const meResponse = getMe({
+	fields: [''],
+	populate: {
+		completedProblems: {
+			fields: ['id'],
+		},
+	},
+});
+
+const me = computed(() => {
+	return meResponse.data.value;
+});
+
+const completedProblems = computed(() => {
+	return me.value?.completedProblems;
+});
+
+const checkIsCompleted = (problemId) => {
+	if (completedProblems.value) {
+		return completedProblems.value.some((completedProblem) => completedProblem.id === problemId);
+	} else
+		return false;
+};
+
 onUnmounted(() => {
+	if (meResponse.canAbort.value) {
+		meResponse.abort();
+	}
 	if (problemsResponse.canAbort.value) {
 		problemsResponse.abort();
 	}
