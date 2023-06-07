@@ -10,6 +10,11 @@
 				<Square3Stack3DIcon class="h-5 w-5" />
 			</button>
 		</router-link>
+		<router-link to="/blog">
+			<button class="btn-menu flex items-center space-x-4">
+				<MegaphoneIcon class="h-5 w-5" />
+			</button>
+		</router-link>
 	</div>
 </template>
 
@@ -17,5 +22,6 @@
 import {
 	RectangleGroupIcon,
 	Square3Stack3DIcon,
+	MegaphoneIcon
 } from '@heroicons/vue/24/outline';
 </script>
