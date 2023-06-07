@@ -4,7 +4,7 @@
 		@click="toggle"
 	>
 		<MagnifyingGlassIcon class="h-4 w-4" />
-		<label>Global Search</label>
+		<label>{{ $t('search.globalSearch') }}</label>
 		<span class="flex items-center space-x-0.5">
 			<label
 				class="rounded border border-blue-600 px-1 text-xs shadow transition group-hover:bg-blue-600 group-hover:text-white"
@@ -131,6 +131,7 @@
 																		item,
 																	);
 																"
+																@dblclick='router.push(`/packages/${item.id}`); close()'
 															>
 																<span
 																	class="h-3 w-3 rounded-bl border-b-2 border-l-2 border-neutral-300"
@@ -210,6 +211,7 @@
 																		item,
 																	);
 																"
+																@dblclick='router.push(`/workspace/${item.id}`); close()'
 															>
 																<span
 																	class="h-3 w-3 rounded-bl border-b-2 border-l-2 border-neutral-300"
@@ -505,8 +507,9 @@ import VenustBadge from '@/components/venust/badge/venustBadge.vue';
 import { computed, ref } from 'vue';
 import { onKeyStroke, useMagicKeys, whenever } from '@vueuse/core';
 import { vOnClickOutside } from '@vueuse/components';
-import SearchPreview from '@/layouts/search/searchPreview.vue';
+import SearchPreview from '@/layouts/search/preview/searchPreview.vue';
 import VenustAvatar from '@/components/venust/avatar/venustAvatar.vue';
+import router from '@/router/index.js';
 
 const searchClient = instantMeiliSearch(
 	'http://localhost:7700',
