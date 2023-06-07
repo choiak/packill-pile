@@ -95,7 +95,7 @@ const problem = computed(() => {
 const problemName = computed(() => {
 	return problem.value?.name;
 });
-console.log(problem)
+
 onUnmounted(() => {
 	if (activityResponse.canAbort.value) {
 		activityResponse.abort();

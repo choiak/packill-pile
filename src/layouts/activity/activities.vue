@@ -46,7 +46,7 @@ watch(propUserId, (newUserId) => {
 const activities = computed(() => {
 	return activitiesResponse.data.value?.data;
 });
-console.log(activities);
+
 function getActivityComponent(type) {
 	switch(type){
 		case 'user-join':
