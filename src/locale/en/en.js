@@ -5,6 +5,7 @@ import search from '@/locale/en/search.js';
 import quiz from '@/locale/en/quiz.js';
 import dashboard from '@/locale/en/dashboard.js';
 import submission from '@/locale/en/submission.js';
+import activity from '@/locale/en/activity.js';
 
 export default {
 	error,
@@ -14,4 +15,5 @@ export default {
 	quiz,
 	dashboard,
 	submission,
+	activity
 }
