@@ -9,7 +9,7 @@
 		<template #container>
 			<div class='w-[500px] rounded-xl shadow-lg bg-white border'>
 				<div class='flex items-center justify-between p-4'>
-					<h5 class='font-bold'>{{ $t('notification.notification') }}</h5>
+					<p class='font-bold'>{{ $t('notification.notification') }}</p>
 					<button class='flex space-x-1 items-center' @click.prevent='readAll'>
 						<CheckIcon class='w-4 h-4 text-blue-600 stroke-2' />
 						<label class='text-sm font-medium text-blue-600'>{{ $t("notification.markAllAsRead") }}</label>
