@@ -81,3 +81,30 @@ export const getQuestionSubmission = (id, query = {}, config = {}) => {
 
 	return useFetchValidated(url, config).get().json();
 };
+
+export function postQuizSubmission(quizId, answers, query = {}, config = {}) {
+	const queryString = computed(() => {
+		return qs.stringify(
+			unref(query),
+			{
+				encodeValuesOnly: true,
+			});
+	});
+
+	const url = computed(() => {
+		return `api/quiz-submissions?${unref(queryString)}`;
+	});
+
+	const payload = computed(() => {
+		return {
+			data: {
+				quiz: {
+					connect: [unref(quizId)],
+				},
+				rawAnswers: unref(answers),
+			},
+		};
+	});
+
+	return useFetchValidated(url, config).post(payload).json();
+}
