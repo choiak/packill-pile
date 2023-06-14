@@ -1,5 +1,6 @@
 <template>
-	<div
+	<section
+		:id='normalizedTitle'
 		class='flex flex-col items-center space-y-4'
 	>
 		<div class='flex w-full items-center justify-between space-x-4'>
@@ -15,7 +16,7 @@
 					<h5
 						class='w-fit rounded-lg bg-blue-600 px-2 font-semibold uppercase tracking-widest text-white'
 					>
-						{{ order + 1 }}. {{ title }}
+						{{ order }}. {{ title }}
 					</h5>
 					<div class='flex items-center space-x-1'>
 						<div class='rounded border px-1 text-xs font-medium text-white bg-orange-600 border-orange-600'
@@ -62,7 +63,7 @@
 				<div class='h-5 animate-pulse bg-slate-200 rounded w-3/5 mr-auto ml-auto'/>
 			</div>
 			<div class='flex items-center space-x-2' v-else-if='purpose'>
-				<FireIcon class='h-4 w-4 text-neutral-500' />
+				<FireIcon class='h-4 w-4 text-neutral-500 min-h-fit min-w-fit' />
 				<p class='font-medium text-sm text-neutral-500 italic'>This knowledge aims to {{ purpose }}.</p>
 			</div>
 		</transition>
@@ -78,7 +79,7 @@
 				class='prose-article w-full text-justify font-text'
 			/>
 		</transition>
-	</div>
+	</section>
 </template>
 
 <script setup>
@@ -87,6 +88,7 @@ import 'highlight.js/styles/a11y-dark.css';
 import { computed, onUnmounted, watch } from 'vue';
 import { getKnowledge } from '@/api/knowledge.js';
 import ProfileCard from '@/layouts/user/profileCard.vue';
+import { normalize } from '@/utils/format.js';
 
 const props = defineProps({
 	knowledgeId: Number,
@@ -126,6 +128,14 @@ const knowledge = computed(() => {
 
 const title = computed(() => {
 	return knowledge.value?.title;
+});
+
+const normalizedTitle = computed(() => {
+	if (title.value) {
+		return normalize(title.value);
+	} else {
+		return null;
+	}
 });
 
 const areas = computed(() => {

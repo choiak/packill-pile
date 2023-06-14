@@ -15,15 +15,14 @@ import NotFound from '@/views/error/404.vue';
 import Forbidden from '@/views/error/403.vue';
 import Unauthorized from '@/views/error/401.vue';
 import Security from '@/layouts/settings/security.vue';
-import Activities from '@/layouts/user/activities.vue';
+import Activities from '@/layouts/activity/activities.vue';
 import Projects from '@/layouts/user/projects.vue';
 import Subscription from '@/layouts/settings/subscription.vue';
 import DeleteAccount from '@/layouts/settings/deleteAccount.vue';
-import ProblemLoading from '@/layouts/problem/problemLoading.vue';
-import ProblemDone from '@/layouts/problem/problemDone.vue';
-import Problem from '@/layouts/problem/problem.vue';
 import Blog from '@/views/blog/blog.vue';
 import Announcement from '@/views/blog/announcement.vue';
+import Quiz from '@/views/quiz/quiz.vue';
+import Topics from '@/views/topic/topics.vue';
 
 const routes = [{
 	name: 'Login', path: '/login', component: Login,
@@ -56,17 +55,14 @@ const routes = [{
 		name: 'SettingsSubscription', path: 'subscription', component: Subscription,
 	}],
 }, {
-	name: 'Workspace', path: '/workspace/:topicId', component: Workspace, children: [{
-		name: 'WorkspaceProblemLoading', path: '', component: ProblemLoading,
-	}, {
-		name: 'WorkspaceProblemDone', path: '0', component: ProblemDone,
-	}, {
-		name: 'WorkspaceProblem', path: ':problemId', component: Problem,
-	}],
+	name: 'Workspace', path: '/workspace/:topicId/:problemId?/:fragment?',
+	component: Workspace,
 }, {
-	name: 'Topic', path: '/topics/:id',
+	name: 'Topic', path: '/topic/:id',
 }, {
 	name: 'Problem', path: '/problems/:id',
+}, {
+	name: 'Quiz', path: '/quizzes/:id', component: Quiz,
 }, {
 	name: 'Packages', path: '/packages', component: Packages,
 }, {
@@ -75,6 +71,8 @@ const routes = [{
 	name: 'Blog', path: '/blog', component: Blog,
 }, {
 	name: 'Announcement', path: '/blog/:announcementId', component: Announcement,
+}, {
+	name: 'Topics', path: '/topics', component: Topics,
 }, {
 	name: '401', path: '/401', component: Unauthorized,
 }, {
