@@ -4,22 +4,19 @@
 			<Dock>
 				<transition name='fade' mode='out-in'>
 					<div v-if='isLoading' class='space-y-1'>
-						<div class='rounded bg-slate-200 animate-pulse w-32 h-7'/>
-						<div class='rounded bg-slate-200 animate-pulse w-20 h-4'/>
+						<div class='rounded bg-slate-200 animate-pulse w-32 h-7' />
+						<div class='rounded bg-slate-200 animate-pulse w-20 h-4' />
 					</div>
 					<div v-else>
 						<h5 class='font-medium'>{{ topicTitle }}</h5>
-						<p class="text-sm">Workspace</p>
+						<p class='text-sm'>Workspace</p>
 					</div>
 				</transition>
 			</Dock>
 			<div class='flex w-full flex-1 divide-x overflow-auto'>
 				<Topic class='w-full flex-1 overflow-auto' />
-				<router-view class='w-[500px] overflow-auto' v-slot='{ Component }'>
-					<keep-alive>
-						<component :is="Component" :key="$route.fullPath"></component>
-					</keep-alive>
-				</router-view>
+				<Problem :key='$route.fullPath' :topic-id='paramTopicId'
+						 :problem-id='problemIdSuggested' class='w-[500px] overflow-auto' />
 			</div>
 		</div>
 	</Index>
@@ -28,6 +25,7 @@
 <script setup>
 import Index from '@/layouts/utils/index.vue';
 import Topic from '@/layouts/topic/topic.vue';
+import Problem from '@/layouts/problem/problem.vue';
 import { computed, onUnmounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { getTopic } from '@/api/topic.js';
@@ -64,7 +62,7 @@ watch(paramTopicId, (newTopicId) => {
 
 const isLoading = computed(() => {
 	return topicResponse.isFetching.value || (!topicResponse.isFetching.value && !topicResponse.isFinished.value) || !paramTopicId;
-})
+});
 
 const topic = computed(() => {
 	return topicResponse.data.value?.data?.attributes;
@@ -76,11 +74,15 @@ const topicTitle = computed(() => {
 
 const problemSuggested = getMyNextProblem(paramTopicId);
 const problemIdSuggested = computed(() => {
-	return problemSuggested.id.value;
+	if (paramProblemId.value) {
+		return paramProblemId.value;
+	} else {
+		return problemSuggested.id.value;
+	}
 });
 
 const problemSuggestedIsLoading = computed(() => {
-	return 	problemSuggested.isLoading.value;
+	return problemSuggested.isLoading.value;
 });
 
 watch(problemSuggestedIsLoading, (newIsLoading, oldIsLoading) => {

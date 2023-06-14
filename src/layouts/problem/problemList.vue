@@ -8,7 +8,7 @@
 			<router-link
 				v-for='problem in problems'
 				class='flex items-center justify-between rounded bg-white px-2 py-1 hover:brightness-95'
-				:to='problem.id.toString()'
+				:to='{params:{problemId: problem.id.toString()}}'
 			>
 				<div class='flex items-center space-x-2'>
 					<DifficultyIndicator
@@ -20,7 +20,7 @@
 				</div>
 				<VenustTooltip v-if='checkIsCompleted(problem.id)'>
 					<template #reference>
-						<CheckIcon class='w-4 h-4 w-fit text-blue-600 stroke-2' />
+						<CheckIcon class='w-4 h-4 min-w-fit text-blue-600 stroke-2' />
 					</template>
 					<template #tooltip>Completed</template>
 				</VenustTooltip>
@@ -45,7 +45,7 @@
 <script setup>
 import { CheckIcon } from '@heroicons/vue/24/outline/index.js';
 import { getProblems } from '@/api/problem.js';
-import { computed, onUnmounted, watch } from 'vue';
+import { computed, onUnmounted, toRefs, watch } from 'vue';
 import DifficultyIndicator from '@/components/pile/problem/difficultyIndicator.vue';
 import VenustBadge from '@/components/venust/badge/venustBadge.vue';
 import { FaceFrownIcon } from '@heroicons/vue/24/solid/index.js';
@@ -54,11 +54,10 @@ import { getMe } from '@/api/me.js';
 
 const props = defineProps({
 	topicId: Number,
+	previousProblemSubmission: Object,
 });
 
-const propTopicId = computed(() => {
-	return props.topicId;
-});
+const { topicId, previousProblemSubmission } = toRefs(props);
 
 const query = computed(() => {
 	return {
@@ -69,7 +68,7 @@ const query = computed(() => {
 		},
 		filters: {
 			topic: {
-				id: propTopicId.value,
+				id: topicId,
 			},
 		},
 	};
@@ -77,11 +76,11 @@ const query = computed(() => {
 
 const problemsResponse = getProblems(query, { immediate: false });
 
-if (propTopicId.value) {
+if (topicId.value) {
 	problemsResponse.execute();
 }
 
-watch(propTopicId, (newTopicId) => {
+watch(topicId, (newTopicId) => {
 	if (newTopicId) {
 		problemsResponse.execute();
 	}
@@ -106,6 +105,10 @@ const meResponse = getMe({
 			fields: ['id'],
 		},
 	},
+});
+
+watch(previousProblemSubmission, () => {
+	meResponse.execute();
 });
 
 const me = computed(() => {

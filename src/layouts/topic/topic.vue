@@ -1,9 +1,9 @@
 <template>
 	<div class='flex h-full flex-col bg-white'>
-		<div class='flex items-center justify-between border-b px-4 py-2'>
+		<div class='flex items-center justify-between border-b px-4 py-2 bg-stripes bg-stripes-orange-100'>
 			<div class='flex items-center space-x-1'>
-				<DocumentTextIcon class='h-4 w-4 text-neutral-500' />
-				<p class='font-bold uppercase text-neutral-500'>Topic</p>
+				<BookOpenIcon class='h-4 w-4 text-orange-600' />
+				<p class='font-bold uppercase text-orange-600'>Topic</p>
 			</div>
 			<div>
 				<VenustBadge>{{ knowledgesCount }} KNOWLEDGES</VenustBadge>
@@ -13,10 +13,6 @@
 			<div class='p-4 flex flex-col justify-between'>
 				<VenustProgressIndicator :sections='knowledgeTitles' :now-at-index='currentElementIndex'
 										 :action='scrollToElement' class='overflow-x-visible' />
-				<div
-					class='rounded-full bg-neutral-300 p-1 w-fit hover:bg-blue-600 text-neutral-500 hover:text-white transition'>
-					<LanguageIcon class='w-4 h-4' />
-				</div>
 			</div>
 			<div class='flex-1 divide-y overflow-auto' ref='knowledgesContainerElement'>
 				<div v-for='(knowledge, index) in knowledges' :key='knowledge.id' ref='knowledgeElements'>
@@ -32,7 +28,7 @@
 </template>
 
 <script setup>
-import { DocumentTextIcon, LanguageIcon } from '@heroicons/vue/24/solid';
+import { BookOpenIcon } from '@heroicons/vue/24/solid';
 import { getTopic } from '@/api/topic.js';
 import Knowledge from '@/layouts/knowledge/knowledge.vue';
 import { computed, onUnmounted, ref, watch } from 'vue';
@@ -102,7 +98,7 @@ const knowledgesCount = computed(() => {
 const knowledgeTitles = computed(() => {
 	if (knowledges.value) {
 		return knowledges.value.map((knowledge) => {
-			return { name: knowledge.attributes.title, to: `#${normalize(knowledge.attributes.title)}` };
+			return { name: knowledge.attributes.title, arg: `#${normalize(knowledge.attributes.title)}` };
 		});
 	}
 });

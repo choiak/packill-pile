@@ -28,7 +28,7 @@
 				</label>
 			</div>
 		</div>
-		<details class='space-y-4' v-if='correctOptions.length'>
+		<details class='space-y-4' v-if='correctOptions.length && !isInsideQuiz'>
 			<summary class='text-sm text-neutral-500 underline font-medium'>Show answer</summary>
 			<div class='space-y-1'>
 				<p class='text-xs text-neutral-500'>Solution</p>
@@ -50,7 +50,8 @@ const emit = defineEmits(['model']);
 const props = defineProps({
 	question: Object,
 });
-const isWaitingResult = inject('isWaitingResult');
+const isWaitingResult = inject('isWaitingResult', false);
+const isInsideQuiz = inject('isInsideQuiz', false);
 
 const description = computed(() => {
 	return props.question?.description;

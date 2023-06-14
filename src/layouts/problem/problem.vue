@@ -1,9 +1,9 @@
 <template>
-	<div class='flex h-full flex-col bg-white'>
-		<div class='flex items-center justify-between border-b px-4 py-2'>
+	<div class='flex h-full flex-col bg-white' @keydown.enter.prevent='handleSubmit'>
+		<div class='flex items-center justify-between border-b px-4 py-2 bg-stripes bg-stripes-purple-100'>
 			<div class='flex items-center space-x-1'>
-				<PencilIcon class='h-4 w-4 text-neutral-500' />
-				<p class='font-bold uppercase text-neutral-500'>Problem</p>
+				<PencilIcon class='h-4 w-4 text-purple-600' />
+				<p class='font-bold uppercase text-purple-600'>Problem</p>
 			</div>
 			<div class='flex items-center space-x-2'>
 				<VenustDropdown alignment='right'>
@@ -15,7 +15,7 @@
 						</button>
 					</template>
 					<template #container>
-						<ProblemList :topic-id='topicId' />
+						<ProblemList :topic-id='topicId' :previous-problem-submission='previousProblemSubmission' />
 					</template>
 				</VenustDropdown>
 				<button
@@ -42,15 +42,72 @@
 			class='relative flex-1 overflow-auto px-6 py-4'
 		>
 			<div v-show='!submissionsIsActive' class='h-full'>
-				<ProblemContent
-					:problem-id='problemId'
-					v-if='problemId'
-					@previous-problem-submission-change='getPreviousProblemSubmission'
-				/>
+				<div v-if='problemId' class='space-y-4'>
+					<ProblemContent
+						:problem-id='problemId'
+						@answers-change='getAnswers'
+						@question-length-change='getQuestionLength'
+						@is-problem-done-change='getIsProblemDone'
+					/>
+					<div class='flex justify-between items-center'>
+						<div class='space-y-1'>
+							<div
+								class='rounded-full px-2 py-1 h-fit w-fit'
+								:class='{"bg-neutral-300": isWaitingResult, "bg-blue-100": previousProblemSubmissionState === "AC", "bg-yellow-100": previousProblemSubmissionState === "WA"}'
+							>
+								<transition name='fade' mode='out-in'>
+									<VenustTooltip v-if='isWaitingResult'>
+										<template #reference>
+											<div class='flex items-center space-x-1'>
+												<div class='rounded-full h-1.5 w-1.5 bg-neutral-500 animate-pulse' />
+												<p class='text-neutral-500 font-semibold text-xs'>
+													{{ $t('submission.waitingForResult') }}</p>
+											</div>
+										</template>
+										<template #tooltip>{{ $t('submission.waitingForResultDescription') }}</template>
+									</VenustTooltip>
+									<VenustTooltip v-else-if='previousProblemSubmissionState === "AC"'>
+										<template #reference>
+											<div class='flex items-center space-x-1'>
+												<CheckIcon class='w-3.5 h-3.5 text-blue-600 stroke-2 min-w-fit' />
+												<p class='text-blue-600 font-semibold text-xs'>
+													{{ $t('submission.accepted') }}</p>
+											</div>
+										</template>
+										<template #tooltip>{{ $t('submission.acceptedDescription') }}</template>
+									</VenustTooltip>
+									<VenustTooltip v-else-if='previousProblemSubmissionState === "WA"'>
+										<template #reference>
+											<div class='flex items-center space-x-1'>
+												<XMarkIcon class='w-3.5 h-3.5 text-yellow-600 stroke-2 min-w-fit' />
+												<p class='text-yellow-600 font-semibold text-xs'>
+													{{ $t('submission.wrongAnswer') }}</p>
+											</div>
+										</template>
+										<template #tooltip>{{ $t('submission.wrongAnswerDescription') }}</template>
+									</VenustTooltip>
+								</transition>
+							</div>
+							<p class='text-neutral-500 text-xs font-medium'
+							   v-if='previousProblemSubmissionCreatedAtString'>
+								Submitted at <span
+								class='font-semibold'>{{ previousProblemSubmissionCreatedAtString }}</span></p>
+						</div>
+						<button
+							type='submit'
+							@click.prevent='handleSubmit'
+							class='btn-accent flex items-center space-x-1 ml-auto'
+							:disabled='!isProblemDone || isWaitingResult'
+						>
+							<span class='capitalize'>{{ $t('submission.submit') }}</span>
+							<ChevronDoubleRightIcon class='h-4 w-4' />
+						</button>
+					</div>
+				</div>
 				<ProblemDone v-else-if='problemId === 0' class='h-full' />
 			</div>
 			<Submissions :problem-id='problemId' :previous-problem-submission='previousProblemSubmission'
-						 v-show='submissionsIsActive' />
+						 v-if='problemId' v-show='submissionsIsActive' />
 		</div>
 		<div class='p-4 w-full'>
 			<router-link
@@ -69,14 +126,17 @@
 <script setup>
 import { ClockIcon, ListBulletIcon } from '@heroicons/vue/24/outline';
 import { PencilIcon } from '@heroicons/vue/24/solid';
-import { computed, onUnmounted, ref, toRefs, watch } from 'vue';
+import { computed, onUnmounted, provide, ref, toRefs, watch } from 'vue';
 import Submissions from '@/layouts/submission/problemSubmissions.vue';
 import ProblemContent from '@/layouts/problem/problemContent.vue';
 import VenustDropdown from '@/components/venust/dropdown/venustDropdown.vue';
 import ProblemList from '@/layouts/problem/problemList.vue';
 import ProblemDone from '@/layouts/problem/problemDone.vue';
-import { CheckIcon, ChevronDoubleRightIcon } from '@heroicons/vue/24/outline/index.js';
+import { CheckIcon, ChevronDoubleRightIcon, XMarkIcon } from '@heroicons/vue/24/outline/index.js';
 import { getMe } from '@/api/me.js';
+import { getProblemSubmission, postProblemSubmission } from '@/api/submission.js';
+import moment from 'moment';
+import VenustTooltip from '@/components/venust/tooltip/venustTooltip.vue';
 
 const props = defineProps({
 	topicId: Number,
@@ -114,19 +174,100 @@ const isCompleted = computed(() => {
 	}
 });
 
-const previousProblemSubmission = ref({});
+const questionLength = ref();
 
-function getPreviousProblemSubmission(value) {
-	previousProblemSubmission.value = value;
+function getQuestionLength(value) {
+	questionLength.value = value;
 }
 
+const answers = ref([]);
+
+function getAnswers(value) {
+	answers.value = value;
+}
+
+const isProblemDone = ref();
+
+function getIsProblemDone(value) {
+	isProblemDone.value = value;
+}
+
+const previousProblemSubmissionIdResponse = postProblemSubmission(
+	props.problemId,
+	answers,
+	{
+		fields: ['id'],
+	},
+	{
+		immediate: false,
+	},
+);
+
+const previousProblemSubmissionId = computed(() => {
+	return previousProblemSubmissionIdResponse.data.value?.data?.id;
+});
+
+const previousProblemSubmissionResponse = getProblemSubmission(previousProblemSubmissionId, {}, { immediate: false });
+
+const previousProblemSubmission = computed(() => {
+	return previousProblemSubmissionResponse.data.value?.data?.attributes;
+});
+
+const previousProblemSubmissionState = computed(() => {
+	return previousProblemSubmission.value?.state;
+});
+
+const previousProblemSubmissionCreatedAt = computed(() => {
+	if (previousProblemSubmission.value?.createdAt) {
+		return new Date(previousProblemSubmission.value?.createdAt);
+	} else {
+		return null;
+	}
+});
+
+const previousProblemSubmissionCreatedAtString = computed(() => {
+	if (previousProblemSubmissionCreatedAt.value) {
+		return moment(previousProblemSubmissionCreatedAt.value).format('LLL');
+	} else {
+		return null;
+	}
+});
+
+const isWaitingResult = computed(() => {
+	return (previousProblemSubmissionIdResponse.isFetching.value || previousProblemSubmissionIdResponse.isFetching.value || previousProblemSubmissionState.value === 'NA');
+});
+
+provide('isWaitingResult', isWaitingResult);
+
+function handleSubmit() {
+	if (isCompleted) {
+		previousProblemSubmissionIdResponse.execute();
+	}
+}
+
+watch(previousProblemSubmissionId, (newId) => {
+	if (newId) {
+		previousProblemSubmissionResponse.execute();
+	}
+});
+
 watch(previousProblemSubmission, () => {
-	meResponse.execute();
+	if ((previousProblemSubmissionState.value === 'NA' || !previousProblemSubmissionState.value) && previousProblemSubmissionId.value) {
+		previousProblemSubmissionResponse.execute();
+	} else {
+		meResponse.execute();
+	}
 });
 
 onUnmounted(() => {
 	if (meResponse.canAbort.value) {
 		meResponse.abort();
+	}
+	if (previousProblemSubmissionIdResponse.canAbort.value) {
+		previousProblemSubmissionIdResponse.abort();
+	}
+	if (previousProblemSubmissionResponse.canAbort.value) {
+		previousProblemSubmissionResponse.abort();
 	}
 });
 </script>
