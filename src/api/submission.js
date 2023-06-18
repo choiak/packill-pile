@@ -108,3 +108,35 @@ export function postQuizSubmission(quizId, answers, query = {}, config = {}) {
 
 	return useFetchValidated(url, config).post(payload).json();
 }
+
+export function getQuizSubmissions(query = {}, config ={}) {
+	const queryString = computed(() => {
+		return qs.stringify(
+			unref(query),
+			{
+				encodeValuesOnly: true,
+			});
+	});
+
+	const url = computed(() => {
+		return `api/quiz-submissions/?${unref(queryString)}`;
+	});
+
+	return useFetchValidated(url, config).get().json();
+}
+
+export function getQuizSubmission(id, query = {}, config ={}) {
+	const queryString = computed(() => {
+		return qs.stringify(
+			unref(query),
+			{
+				encodeValuesOnly: true,
+			});
+	});
+
+	const url = computed(() => {
+		return `api/quiz-submissions/${unref(id)}?${unref(queryString)}`;
+	});
+
+	return useFetchValidated(url, config).get().json();
+}
