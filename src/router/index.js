@@ -23,6 +23,8 @@ import Blog from '@/views/blog/blog.vue';
 import Announcement from '@/views/blog/announcement.vue';
 import Quiz from '@/views/quiz/quiz.vue';
 import Topics from '@/views/topic/topics.vue';
+import QuizSubmissions from '@/views/quiz/quizSubmissions.vue';
+import QuizSubmission from '@/views/quiz/quizSubmission.vue';
 
 const routes = [{
 	name: 'Login', path: '/login', component: Login,
@@ -73,6 +75,10 @@ const routes = [{
 	name: 'Announcement', path: '/blog/:announcementId', component: Announcement,
 }, {
 	name: 'Topics', path: '/topics', component: Topics,
+}, {
+	name: 'QuizSubmissions', path: '/submissions/quizzes/:quizId', component: QuizSubmissions,
+}, {
+	name: 'QuizSubmission', path: '/submission/quiz/:quizSubmissionId', component: QuizSubmission,
 }, {
 	name: '401', path: '/401', component: Unauthorized,
 }, {
