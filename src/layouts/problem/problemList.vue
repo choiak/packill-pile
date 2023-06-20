@@ -46,7 +46,7 @@
 import { CheckIcon } from '@heroicons/vue/24/outline/index.js';
 import { getProblems } from '@/api/problem.js';
 import { computed, onUnmounted, toRefs, watch } from 'vue';
-import DifficultyIndicator from '@/components/pile/problem/difficultyIndicator.vue';
+import DifficultyIndicator from '@/layouts/problem/difficultyIndicator.vue';
 import VenustBadge from '@/components/venust/badge/venustBadge.vue';
 import { FaceFrownIcon } from '@heroicons/vue/24/solid/index.js';
 import VenustTooltip from '@/components/venust/tooltip/venustTooltip.vue';

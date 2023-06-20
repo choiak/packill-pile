@@ -8,7 +8,7 @@
 	>
 		<div class="flex items-center justify-between">
 			<CheckIcon class="h-4 w-4 text-blue-600" v-if="stateIsAC" />
-			<XMarkIcon class="h-4 w-4 text-yellow-600" v-if="stateIsWA" />
+			<XMarkIcon class="h-4 w-4 text-yellow-600" v-else-if="stateIsWA" />
 			<div
 				class="w-fit rounded border px-1 text-xs font-medium"
 				:class="{
@@ -30,7 +30,7 @@
 			<p class="text-xs font-medium text-neutral-500">
 				{{ publishDateTime }}
 			</p>
-			<p class="text-xs font-medium text-neutral-500">{{ id }}</p>
+			<p class="text-xs font-medium text-neutral-500">Problem Submission ID: {{ id }}</p>
 		</div>
 	</div>
 </template>

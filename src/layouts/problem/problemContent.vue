@@ -49,7 +49,7 @@
 </template>
 
 <script setup>
-import DifficultyIndicator from '@/components/pile/problem/difficultyIndicator.vue';
+import DifficultyIndicator from '@/layouts/problem/difficultyIndicator.vue';
 import { computed, onUnmounted, ref, toRefs, watch } from 'vue';
 import { getProblem } from '@/api/problem.js';
 import Question from '@/layouts/question/question.vue';
