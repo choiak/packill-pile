@@ -3,7 +3,39 @@ import { computed } from 'vue';
 import { getMe } from '@/api/me.js';
 
 export const useMyStore = defineStore('me', () => {
-	const meResponse = getMe();
+	const meResponse = getMe({
+		populate: {
+			currentPackage: true,
+			currentTopicOrQuiz: {
+				populate: {
+					topic: {
+						populate: {
+							partitions: {
+								populate: {
+									topics: true,
+									quiz: true,
+									package: true,
+								},
+							},
+						},
+					},
+					quiz: {
+						populate: {
+							partition: {
+								populate: {
+									topics: true,
+									quiz: true,
+									package: true,
+								},
+							},
+						},
+					},
+				},
+			},
+			completedTopics: true,
+			completedQuizzes: true,
+		},
+	});
 
 	const me = computed(() => {
 		return meResponse.data.value;
@@ -33,5 +65,87 @@ export const useMyStore = defineStore('me', () => {
 		return me.value?.email;
 	});
 
-	return { me, username, displayName, bio, birthday, id, email, refresh: meResponse.execute };
+	const currentPackage = computed(() => {
+		return me.value?.currentPackage;
+	});
+
+	const currentTopicOrQuiz = computed(() => {
+		switch (currentType.value) {
+			case 'topic' :
+				return me.value.currentTopicOrQuiz[0].topic;
+			case 'quiz' :
+				return me.value.currentTopicOrQuiz[0].quiz;
+			default:
+				return null;
+		}
+	});
+
+	const currentType = computed(() => {
+		if (me.value?.currentTopicOrQuiz.length) {
+			switch (me.value?.currentTopicOrQuiz[0].__component) {
+				case 'relation.topic-connector' :
+					return 'topic';
+				case 'relation.quiz-connector' :
+					return 'quiz';
+				default:
+					return null;
+			}
+		} else {
+			return null;
+		}
+	});
+
+	const currentPartition = computed(() => {
+		switch (currentType.value) {
+			case 'topic':
+				return currentTopicOrQuiz.value?.partitions?.filter(partition => partition.package.id === currentPackage.value?.id)[0];
+			case 'quiz':
+				return currentTopicOrQuiz.value?.partition;
+			default:
+				return null;
+		}
+	});
+
+	const topicsAndQuizInCurrentPartition = computed(() => {
+		if (currentPartition.value) {
+			return [...currentPartition.value.topics.map(topic => {
+				return { type: 'topic', ...topic };
+			}), { type: 'quiz', ...currentPartition.value.quiz }];
+		} else {
+			return null;
+		}
+	});
+
+	const completedTopics = computed(() => {
+		return me.value?.completedTopics;
+	});
+
+	const completedQuizzes = computed(() => {
+		return me.value?.completedQuizzes;
+	});
+
+	const currentPartitionProgress = computed(() => {
+		if (topicsAndQuizInCurrentPartition.value) {
+			const completedTopicsAndQuizInCurrentPartition = topicsAndQuizInCurrentPartition.value.filter(item => (item.type === 'topic' && completedTopics.value.some(topic => topic.id === item.id)) || (item.type === 'quiz' && completedQuizzes.value.some(quiz => quiz.id === item.id)));
+			return completedTopicsAndQuizInCurrentPartition.length / topicsAndQuizInCurrentPartition.value.length;
+		} else {
+			return null;
+		}
+	});
+
+	return {
+		username,
+		displayName,
+		bio,
+		birthday,
+		id,
+		email,
+		currentPackage,
+		currentTopicOrQuiz,
+		currentPartition,
+		currentPartitionProgress,
+		completedTopics,
+		completedQuizzes,
+		refresh: meResponse.execute,
+	};
 });
