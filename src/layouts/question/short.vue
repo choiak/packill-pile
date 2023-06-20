@@ -10,7 +10,7 @@
 			</div>
 			<p class='flex-1 text-justify font-medium'>{{ description }}</p>
 		</div>
-		<form class='space-y-4'>
+		<div class='space-y-4'>
 			<VenustInput
 				placeholder='Type your answer here...'
 				default-type='text'
@@ -18,7 +18,7 @@
 				@model='sendParent'
 				:disabled='isWaitingResult'
 			/>
-		</form>
+		</div>
 		<details class='space-y-4' v-if='answer && !isInsideQuiz'>
 			<summary class='text-sm text-neutral-500 underline font-medium'>Show answer</summary>
 			<div class='space-y-1'>
