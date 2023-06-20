@@ -13,45 +13,55 @@
 					</div>
 				</transition>
 			</Dock>
-			<div class='flex-1 flex p-8 justify-between'>
-				<div class='flex flex-col justify-between'>
-					<VenustProgressIndicator :sections='problemNamesAndArgs' :now-at-index='currentProblemIndex'
-											 :action='goToProblemIndex' class='overflow-x-visible' />
-				</div>
-				<div class='flex-1 flex items-center justify-center'>
-					<button
-						:class='{"invisible": atFirstProblem}'
-						class='flex flex-col justify-center bg-orange-600 rounded-l-lg p-2 h-1/2 transition hover:scale-x-110'
-						@click.prevent='goToPreviousProblem'>
-						<ChevronLeftIcon class='w-6 h-6 min-w-fit text-white' />
-					</button>
-					<div class='h-full bg-white p-8 w-[1000px] rounded-xl border shadow-lg'>
-						<div v-for='(problem, index) in problems'>
-							<ProblemContent :problem-id='problem.id'
-											v-show='index === currentProblemIndex'
-											@answers-change='getAnswers'
-											@is-problem-done-change='getProblemDone(problem.id, $event)'
-							/>
-						</div>
+			<div class='flex-1 flex flex-col'>
+				<div class='flex items-center justify-between border-b px-4 py-2 bg-stripes bg-stripes-rose-100'>
+					<div class='flex items-center space-x-1'>
+						<DocumentIcon class='h-4 w-4 text-rose-600' />
+						<p class='font-bold uppercase text-rose-600'>Quiz</p>
 					</div>
-					<button
-						:class='{"invisible": atLastProblem}'
-						class='flex flex-col justify-center bg-blue-600 rounded-r-lg p-2 h-1/2 transition hover:scale-x-110'
-						@click.prevent='goToNextProblem'>
-						<ChevronRightIcon class='w-6 h-6 min-w-fit text-white' />
-					</button>
+					<div class='flex items-center space-x-2'>
+					</div>
 				</div>
-				<div class='flex flex-col justify-between'>
-					<div></div>
-					<button
-						type='submit'
-						@click.prevent='handleSubmit'
-						class='btn-accent flex items-center space-x-1'
-						:disabled='!isQuizDone'
-					>
-						<span class='capitalize'>{{ $t('submission.submit') }}</span>
-						<ChevronDoubleRightIcon class='h-4 w-4' />
-					</button>
+				<div class='flex-1 flex p-8 justify-between'>
+					<div class='flex flex-col justify-between'>
+						<VenustProgressIndicator :sections='problemNamesAndArgs' :now-at-index='currentProblemIndex'
+												 :action='goToProblemIndex' class='overflow-x-visible' />
+					</div>
+					<div class='flex-1 flex items-center justify-center'>
+						<button
+							:class='{"invisible": atFirstProblem}'
+							class='flex flex-col justify-center bg-orange-600 rounded-l-lg p-2 h-1/2 transition hover:scale-x-110'
+							@click.prevent='goToPreviousProblem'>
+							<ChevronLeftIcon class='w-6 h-6 min-w-fit text-white' />
+						</button>
+						<div class='h-full bg-white p-8 w-[1000px] rounded-xl border shadow-lg'>
+							<div v-for='(problem, index) in problems'>
+								<ProblemContent :problem-id='problem.id'
+												v-show='index === currentProblemIndex'
+												@answers-change='getAnswers'
+												@is-problem-done-change='getProblemDone(problem.id, $event)'
+								/>
+							</div>
+						</div>
+						<button
+							:class='{"invisible": atLastProblem}'
+							class='flex flex-col justify-center bg-blue-600 rounded-r-lg p-2 h-1/2 transition hover:scale-x-110'
+							@click.prevent='goToNextProblem'>
+							<ChevronRightIcon class='w-6 h-6 min-w-fit text-white' />
+						</button>
+					</div>
+					<div class='flex flex-col justify-between'>
+						<div></div>
+						<button
+							type='submit'
+							@click.prevent='handleSubmit'
+							class='btn-accent flex items-center space-x-1'
+							:disabled='!isQuizDone'
+						>
+							<span class='capitalize'>{{ $t('submission.submit') }}</span>
+							<ChevronDoubleRightIcon class='h-4 w-4' />
+						</button>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -59,15 +69,20 @@
 </template>
 
 <script setup>
-import { ChevronDoubleRightIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/outline/index.js';
+import {
+	ChevronDoubleRightIcon,
+	ChevronLeftIcon,
+	ChevronRightIcon, DocumentIcon,
+} from '@heroicons/vue/24/outline/index.js';
 import Index from '@/layouts/utils/index.vue';
 import Dock from '@/layouts/dock/dock.vue';
 import ProblemContent from '@/layouts/problem/problemContent.vue';
 import { getQuiz } from '@/api/quiz.js';
-import { computed, provide, ref } from 'vue';
+import { computed, provide, ref, watch } from 'vue';
 import VenustProgressIndicator from '@/components/venust/progress/venustProgressIndicator.vue';
 import { useRouteParams } from '@vueuse/router';
-import { postQuizSubmission } from '@/api/submission.js';
+import { getQuizSubmission, postQuizSubmission } from '@/api/submission.js';
+import router from '@/router/index.js';
 
 provide('isInsideQuiz', true);
 
@@ -180,6 +195,42 @@ const previousQuizSubmissionIdResponse = postQuizSubmission(quizId, answers,
 	{
 		immediate: false,
 	});
+
+const previousQuizSubmissionId = computed(() => {
+	return previousQuizSubmissionIdResponse.data.value?.data?.id;
+});
+
+const previousQuizSubmissionResponse = getQuizSubmission(previousQuizSubmissionId, {
+	fields: ['state']
+}, { immediate: false });
+
+const previousQuizSubmission = computed(() => {
+	return previousQuizSubmissionResponse.data.value?.data.attributes;
+});
+
+const previousQuizSubmissionState = computed(() => {
+	return previousQuizSubmission.value?.state;
+})
+
+watch(previousQuizSubmissionId, (newId) => {
+	if (newId) {
+		previousQuizSubmissionResponse.execute();
+	}
+});
+
+watch(previousQuizSubmission, () => {
+	if ((previousQuizSubmissionState.value === 'NA' || !previousQuizSubmissionState.value) && previousQuizSubmissionId.value) {
+		previousQuizSubmissionResponse.execute();
+	} else {
+		router.push(`/submission/quiz/${previousQuizSubmissionId.value}`)
+	}
+});
+
+const isWaitingResult = computed(() => {
+	return (previousQuizSubmissionIdResponse.isFetching.value || previousQuizSubmissionState.value === 'NA');
+});
+
+provide('isWaitingResult', isWaitingResult);
 
 function handleSubmit() {
 	if (isQuizDone.value) {
