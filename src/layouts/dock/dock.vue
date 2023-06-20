@@ -3,10 +3,14 @@
 		<div class="flex items-end">
 			<slot />
 		</div>
-		<Search />
+		<div class='flex items-center space-x-8'>
+			<Tracker />
+			<Search />
+		</div>
 	</div>
 </template>
 
 <script setup>
 import Search from '@/layouts/search/search.vue';
+import Tracker from '@/layouts/utils/tracker.vue';
 </script>
