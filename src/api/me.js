@@ -1,6 +1,6 @@
 import qs from 'qs';
 import { useFetchValidated } from '@/utils/fetch.js';
-import { useUserStore } from '@/store/user.js';
+import { useMyStore } from '@/store/me.js';
 
 export function getMe(query = {}, config = {}) {
 	const queryString = qs.stringify(query, {
@@ -11,7 +11,7 @@ export function getMe(query = {}, config = {}) {
 }
 
 export function updateMe(content, query = {}, config = {}) {
-	const userStore = useUserStore();
+	const userStore = useMyStore();
 	const queryString = qs.stringify(query, {
 		encodeValuesOnly: true, // prettify URL
 	});
@@ -28,7 +28,7 @@ export function updateMyPassword(currentPassword, newPassword, confirmationPassw
 }
 
 export function updateMyPackage(id, query = {}, config = {}) {
-	const userStore = useUserStore();
+	const userStore = useMyStore();
 	const queryString = qs.stringify(query, {
 		encodeValuesOnly: true,
 	});
