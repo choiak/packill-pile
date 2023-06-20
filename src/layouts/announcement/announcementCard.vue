@@ -1,15 +1,15 @@
 <template>
-		<VenustCard>
-			<div class="space-y-4">
-				<p class="font-display capitalize">{{ series }}</p>
-				<h6 class="font-display font-semibold leading-5">{{ title }}</h6>
-				<p class="line-clamp-3 text-neutral-700 leading-5">{{ lead }}</p>
-				<div class='flex items-baseline justify-between'>
-					<p class='text-xs text-neutral-700'>{{ authorDisplayName }}</p>
-					<p class='text-xs text-neutral-700'>{{ publishedAtString }}</p>
-				</div>
+	<VenustCard>
+		<div class='space-y-4'>
+			<p class='font-display capitalize'>{{ series }}</p>
+			<h6 class='font-display font-semibold leading-5'>{{ title }}</h6>
+			<p class='line-clamp-3 text-neutral-700 leading-5'>{{ lead }}</p>
+			<div class='flex items-baseline justify-between'>
+				<p class='text-xs text-neutral-700'>{{ authorDisplayName }}</p>
+				<p class='text-xs text-neutral-700'>{{ publishedAtString }}</p>
 			</div>
-		</VenustCard>
+		</div>
+	</VenustCard>
 </template>
 
 <script setup>
@@ -22,9 +22,9 @@ const props = defineProps({
 	announcementId: Number,
 });
 
-const announcementId = toRef(props, 'announcementId')
+const announcementId = toRef(props, 'announcementId');
 
-const announcementResponse = getAnnouncement(announcementId,{ populate: ['author']}, {immediate: false});
+const announcementResponse = getAnnouncement(announcementId, { populate: ['author'] }, { immediate: false });
 
 if (announcementId.value) {
 	announcementResponse.execute();
