@@ -12,7 +12,7 @@
 				<div class='w-0.5 bg-neutral-300 h-full' />
 			</div>
 		</div>
-		<div class='pt-1.5 pb-4 space-y-2 border-b'>
+		<div class='flex-1 pt-1.5 pb-4 space-y-2 border-b'>
 			<p class='font-semibold text-neutral-700'><slot name='message'/></p>
 			<slot name='details'/>
 		</div>

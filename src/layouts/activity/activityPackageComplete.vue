@@ -10,7 +10,7 @@
 		<template #createdAtTime>{{ createdAtTimeString }}</template>
 		<template #details>
 			<router-link to='' class='flex space-x-2 border rounded-lg bg-white p-2 w-fit items-center hover:underline hover:text-sky-800'>
-				<Square3Stack3DIcon class='text-teal-600 w-4 h-4'/>
+				<Square3Stack3DIcon class='text-blue-600 w-4 h-4'/>
 				<p class='text-sm font-semibold'>{{ packageName }}</p>
 				<ArrowUpRightIcon class='w-3 h-3'/>
 			</router-link>
@@ -34,6 +34,7 @@ const propActivityId = computed(() => {
 });
 
 const activityResponse = getActivity(propActivityId, {
+	fields: ['type', 'createdAt'],
 	populate: {
 		target: {
 			populate: {
