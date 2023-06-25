@@ -33,7 +33,12 @@ const routes = [
 		name: 'Workspace',
 		path: '/workspace/:topicId/:problemId?/:fragment?',
 		component: Workspace,
-	}, {
+	},
+	{
+		path: '/',
+		redirect: '/dashboard',
+	},
+	{
 		path: '/:pathMatch(.*)*',
 		redirect: '/404',
 	},
@@ -44,8 +49,13 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to) => {
-	if (!publicRouteNames.includes(to.name) && !(await validateToken())) {
+	const isAuthenticated  = await validateToken();
+
+	if (!publicRouteNames.includes(to.name) && !isAuthenticated) {
 		return { name: 'Login' };
+	}
+	if (isAuthenticated && auth.map(route => route.name).includes(to.name)) {
+		return { name: 'Dashboard' };
 	}
 });
 
