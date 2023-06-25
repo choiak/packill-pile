@@ -1,100 +1,50 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { validateToken } from '@/api/auth.js';
-import Login from '@/views/session/login.vue';
-import Register from '@/views/session/register.vue';
-import ForgetPassword from '@/views/session/forgetPassword.vue';
-import ResetPassword from '@/views/session/resetPassword.vue';
-import Dashboard from '@/views/pile/dashboard.vue';
-import User from '@/views/user/user.vue';
-import Workspace from '@/views/workspace/workspace.vue';
-import Packages from '@/views/workspace/packages.vue';
-import Package from '@/views/workspace/package.vue';
-import UserSettings from '@/views/settings/settings.vue';
-import General from '@/layouts/settings/general.vue';
-import NotFound from '@/views/error/404.vue';
-import Forbidden from '@/views/error/403.vue';
-import Unauthorized from '@/views/error/401.vue';
-import Security from '@/layouts/settings/security.vue';
-import Activities from '@/layouts/activity/activities.vue';
-import Projects from '@/layouts/user/projects.vue';
-import Subscription from '@/layouts/settings/subscription.vue';
-import DeleteAccount from '@/layouts/settings/deleteAccount.vue';
-import Blog from '@/views/blog/blog.vue';
-import Announcement from '@/views/blog/announcement.vue';
-import Quiz from '@/views/quiz/quiz.vue';
-import Topics from '@/views/topic/topics.vue';
-import QuizSubmissions from '@/views/quiz/quizSubmissions.vue';
-import QuizSubmission from '@/views/quiz/quizSubmission.vue';
+import announcement from '@/router/announcement.js';
+import auth from '@/router/auth.js';
+import error from '@/router/error.js';
+import pack from '@/router/package.js';
+import problem from '@/router/problem.js';
+import quiz from '@/router/quiz.js';
+import settings from '@/router/settings.js';
+import topic from '@/router/topic.js';
+import user from '@/router/user.js';
+import publicRouteNames from '@/router/publicRouteNames.js';
 
-const routes = [{
-	name: 'Login', path: '/login', component: Login,
-}, {
-	name: 'Register', path: '/register', component: Register,
-}, {
-	name: 'ForgetPassword', path: '/forget-password', component: ForgetPassword,
-}, {
-	name: 'ResetPassword', path: '/reset-password', component: ResetPassword,
-}, {
-	name: 'DeleteAccount', path: '/delete-account', component: DeleteAccount,
-}, {
-	name: 'Dashboard', path: '/dashboard', component: Dashboard,
-}, {
-	name: 'User', path: '/users/:username', component: User, redirect: {
-		name: 'UserActivities',
-	}, children: [{
-		name: 'UserActivities', path: 'activities', component: Activities,
+const Dashboard = () => import('@/views/pile/dashboard.vue');
+const Workspace = () => import('@/views/workspace/workspace.vue');
+
+const routes = [
+	...announcement,
+	...auth,
+	...error,
+	...pack,
+	...problem,
+	...quiz,
+	...settings,
+	...topic,
+	...user,
+	{
+		name: 'Dashboard',
+		path: '/dashboard',
+		component: Dashboard,
+	},
+	{
+		name: 'Workspace',
+		path: '/workspace/:topicId/:problemId?/:fragment?',
+		component: Workspace,
 	}, {
-		name: 'userProjects', path: 'projects', component: Projects,
-	}],
-}, {
-	name: 'UserSettings', path: '/settings', component: UserSettings, redirect: {
-		name: 'SettingsGeneral',
-	}, children: [{
-		name: 'SettingsGeneral', path: 'general', component: General,
-	}, {
-		name: 'SettingsSecurity', path: 'security', component: Security,
-	}, {
-		name: 'SettingsSubscription', path: 'subscription', component: Subscription,
-	}],
-}, {
-	name: 'Workspace', path: '/workspace/:topicId/:problemId?/:fragment?',
-	component: Workspace,
-}, {
-	name: 'Topic', path: '/topic/:id',
-}, {
-	name: 'Problem', path: '/problems/:id',
-}, {
-	name: 'Quiz', path: '/quizzes/:id', component: Quiz,
-}, {
-	name: 'Packages', path: '/packages', component: Packages,
-}, {
-	name: 'Package', path: '/packages/:id', component: Package,
-}, {
-	name: 'Blog', path: '/blog', component: Blog,
-}, {
-	name: 'Announcement', path: '/blog/:announcementId', component: Announcement,
-}, {
-	name: 'Topics', path: '/topics', component: Topics,
-}, {
-	name: 'QuizSubmissions', path: '/submissions/quizzes/:quizId', component: QuizSubmissions,
-}, {
-	name: 'QuizSubmission', path: '/submission/quiz/:quizSubmissionId', component: QuizSubmission,
-}, {
-	name: '401', path: '/401', component: Unauthorized,
-}, {
-	name: '403', path: '/403', component: Forbidden,
-}, {
-	name: '404', path: '/404', component: NotFound,
-}, {
-	path: '/:pathMatch(.*)*', redirect: '/404',
-}];
+		path: '/:pathMatch(.*)*',
+		redirect: '/404',
+	},
+];
 
 const router = createRouter({
 	history: createWebHistory(), routes,
 });
 
-router.beforeEach(async (to, from) => {
-	if (to.name !== 'Login' && to.name !== 'Register' && to.name !== 'ForgetPassword' && !(await validateToken())) {
+router.beforeEach(async (to) => {
+	if (!publicRouteNames.includes(to.name) && !(await validateToken())) {
 		return { name: 'Login' };
 	}
 });
