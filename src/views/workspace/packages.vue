@@ -58,7 +58,7 @@ import { getPackages } from '@/api/package.js';
 import { computed, onUnmounted, ref, watch } from 'vue';
 import gsap from 'gsap';
 import Dock from '@/layouts/dock/dock.vue';
-import PackageCard from '@/components/pile/package/packageCard.vue';
+import PackageCard from '@/layouts/package/packageCard.vue';
 import MultiAreaSelector from '@/components/pile/multiAreaSelector.vue';
 import VenustNumberBadge from '@/components/venust/badge/venustBadge.vue';
 

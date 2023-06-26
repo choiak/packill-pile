@@ -22,7 +22,7 @@
 				</div>
 				<button
 					class="btn-accent group flex items-center space-x-1"
-					@click.prevent="selectPackageHandler"
+					@click.prevent=""
 				>
 					<CursorArrowRippleIcon class="h-4 w-4 animate-pulse" />
 					<label class="animate-pulse">
@@ -34,7 +34,7 @@
 				class="w-full flex-1 space-y-8 overflow-auto rounded-xl border p-4 md:flex md:space-x-8 md:space-y-0"
 			>
 				<div
-					class="space-y-4 rounded-lg rounded-lg bg-gradient-to-tr from-neutral-700 to-purple-300 p-4 shadow-lg md:flex md:w-1/2 md:flex-col md:justify-between md:space-y-0 lg:w-1/3"
+					class="space-y-4 rounded-lg bg-gradient-to-tr from-neutral-700 to-purple-300 p-4 shadow-lg md:flex md:w-1/2 md:flex-col md:justify-between md:space-y-0 lg:w-1/3"
 				>
 					<div
 						class="grid grid-flow-row grid-cols-2 justify-between gap-y-2 lg:grid-cols-3"
@@ -106,7 +106,7 @@
 import Index from '@/layouts/utils/index.vue';
 import { CursorArrowRippleIcon } from '@heroicons/vue/24/outline/index.js';
 import { useRoute } from 'vue-router';
-import { getPackage, selectPackage } from '@/api/package.js';
+import { getPackage } from '@/api/package.js';
 import { computed } from 'vue';
 
 const route = useRoute();
@@ -117,8 +117,4 @@ const { response, data, error, loading, retry } = getPackage(packageId);
 const attributes = computed(() => {
 	return data.value?.data?.attributes;
 });
-
-async function selectPackageHandler() {
-	await selectPackage(packageId);
-}
 </script>
