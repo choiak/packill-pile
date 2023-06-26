@@ -10,6 +10,7 @@
 			:disabled="disabled"
 			v-model="input"
 			@input="sendParent"
+			@keydown.enter.prevent
 		/>
 		<div
 			v-if="hasIcon"
