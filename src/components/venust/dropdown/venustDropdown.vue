@@ -22,6 +22,10 @@ import { vOnClickOutside } from '@vueuse/components';
 import { createPopper } from '@popperjs/core';
 
 const props = defineProps({
+	options: {
+		type: Object,
+		default: {},
+	},
 	modifiers: {
 		type: Array,
 		default: [],
@@ -63,6 +67,7 @@ const createPopperInstance = () => {
 			},
 			...props.modifiers,
 		],
+		...props.options,
 	});
 	nextTick(() => {
 		popperInstance.update();
