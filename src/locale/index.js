@@ -1,28 +1,22 @@
 import en from '@/locale/en/en.js';
 import zhTW from '@/locale/zh-TW/zh-TW.js';
 import { createI18n } from 'vue-i18n';
-import { watch } from 'vue';
+import { useSettingsStore } from '@/store/settings.js';
+import { storeToRefs } from 'pinia';
 
-const messages = { en, 'zh-TW': zhTW };
+export const messages = { en, 'zh-TW': zhTW };
 
-const i18n = createI18n({
-	legacy: false,
-	globalInjection: true,
-	locale: getLang(),
-	fallbackLocale: 'en',
-	messages,
-});
+export function installI18n(app) {
+	const settingsStore = useSettingsStore();
+	const { locale } = storeToRefs(settingsStore);
 
-function getLang() {
-	const browserLocales = navigator.languages;
-	const availableLocales = Object.keys(messages);
-	const bestFitLocale = browserLocales.filter(locale => availableLocales.includes(locale))[0];
-
-	return localStorage.getItem('locale') || bestFitLocale || 'en';
+	const i18n = createI18n({
+		legacy: false,
+		globalInjection: true,
+		locale: locale.value,
+		fallbackLocale: 'en',
+		messages,
+	});
+	app.use(i18n);
+	return i18n;
 }
-
-watch(i18n.global.locale, (locale) => {
-	localStorage.setItem('locale', locale);
-});
-
-export default i18n;
