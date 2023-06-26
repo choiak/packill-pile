@@ -1,8 +1,25 @@
 import { defineStore } from 'pinia';
-import { computed } from 'vue';
+import { computed, watch } from 'vue';
 import { getMe } from '@/api/me.js';
+import { useLocalStorage } from '@vueuse/core';
 
 export const useMyStore = defineStore('me', () => {
+	const token = useLocalStorage('token', '');
+
+	function setToken(jwt) {
+		token.value = jwt;
+	}
+
+	function clearToken() {
+		token.value = '';
+	}
+
+	watch(token, (newToken, oldToken) => {
+		if (newToken !== oldToken) {
+			meResponse.execute();
+		}
+	});
+
 	const meResponse = getMe({
 		populate: {
 			currentPackage: true,
@@ -34,7 +51,13 @@ export const useMyStore = defineStore('me', () => {
 			},
 			completedTopics: true,
 			completedQuizzes: true,
+			completedProblems: true,
+			completedPackages: true,
 		},
+	});
+
+	const meIsLoading = computed(() => {
+		return meResponse.isFetching.value || (!meResponse.isFetching.value && !meResponse.isFinished.value);
 	});
 
 	const me = computed(() => {
@@ -57,12 +80,16 @@ export const useMyStore = defineStore('me', () => {
 		return me.value?.birthday;
 	});
 
-	const id = computed(() => {
+	const myId = computed(() => {
 		return me.value?.id;
 	});
 
 	const email = computed(() => {
 		return me.value?.email;
+	});
+
+	const createdAt = computed(() => {
+		return new Date(me.value?.createdAt);
 	});
 
 	const currentPackage = computed(() => {
@@ -124,28 +151,61 @@ export const useMyStore = defineStore('me', () => {
 		return me.value?.completedQuizzes;
 	});
 
+	const completedTopicsAndQuizInCurrentPartition = computed(() => {
+		if (topicsAndQuizInCurrentPartition.value) {
+			return topicsAndQuizInCurrentPartition.value.filter(item => (item.type === 'topic' && completedTopics.value.some(topic => topic.id === item.id)) || (item.type === 'quiz' && completedQuizzes.value.some(quiz => quiz.id === item.id)));
+		} else {
+			return null;
+		}
+	});
+
 	const currentPartitionProgress = computed(() => {
 		if (topicsAndQuizInCurrentPartition.value) {
-			const completedTopicsAndQuizInCurrentPartition = topicsAndQuizInCurrentPartition.value.filter(item => (item.type === 'topic' && completedTopics.value.some(topic => topic.id === item.id)) || (item.type === 'quiz' && completedQuizzes.value.some(quiz => quiz.id === item.id)));
-			return completedTopicsAndQuizInCurrentPartition.length / topicsAndQuizInCurrentPartition.value.length;
+			return completedTopicsAndQuizInCurrentPartition.value.length / topicsAndQuizInCurrentPartition.value.length;
+		} else {
+			return null;
+		}
+	});
+
+	const completedProblems = computed(() => {
+		return me.value?.completedProblems;
+	});
+
+	const completedPackages = computed(() => {
+		return me.value?.completedPackages;
+	});
+
+	const isCurrentPackageCompleted = computed(() => {
+		if (completedPackages.value && currentPackage.value) {
+			return completedPackages.value.some(pack => pack.id === currentPackage.value.id);
 		} else {
 			return null;
 		}
 	});
 
 	return {
+		token,
+		setToken,
+		clearToken,
+		meResponse,
+		meIsLoading,
 		username,
 		displayName,
 		bio,
 		birthday,
-		id,
+		myId,
 		email,
+		createdAt,
 		currentPackage,
 		currentTopicOrQuiz,
+		currentType,
+		completedProblems,
+		completedPackages,
 		currentPartition,
 		currentPartitionProgress,
 		completedTopics,
 		completedQuizzes,
+		isCurrentPackageCompleted,
 		refresh: meResponse.execute,
 	};
 });
