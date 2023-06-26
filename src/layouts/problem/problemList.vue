@@ -68,7 +68,7 @@ const query = computed(() => {
 		},
 		filters: {
 			topic: {
-				id: topicId,
+				id: topicId.value,
 			},
 		},
 	};
