@@ -82,7 +82,7 @@
 						</div>
 					</div>
 				</div>
-				<div class='flex-1 space-y-8 rounded-xl border bg-white p-8'>
+				<div class='flex-1 flex flex-col space-y-8 rounded-xl border bg-white p-8 overflow-auto'>
 					<div class='flex items-baseline space-x-4'>
 						<router-link
 							:to='`/users/${username}/activities`'
@@ -113,7 +113,9 @@
 							Projects
 						</router-link>
 					</div>
-					<router-view :user-id='id'/>
+					<div class='flex-1 overflow-auto'>
+						<router-view :user-id='id'/>
+					</div>
 				</div>
 				<div class='h-fit w-[250px] rounded-xl border bg-white'>
 					<div
