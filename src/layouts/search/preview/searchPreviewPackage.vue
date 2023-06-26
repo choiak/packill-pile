@@ -73,20 +73,12 @@
 				<VenustBadge>{{ partitionsCount }}</VenustBadge>
 			</div>
 			<div class='space-y-2'>
-				<div v-for='partition in partitions' class='rounded-lg border bg-neutral-100 px-4 py-2'>
+				<div v-for='partition in partitions' class='rounded-lg border bg-neutral-100 px-4 py-2 space-y-2'>
 					<div class='flex items-center space-x-4'>
-						<Square2StackIcon class='h-4 w-4'/>
-						<div class='flex justify-between items-center flex-1 space-x-4'>
-							<VenustTooltip>
-								<template #reference>
-									<p class='font-semibold underline decoration-dashed underline-offset-2 decoration-1'>{{ partition.name }}</p>
-								</template>
-								<template #tooltip>
-									{{ partition.description }}
-								</template>
-							</VenustTooltip>
-						</div>
+						<Square2StackIcon class='h-4 w-4 text-neutral-500 min-w-fit'/>
+						<p class='font-semibold text-neutral-500'>{{ partition.name }}</p>
 					</div>
+					<p class='font-medium text-xs text-neutral-500 ml-8' v-if='partition.description'>{{ partition.description }}</p>
 				</div>
 			</div>
 		</div>

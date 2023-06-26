@@ -216,7 +216,7 @@
 																<span
 																	class="h-3 w-3 rounded-bl border-b-2 border-l-2 border-neutral-300"
 																/>
-																<DocumentTextIcon
+																<BookOpenIcon
 																	class="h-4 w-4 text-neutral-700"
 																/>
 																<div>
@@ -496,7 +496,7 @@ import {
 	AtSymbolIcon,
 	MagnifyingGlassIcon,
 	Square3Stack3DIcon,
-	DocumentTextIcon,
+	BookOpenIcon,
 	LightBulbIcon,
 	ArrowLongUpIcon,
 	ArrowLongDownIcon,
@@ -514,6 +514,9 @@ import router from '@/router/index.js';
 const searchClient = instantMeiliSearch(
 	'http://localhost:7700',
 	'h9kyooq_Lz4KhOZrnlVxoL7mGaSjyVqmcRNnwBPKRJw',
+	{
+		placeholderSearch: false
+	},
 );
 
 const isActive = ref(false);
