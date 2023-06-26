@@ -4,7 +4,7 @@
 		@click.prevent="unlock"
 		v-if="!isUnlocked"
 	>
-		<LockOpenIcon class="h-4 w-4 antialiased" />
+		<LockOpenIcon class="h-4 w-4" />
 		<label>Unlock to modify settings</label>
 	</button>
 	<div class="flex items-center space-x-2" v-if="isUnlocked">
@@ -12,14 +12,14 @@
 			class="btn-secondary group flex items-center space-x-1"
 			@click.prevent="toggle"
 		>
-			<LockClosedIcon class="h-4 w-4 antialiased" />
+			<LockClosedIcon class="h-4 w-4" />
 			<label>Lock to confirm changes</label>
 		</button>
 		<button
 			class="btn-light group flex items-center space-x-1"
-			@click.prevent="reload"
+			@click.prevent="lock(); close()"
 		>
-			<XMarkIcon class="h-4 w-4 antialiased" />
+			<XMarkIcon class="h-4 w-4" />
 			<label>Abort</label>
 		</button>
 	</div>
@@ -30,17 +30,17 @@
 		>
 			<div
 				class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 space-y-8 rounded-lg bg-white p-8 shadow-xl backdrop-blur"
-				v-click-away="close"
+				v-on-click-outside="close"
 			>
 				<div class="space-y-1">
 					<h4 class="font-semibold">Lock</h4>
 					<h6 class="text-sm font-medium text-neutral-500">
-						Enter your password to confirm changes to settings
+						Enter your current password to confirm changes to settings
 					</h6>
 				</div>
 				<form
 					class="space-y-8"
-					@keydown.enter.prevent="validateHandler"
+					@keydown.enter.prevent="updateAndLock"
 				>
 					<VenustInput
 						placeholder="Password"
@@ -57,17 +57,17 @@
 						<button
 							class="btn-light group flex items-center space-x-1"
 							type="button"
-							@click.prevent="reload"
+							@click.prevent="lock(); close()"
 						>
-							<XMarkIcon class="h-4 w-4 antialiased" />
+							<XMarkIcon class="h-4 w-4" />
 							<label>Abort</label>
 						</button>
 						<button
 							class="btn-accent group flex items-center space-x-1"
 							type="button"
-							@click.prevent="validateHandler"
+							@click.prevent="updateAndLock"
 						>
-							<LockClosedIcon class="h-4 w-4 antialiased" />
+							<LockClosedIcon class="h-4 w-4" />
 							<label>Lock & Update</label>
 						</button>
 					</div>
@@ -84,11 +84,27 @@ import {
 	LockClosedIcon,
 	XMarkIcon,
 } from '@heroicons/vue/24/outline/index.js';
-import { ref } from 'vue';
-import { doubleValidate } from '@/api/auth.js';
+import { computed, ref, watch } from 'vue';
+import { vOnClickOutside } from '@vueuse/components';
+import { useRoute } from 'vue-router';
+import { updateMe, updateMyPassword } from '@/api/me.js';
+
+const emit = defineEmits(['validationState', 'unlockedState', 'IsUpdateClicked']);
+const props = defineProps({
+	modified: Object,
+});
+
+const route = useRoute();
+const path = computed(() => {
+	return route.path;
+})
 
 const isUnlocked = ref(false);
 const isActive = ref(false);
+
+watch(isUnlocked, (newState) => {
+	emit('unlockedState', newState);
+});
 
 function unlock() {
 	isUnlocked.value = true;
@@ -106,9 +122,9 @@ function close() {
 	isActive.value = false;
 }
 
-function reload() {
-	window.location.reload();
-}
+const modified = computed(() => {
+	return props.modified;
+});
 
 const password = ref();
 
@@ -116,14 +132,26 @@ function getPassword(value) {
 	password.value = value;
 }
 
-const emit = defineEmits(['validationState']);
-
-async function validateHandler() {
-	const isValid = await doubleValidate(password.value);
-
-	if (isValid) {
-		emit('validationState', isValid);
-		lock();
+async function updateAndLock() {
+	if (password.value && modified.value && Object.keys(modified.value).length) {
+		const hasModifiedAndConfirmedPassword = modified.value.newPassword && modified.value.confirmationPassword && modified.value.confirmationPassword === modified.value.newPassword;
+		if (hasModifiedAndConfirmedPassword) {
+			updateMyPassword(password.value, modified.value.newPassword, modified.value.confirmationPassword);
+			const modifiedWithoutNewPassword = { ...modified.value };
+			delete modifiedWithoutNewPassword.newPassword;
+			delete modifiedWithoutNewPassword.confirmationPassword;
+			updateMe({ ...modifiedWithoutNewPassword, validationPassword: password.value });
+			lock();
+			close();
+		} else {
+			updateMe({ ...modified.value, validationPassword: password.value });
+			lock();
+			close();
+		}
 	}
 }
+
+watch(path, () => {
+	lock();
+})
 </script>

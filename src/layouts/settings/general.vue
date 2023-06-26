@@ -22,8 +22,9 @@
 								placeholder='Username'
 								has-icon
 								left-icon
-								:default-value='attributes?.username'
+								:default-value='user?.username'
 								@model='getUsername'
+								:disabled='!isUnlocked'
 							>
 								<AtSymbolIcon
 									class='h-6 w-6 text-neutral-500'
@@ -45,8 +46,9 @@
 								default-type='text'
 								input-class='w-full rounded-lg'
 								placeholder='Legal Name'
-								:default-value='attributes?.legalName'
+								:default-value='user?.legalName'
 								@model='getLegalName'
+								:disabled='!isUnlocked'
 							/>
 							<div class='flex items-start space-x-1'>
 								<ChevronUpIcon
@@ -69,8 +71,9 @@
 							default-type='text'
 							input-class='w-full rounded-lg'
 							placeholder='Email'
-							:default-value='attributes?.email'
+							:default-value='user?.email'
 							@model='getEmail'
+							:disabled='!isUnlocked'
 						/>
 						<div class='flex items-start space-x-1'>
 							<ChevronUpIcon
@@ -104,8 +107,9 @@
 								default-type='text'
 								input-class='w-full rounded-lg'
 								placeholder='Display Name'
-								:default-value='attributes?.displayName'
+								:default-value='user?.displayName'
 								@model='getDisplayName'
+								:disabled='!isUnlocked'
 							/>
 							<div class='flex items-start space-x-1'>
 								<ChevronUpIcon
@@ -123,8 +127,9 @@
 								default-type='text'
 								input-class='w-full rounded-lg'
 								placeholder='GitHub Username'
-								:default-value='attributes?.githubUsername'
+								:default-value='user?.githubUsername'
 								@model='getGithubUsername'
+								:disabled='!isUnlocked'
 							/>
 							<div class='flex items-start space-x-1'>
 								<ChevronUpIcon
@@ -143,8 +148,9 @@
 						<VenustTextarea
 							input-class='w-full rounded-lg'
 							placeholder='Biography'
-							:default-value='attributes?.bio'
+							:default-value='user?.bio'
 							@model='getBio'
+							:disabled='!isUnlocked'
 						/>
 						<div class='flex items-start space-x-1'>
 							<ChevronUpIcon
@@ -159,7 +165,7 @@
 				</div>
 			</div>
 		</div>
-		<div class='flex w-[300px] flex-col justify-between'>
+		<div class='flex w-[300px] flex-col space-y-4'>
 			<div class='rounded-xl border bg-white'>
 				<div
 					class='flex items-center justify-between border-b px-4 py-2'
@@ -174,13 +180,13 @@
 				<div class='p-4'>
 					<div class='space-y-2'>
 						<div class='flex items-center space-x-4'>
-							<VenustAvatar :user-id='attributes?.id' />
-							<div class='space-y-2'>
+							<VenustAvatar :user-id='user?.id' />
+							<form class='space-y-2'>
 								<VenustFileInput class='w-full' name='avatar' />
 								<button class='btn-accent'>
 									Delete avatar
 								</button>
-							</div>
+							</form>
 						</div>
 						<div class='flex items-start space-x-1'>
 							<ChevronUpIcon
@@ -197,18 +203,23 @@
 			</div>
 			<div class='rounded-xl border bg-orange-50'>
 				<div
-					class='flex items-center justify-between border-b px-4 py-2'
+					class='flex items-center justify-between border-b px-4 py-2 bg-stripes bg-stripes-orange-100 rounded-t-xl text-orange-600'
 				>
-					<label class='text-sm font-bold uppercase text-neutral-500'>
+					<label class='text-sm font-bold uppercase'>
 						Danger Zone
 					</label>
 					<div class='flex items-center space-x-1'>
 						<ExclamationTriangleIcon
-							class='h-5 w-5 text-neutral-500'
+							class='h-5 w-5'
 						/>
 					</div>
 				</div>
-				<div class='p-8'></div>
+				<div class='p-4'>
+					<router-link class='space-y-2' to='/delete-account'>
+						<p class='text-xs font-medium text-neutral-500'>Once you delete your account, there is <strong class='uppercase'>no going back</strong>. Please be <strong class='uppercase'>certain</strong>.</p>
+						<button class='btn-secondary'>Delete account</button>
+					</router-link>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -216,7 +227,7 @@
 
 <script setup>
 import { getMe } from '@/api/me.js';
-import { computed, reactive, ref } from 'vue';
+import { computed, inject, onUnmounted, reactive, watch } from 'vue';
 import VenustInput from '@/components/venust/input/venustInput.vue';
 import { AtSymbolIcon, ChevronUpIcon } from '@heroicons/vue/24/outline';
 import {
@@ -228,46 +239,84 @@ import {
 import VenustTextarea from '@/components/venust/textarea/venustTextarea.vue';
 import VenustFileInput from '@/components/venust/fileInput/venustFileInput.vue';
 import VenustAvatar from '@/components/venust/avatar/venustAvatar.vue';
+import SettingsValidationPrompt from '@/layouts/settings/settingsValidationPrompt.vue';
+
+const emit = defineEmits(['modify'])
+const isUnlocked = inject('unlockedState');
 
 const userResponse = getMe({
 	populate: {
 		avatar: true,
 	},
 });
-const attributes = computed(() => {
+
+const user = computed(() => {
 	return userResponse.data.value;
 });
 
-const modified = reactive({
-	username: '',
-	legalName: '',
-	email: '',
-	displayName: '',
-	githubUsername: '',
-	bio: '',
+watch(isUnlocked, (newState) => {
+	if (!newState) {
+		userResponse.execute();
+	}
+});
+
+const modified = reactive({});
+
+watch(modified, (newValue) => {
+	emit('modify', newValue);
 });
 
 function getUsername(value) {
-	modified.username = value;
+	if (value !== user.value.username) {
+		modified.username = value;
+	} else {
+		delete modified.username;
+	}
 }
 
 function getLegalName(value) {
-	modified.legalName = value;
+	if (value !== user.value.legalName) {
+		modified.legalName = value;
+	} else {
+		delete modified.legalName;
+	}
 }
 
 function getEmail(value) {
-	modified.email = value;
+	if (value !== user.value.email) {
+		modified.email = value;
+	} else {
+		delete modified.email;
+	}
 }
 
 function getDisplayName(value) {
-	modified.displayName = value;
+	if (value !== user.value.displayName) {
+		modified.displayName = value;
+	} else {
+		delete modified.displayName;
+	}
 }
 
 function getGithubUsername(value) {
-	modified.githubUsername = value;
+	if (value !== user.value.githubUsername) {
+		modified.githubUsername = value;
+	} else {
+		delete modified.githubUsername;
+	}
 }
 
 function getBio(value) {
-	modified.bio = value;
+	if (value !== user.value.bio) {
+		modified.bio = value;
+	} else {
+		delete modified.bio;
+	}
 }
+
+onUnmounted(() => {
+	if (userResponse.canAbort.value) {
+		userResponse.abort()
+	}
+});
 </script>
