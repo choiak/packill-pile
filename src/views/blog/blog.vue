@@ -3,14 +3,15 @@
 		<div class='flex h-full flex-col'>
 			<Dock>
 				<div>
-					<h5 class='font-medium'>Blog</h5>
+					<h5 class='font-medium'>{{ $t('announcement.blog') }}</h5>
 					<p class='text-sm'>
 						All the latest Packill news, directly from our team.
 					</p>
 				</div>
 			</Dock>
 			<div class='flex-1 overflow-auto snap-y'>
-				<router-link class='block relative h-full w-full overflow-hidden snap-start snap-always' :to='`/blog/${latestAnnouncementId}`'>
+				<router-link class='block relative h-full w-full overflow-hidden snap-start snap-always'
+							 :to='`/blog/${latestAnnouncementId}`'>
 					<img :src='latestAnnouncementCoverUrlFull' class='object-cover h-full w-full object-center'>
 					<div class='absolute w-full h-full left-0 top-0 p-8 flex flex-col justify-between'>
 						<h5 class='text-white font-medium ml-auto'>
@@ -20,7 +21,7 @@
 							<p class='text-white font-medium'>{{ latestAnnouncementLead }}</p>
 							<h3 class='text-white font-display font-semibold'>{{ latestAnnouncementTitle }}</h3>
 							<div class='flex items-center justify-center space-x-2'>
-								<ChevronDownIcon class='h-6 w-6 text-white animate-bounce stroke-2'/>
+								<ChevronDownIcon class='h-6 w-6 text-white animate-bounce stroke-2' />
 								<div
 									class='w-fit rounded border border-white px-1 text-xs font-medium text-white'
 								>
@@ -32,7 +33,8 @@
 				</router-link>
 				<div class='flex flex-col items-center snap-start snap-always'>
 					<div class='px-4 md:px-8 space-y-8 py-16'>
-						<h4 class='ml-auto mr-auto text-center lg:text-left lg:ml-0 lg:mr-0 font-bold relative before:absolute before:-bottom-2 before:left-1/2 before:h-1 before:w-4 before:-translate-x-1/2 before:rounded-full before:bg-blue-600 w-fit'>All announcements</h4>
+						<h4 class='ml-auto mr-auto text-center lg:text-left lg:ml-0 lg:mr-0 font-bold relative before:absolute before:-bottom-2 before:left-1/2 before:h-1 before:w-4 before:-translate-x-1/2 before:rounded-full before:bg-blue-600 w-fit'>
+							{{ $t('announcement.allAnnouncements') }}</h4>
 						<div
 							class='space-y-4 lg:space-y-0 max-w-[1600px] lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-4'>
 							<router-link v-for='announcement in announcements' :to='`/blog/${announcement.id}`'>
@@ -52,9 +54,9 @@ import Index from '@/layouts/utils/index.vue';
 import Dock from '@/layouts/dock/dock.vue';
 import { getAnnouncements } from '@/api/announcement.js';
 import { computed } from 'vue';
-import { useInfoStore } from '@/store/index.js';
+import { useInfoStore } from '@/store/info.js';
 import moment from 'moment';
-import AnnouncementCard from '@/components/pile/announcement/announcementCard.vue';
+import AnnouncementCard from '@/layouts/announcement/announcementCard.vue';
 
 const infoStore = useInfoStore();
 

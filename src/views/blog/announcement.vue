@@ -3,7 +3,7 @@
 		<div class='flex h-full flex-col'>
 			<Dock>
 				<div>
-					<h5 class='font-medium'>Blog</h5>
+					<h5 class='font-medium'>{{ $t('announcement.announcement') }}</h5>
 					<p class='text-sm'>
 						All the latest Packill news, directly from our team.
 					</p>
@@ -101,7 +101,7 @@ import { getAnnouncement } from '@/api/announcement.js';
 import { computed, onUnmounted, watch } from 'vue';
 import moment from 'moment';
 import { useRoute } from 'vue-router';
-import { useInfoStore } from '@/store/index.js';
+import { useInfoStore } from '@/store/info.js';
 
 const infoStore = useInfoStore();
 
@@ -162,7 +162,6 @@ const author = computed(() => {
 const authorDisplayName = computed(() => {
 	return author.value?.displayName;
 });
-
 
 const cover = computed(() => {
 	return announcement.value?.cover?.data?.attributes;
