@@ -128,6 +128,11 @@ function getDisplayName(value) {
 }
 
 async function registerHandler() {
-	await register(username.value, displayName.value, email.value, password.value);
+	await register(
+		username.value,
+		displayName.value,
+		email.value,
+		password.value,
+	);
 }
 </script>

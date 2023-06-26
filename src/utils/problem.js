@@ -5,24 +5,32 @@ import { computed, unref, watch } from 'vue';
 export function getMyNextProblem(topicId) {
 	const problemsQuery = computed(() => {
 		return {
-			fields: ['id'], filters: {
+			fields: ['id'],
+			filters: {
 				topic: unref(topicId),
 			},
-		}
+		};
 	});
 
 	const problemsResponse = getProblems(problemsQuery, { immediate: false });
 
-	const problemsCompletedResponse = getMe({
-		fields: [], populate: {
-			completedProblems: {
-				fields: ['id'],
+	const problemsCompletedResponse = getMe(
+		{
+			fields: [],
+			populate: {
+				completedProblems: {
+					fields: ['id'],
+				},
 			},
 		},
-	}, { immediate: false });
+		{ immediate: false },
+	);
 
 	const canAbort = computed(() => {
-		return problemsResponse.canAbort.value && problemsCompletedResponse.canAbort.value;
+		return (
+			problemsResponse.canAbort.value &&
+			problemsCompletedResponse.canAbort.value
+		);
 	});
 
 	function abort() {
@@ -54,7 +62,10 @@ export function getMyNextProblem(topicId) {
 	});
 
 	const isLoading = computed(() => {
-		return (problemsResponse.isFetching.value || problemsCompletedResponse.isFetching.value);
+		return (
+			problemsResponse.isFetching.value ||
+			problemsCompletedResponse.isFetching.value
+		);
 	});
 
 	const problems = computed(() => {
@@ -65,9 +76,15 @@ export function getMyNextProblem(topicId) {
 		return problemsCompletedResponse.data.value?.completedProblems;
 	});
 
-	const problemsUncompleted= computed(() => {
+	const problemsUncompleted = computed(() => {
 		if (problems.value && problemsCompleted.value) {
-			return problems.value.filter((problem) => !problemsCompleted.value.some((problemCompleted) => problemCompleted.id === problem.id));
+			return problems.value.filter(
+				(problem) =>
+					!problemsCompleted.value.some(
+						(problemCompleted) =>
+							problemCompleted.id === problem.id,
+					),
+			);
 		} else {
 			return null;
 		}

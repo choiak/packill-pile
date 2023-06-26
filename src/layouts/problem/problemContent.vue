@@ -1,47 +1,54 @@
 <template>
-	<form class='space-y-8'>
-		<div class='flex items-center justify-between'>
-			<transition name='fade' mode='out-in'>
-				<div v-if='isLoading' class='space-y-1'>
-					<div class='bg-slate-200 rounded w-48 h-6 animate-pulse' />
-					<div class='flex space-x-2'>
-						<div class='bg-slate-200 rounded w-16 h-5 animate-pulse' />
-						<p class='text-sm text-slate-400 animate-pulse'>•</p>
-						<div class='bg-slate-200 rounded w-16 h-5 animate-pulse' />
+	<form class="space-y-8">
+		<div class="flex items-center justify-between">
+			<transition name="fade" mode="out-in">
+				<div v-if="isLoading" class="space-y-1">
+					<div class="h-6 w-48 animate-pulse rounded bg-slate-200" />
+					<div class="flex space-x-2">
+						<div
+							class="h-5 w-16 animate-pulse rounded bg-slate-200"
+						/>
+						<p class="animate-pulse text-sm text-slate-400">•</p>
+						<div
+							class="h-5 w-16 animate-pulse rounded bg-slate-200"
+						/>
 					</div>
 				</div>
 				<div v-else>
-					<h5 class='font-semibold'>{{ name }}</h5>
-					<div class='flex space-x-2'>
-						<p class='text-sm text-neutral-500'>
+					<h5 class="font-semibold">{{ name }}</h5>
+					<div class="flex space-x-2">
+						<p class="text-sm text-neutral-500">
 							Published on
-							<span class='font-medium'>
-							{{ publishedAtString }}
-						</span>
+							<span class="font-medium">
+								{{ publishedAtString }}
+							</span>
 						</p>
-						<p class='text-sm text-neutral-500'>•</p>
-						<p class='text-sm text-neutral-500'>
+						<p class="text-sm text-neutral-500">•</p>
+						<p class="text-sm text-neutral-500">
 							Updated on
-							<span class='font-medium'>
-							{{ updatedAtString }}
-						</span>
+							<span class="font-medium">
+								{{ updatedAtString }}
+							</span>
 						</p>
 					</div>
 				</div>
 			</transition>
-			<DifficultyIndicator :difficulty-id='difficultyId' show-name />
+			<DifficultyIndicator :difficulty-id="difficultyId" show-name />
 		</div>
-		<div class='space-y-8'>
-			<div v-for='item in content' :key='`${item.__component}-${item.id}`'>
+		<div class="space-y-8">
+			<div
+				v-for="item in content"
+				:key="`${item.__component}-${item.id}`"
+			>
 				<p
 					v-if="item.__component === 'generic.rich-text'"
-					class='prose-article text-justify font-text'
-					v-html='item.text'
+					class="prose-article text-justify font-text"
+					v-html="item.text"
 				/>
 				<Question
 					v-if="item.__component === 'relation.question-connector'"
-					:questionId='item.question.data.id'
-					@model='getAnswer(item.question.data.id, $event)'
+					:questionId="item.question.data.id"
+					@model="getAnswer(item.question.data.id, $event)"
 				/>
 			</div>
 		</div>
@@ -56,25 +63,34 @@ import Question from '@/layouts/question/question.vue';
 import moment from 'moment';
 import { checkArraysAreEqual } from '@/utils/array.js';
 
-const emit = defineEmits(['previousProblemSubmissionChange', 'answersChange', 'questionLengthChange', 'isProblemDoneChange']);
+const emit = defineEmits([
+	'previousProblemSubmissionChange',
+	'answersChange',
+	'questionLengthChange',
+	'isProblemDoneChange',
+]);
 const props = defineProps({
 	problemId: Number,
 });
 
 const { problemId } = toRefs(props);
 
-const problemResponse = getProblem(problemId, {
-	populate: {
-		content: {
-			populate: {
-				question: {
-					fields: ['id'],
+const problemResponse = getProblem(
+	problemId,
+	{
+		populate: {
+			content: {
+				populate: {
+					question: {
+						fields: ['id'],
+					},
 				},
 			},
+			difficulty: true,
 		},
-		difficulty: true,
 	},
-}, { immediate: false });
+	{ immediate: false },
+);
 
 if (problemId.value) {
 	problemResponse.execute();
@@ -90,7 +106,12 @@ watch(problemId, (newProblemId, oldProblemId) => {
 });
 
 const isLoading = computed(() => {
-	return problemResponse.isFetching.value || (!problemResponse.isFetching.value && !problemResponse.isFinished.value) || !problemId.value;
+	return (
+		problemResponse.isFetching.value ||
+		(!problemResponse.isFetching.value &&
+			!problemResponse.isFinished.value) ||
+		!problemId.value
+	);
 });
 
 const problem = computed(() => {
@@ -106,7 +127,12 @@ const content = computed(() => {
 });
 
 watch(content, (newContent) => {
-	emit('questionLengthChange', newContent.filter((item) => item.__component === 'relation.question-connector').length);
+	emit(
+		'questionLengthChange',
+		newContent.filter(
+			(item) => item.__component === 'relation.question-connector',
+		).length,
+	);
 });
 
 const difficultyId = computed(() => {
@@ -140,7 +166,9 @@ const updatedAtString = computed(() => {
 const answers = ref([]);
 
 function getAnswer(id, answer) {
-	const answerIndex = answers.value.findIndex((answer) => answer?.questionId === id);
+	const answerIndex = answers.value.findIndex(
+		(answer) => answer?.questionId === id,
+	);
 	if (answerIndex !== -1) {
 		if (answer.length) {
 			answers.value[answerIndex] = {
@@ -148,7 +176,9 @@ function getAnswer(id, answer) {
 				value: answer,
 			};
 		} else {
-			answers.value = answers.value.filter((answer) => answer?.questionId !== id);
+			answers.value = answers.value.filter(
+				(answer) => answer?.questionId !== id,
+			);
 		}
 	} else {
 		if (answer.length) {
@@ -160,21 +190,38 @@ function getAnswer(id, answer) {
 	}
 }
 
-watch(answers, (newAnswers) => {
-	emit('answersChange', newAnswers);
-}, { deep: true });
+watch(
+	answers,
+	(newAnswers) => {
+		emit('answersChange', newAnswers);
+	},
+	{ deep: true },
+);
 
 const isProblemDone = computed(() => {
 	if (content.value && content.value.length) {
-		return checkArraysAreEqual(answers.value.map((answer) => answer.questionId).sort(), content.value.filter((item) => item.__component === 'relation.question-connector').map((item) => item?.question?.data?.id).sort());
+		return checkArraysAreEqual(
+			answers.value.map((answer) => answer.questionId).sort(),
+			content.value
+				.filter(
+					(item) =>
+						item.__component === 'relation.question-connector',
+				)
+				.map((item) => item?.question?.data?.id)
+				.sort(),
+		);
 	} else {
 		return false;
 	}
 });
 
-watch(isProblemDone, (newIsDone) => {
-	emit('isProblemDoneChange', newIsDone);
-}, { immediate: true });
+watch(
+	isProblemDone,
+	(newIsDone) => {
+		emit('isProblemDoneChange', newIsDone);
+	},
+	{ immediate: true },
+);
 
 onUnmounted(() => {
 	if (problemResponse.canAbort.value) {

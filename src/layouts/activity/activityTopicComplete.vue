@@ -1,18 +1,26 @@
 <template>
 	<Activity>
 		<template #icon>
-			<BookOpenIcon class='h-4 w-4' />
+			<BookOpenIcon class="h-4 w-4" />
 		</template>
 		<template #message>
-			{{ $t('activity.topicCompleteMessage', { displayName: displayName, title: title}) }}
+			{{
+				$t('activity.topicCompleteMessage', {
+					displayName: displayName,
+					title: title,
+				})
+			}}
 		</template>
 		<template #createdAtDate>{{ createdAtDateString }}</template>
 		<template #createdAtTime>{{ createdAtTimeString }}</template>
 		<template #details>
-			<router-link :to='`/workspace/${topicId}`' class='flex space-x-2 border rounded-lg bg-white p-2 w-fit items-center hover:underline hover:text-sky-800'>
-				<BookOpenIcon class='text-orange-600 w-4 h-4' />
-				<p class='text-sm font-semibold'>{{ title }}</p>
-				<ArrowUpRightIcon class='w-3 h-3'/>
+			<router-link
+				:to="`/workspace/${topicId}`"
+				class="flex w-fit items-center space-x-2 rounded-lg border bg-white p-2 hover:text-sky-800 hover:underline"
+			>
+				<BookOpenIcon class="h-4 w-4 text-orange-600" />
+				<p class="text-sm font-semibold">{{ title }}</p>
+				<ArrowUpRightIcon class="h-3 w-3" />
 			</router-link>
 		</template>
 	</Activity>
@@ -20,7 +28,10 @@
 
 <script setup>
 import Activity from '@/layouts/activity/activity.vue';
-import { ArrowUpRightIcon, BookOpenIcon } from '@heroicons/vue/24/outline/index.js';
+import {
+	ArrowUpRightIcon,
+	BookOpenIcon,
+} from '@heroicons/vue/24/outline/index.js';
 import { computed, onUnmounted, watch } from 'vue';
 import { getActivity } from '@/api/activity.js';
 import moment from 'moment';
@@ -33,20 +44,24 @@ const propActivityId = computed(() => {
 	return props.activityId;
 });
 
-const activityResponse = getActivity(propActivityId, {
-	populate: {
-		target: {
-			populate: {
-				topic: {
-					fields: ['id', 'title'],
+const activityResponse = getActivity(
+	propActivityId,
+	{
+		populate: {
+			target: {
+				populate: {
+					topic: {
+						fields: ['id', 'title'],
+					},
 				},
 			},
-		},
-		user: {
-			fields: ['id', 'displayName'],
+			user: {
+				fields: ['id', 'displayName'],
+			},
 		},
 	},
-}, { immediate: false });
+	{ immediate: false },
+);
 
 if (propActivityId.value) {
 	activityResponse.execute();
@@ -89,8 +104,8 @@ const target = computed(() => {
 });
 
 const topicId = computed(() => {
-	return  target.value?.topic?.data?.id;
-})
+	return target.value?.topic?.data?.id;
+});
 
 const topic = computed(() => {
 	return target.value?.topic?.data?.attributes;

@@ -1,6 +1,11 @@
 <template>
 	<div>
-		<component v-for='activity in activities' :activity-id='activity.id' :is='getActivityComponent(activity.attributes.type)' class='w-full'/>
+		<component
+			v-for="activity in activities"
+			:activity-id="activity.id"
+			:is="getActivityComponent(activity.attributes.type)"
+			class="w-full"
+		/>
 	</div>
 </template>
 
@@ -31,8 +36,8 @@ const query = computed(() => {
 		},
 		pagination: {
 			pageSize: pageSize.value,
-		}
-	}
+		},
+	};
 });
 
 const activitiesResponse = getActivities(query, { immediate: false });
@@ -52,7 +57,7 @@ const activities = computed(() => {
 });
 
 function getActivityComponent(type) {
-	switch(type){
+	switch (type) {
 		case 'user-join':
 			return activityUserJoin;
 		case 'knowledge-publish':

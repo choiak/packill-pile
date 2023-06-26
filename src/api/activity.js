@@ -4,12 +4,11 @@ import { computed, unref } from 'vue';
 
 export function getActivities(query = {}, config = {}) {
 	const queryString = computed(() => {
-		return qs.stringify(unref(query),
-			{ encodeValuesOnly: true });
+		return qs.stringify(unref(query), { encodeValuesOnly: true });
 	});
 
 	const url = computed(() => {
-		return `api/activities?${queryString.value}`
+		return `api/activities?${queryString.value}`;
 	});
 
 	return useFetchValidated(url, config).get().json();

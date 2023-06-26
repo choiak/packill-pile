@@ -57,7 +57,10 @@ export const useMyStore = defineStore('me', () => {
 	});
 
 	const meIsLoading = computed(() => {
-		return meResponse.isFetching.value || (!meResponse.isFetching.value && !meResponse.isFinished.value);
+		return (
+			meResponse.isFetching.value ||
+			(!meResponse.isFetching.value && !meResponse.isFinished.value)
+		);
 	});
 
 	const me = computed(() => {
@@ -98,9 +101,9 @@ export const useMyStore = defineStore('me', () => {
 
 	const currentTopicOrQuiz = computed(() => {
 		switch (currentType.value) {
-			case 'topic' :
+			case 'topic':
 				return me.value.currentTopicOrQuiz[0].topic;
-			case 'quiz' :
+			case 'quiz':
 				return me.value.currentTopicOrQuiz[0].quiz;
 			default:
 				return null;
@@ -110,9 +113,9 @@ export const useMyStore = defineStore('me', () => {
 	const currentType = computed(() => {
 		if (me.value?.currentTopicOrQuiz.length) {
 			switch (me.value?.currentTopicOrQuiz[0].__component) {
-				case 'relation.topic-connector' :
+				case 'relation.topic-connector':
 					return 'topic';
-				case 'relation.quiz-connector' :
+				case 'relation.quiz-connector':
 					return 'quiz';
 				default:
 					return null;
@@ -125,7 +128,10 @@ export const useMyStore = defineStore('me', () => {
 	const currentPartition = computed(() => {
 		switch (currentType.value) {
 			case 'topic':
-				return currentTopicOrQuiz.value?.partitions?.filter(partition => partition.package.id === currentPackage.value?.id)[0];
+				return currentTopicOrQuiz.value?.partitions?.filter(
+					(partition) =>
+						partition.package.id === currentPackage.value?.id,
+				)[0];
 			case 'quiz':
 				return currentTopicOrQuiz.value?.partition;
 			default:
@@ -135,9 +141,12 @@ export const useMyStore = defineStore('me', () => {
 
 	const topicsAndQuizInCurrentPartition = computed(() => {
 		if (currentPartition.value) {
-			return [...currentPartition.value.topics.map(topic => {
-				return { type: 'topic', ...topic };
-			}), { type: 'quiz', ...currentPartition.value.quiz }];
+			return [
+				...currentPartition.value.topics.map((topic) => {
+					return { type: 'topic', ...topic };
+				}),
+				{ type: 'quiz', ...currentPartition.value.quiz },
+			];
 		} else {
 			return null;
 		}
@@ -153,7 +162,17 @@ export const useMyStore = defineStore('me', () => {
 
 	const completedTopicsAndQuizInCurrentPartition = computed(() => {
 		if (topicsAndQuizInCurrentPartition.value) {
-			return topicsAndQuizInCurrentPartition.value.filter(item => (item.type === 'topic' && completedTopics.value.some(topic => topic.id === item.id)) || (item.type === 'quiz' && completedQuizzes.value.some(quiz => quiz.id === item.id)));
+			return topicsAndQuizInCurrentPartition.value.filter(
+				(item) =>
+					(item.type === 'topic' &&
+						completedTopics.value.some(
+							(topic) => topic.id === item.id,
+						)) ||
+					(item.type === 'quiz' &&
+						completedQuizzes.value.some(
+							(quiz) => quiz.id === item.id,
+						)),
+			);
 		} else {
 			return null;
 		}
@@ -161,7 +180,10 @@ export const useMyStore = defineStore('me', () => {
 
 	const currentPartitionProgress = computed(() => {
 		if (topicsAndQuizInCurrentPartition.value) {
-			return completedTopicsAndQuizInCurrentPartition.value.length / topicsAndQuizInCurrentPartition.value.length;
+			return (
+				completedTopicsAndQuizInCurrentPartition.value.length /
+				topicsAndQuizInCurrentPartition.value.length
+			);
 		} else {
 			return null;
 		}
@@ -177,7 +199,9 @@ export const useMyStore = defineStore('me', () => {
 
 	const isCurrentPackageCompleted = computed(() => {
 		if (completedPackages.value && currentPackage.value) {
-			return completedPackages.value.some(pack => pack.id === currentPackage.value.id);
+			return completedPackages.value.some(
+				(pack) => pack.id === currentPackage.value.id,
+			);
 		} else {
 			return null;
 		}

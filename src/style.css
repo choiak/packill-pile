@@ -3,148 +3,146 @@
 @tailwind utilities;
 
 @layer base {
-    html {
-        scroll-behavior: smooth;
-    }
+	html {
+		scroll-behavior: smooth;
+	}
 
-    h1 {
-        @apply text-6xl;
-    }
+	h1 {
+		@apply text-6xl;
+	}
 
-    h2 {
-        @apply text-5xl;
-    }
+	h2 {
+		@apply text-5xl;
+	}
 
-    h3 {
-        @apply text-4xl;
-    }
+	h3 {
+		@apply text-4xl;
+	}
 
-    h4 {
-        @apply text-2xl;
-    }
+	h4 {
+		@apply text-2xl;
+	}
 
-    h5 {
-        @apply text-xl;
-    }
+	h5 {
+		@apply text-xl;
+	}
 
-    h6 {
-        @apply text-lg;
-    }
+	h6 {
+		@apply text-lg;
+	}
 }
 
 @layer components {
-    .input {
-        @apply w-full border border-gray-300 bg-neutral-50 px-3 py-2 shadow-sm focus:border-blue-600 focus:bg-white focus:shadow-lg focus:shadow-blue-100 focus:ring-0 active:ring-0;
-    }
+	.input {
+		@apply w-full border border-gray-300 bg-neutral-50 px-3 py-2 shadow-sm focus:border-blue-600 focus:bg-white focus:shadow-lg focus:shadow-blue-100 focus:ring-0 active:ring-0;
+	}
 
-    .btn {
-        @apply w-fit shadow-sm active:shadow-inner transition hover:brightness-95 active:scale-95;
-    }
+	.btn {
+		@apply w-fit shadow-sm transition hover:brightness-95 active:scale-95 active:shadow-inner;
+	}
 
-    .btn-accent {
-        @apply w-fit rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-blue-700 active:scale-95 disabled:cursor-not-allowed disabled:bg-blue-200 disabled:hover:bg-blue-200 disabled:active:scale-100 border border-blue-600 disabled:border-blue-200;
-    }
+	.btn-accent {
+		@apply w-fit rounded-lg border border-blue-600 bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-blue-700 active:scale-95 disabled:cursor-not-allowed disabled:border-blue-200 disabled:bg-blue-200 disabled:hover:bg-blue-200 disabled:active:scale-100;
+	}
 
-    .btn-secondary {
-        @apply w-fit rounded-lg bg-orange-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-orange-700 active:scale-95 border border-orange-600 disabled:cursor-not-allowed disabled:bg-orange-200 disabled:hover:bg-orange-200 disabled:border-orange-200 disabled:active:scale-100;
-    }
+	.btn-secondary {
+		@apply w-fit rounded-lg border border-orange-600 bg-orange-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-orange-700 active:scale-95 disabled:cursor-not-allowed disabled:border-orange-200 disabled:bg-orange-200 disabled:hover:bg-orange-200 disabled:active:scale-100;
+	}
 
-    .btn-light {
-        @apply w-fit rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-black shadow-sm transition hover:brightness-95 active:scale-95;
-    }
+	.btn-light {
+		@apply w-fit rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-black shadow-sm transition hover:brightness-95 active:scale-95;
+	}
 
-    .btn-menu {
-        @apply w-full rounded-lg bg-white p-2 font-medium text-neutral-500 transition hover:bg-blue-50 hover:text-blue-600 active:scale-95 border hover:border-blue-600 hover:shadow-lg hover:shadow-blue-100;
-    }
+	.btn-menu {
+		@apply w-full rounded-lg border bg-white p-2 font-medium text-neutral-500 transition hover:border-blue-600 hover:bg-blue-50 hover:text-blue-600 hover:shadow-lg hover:shadow-blue-100 active:scale-95;
+	}
 
-    .btn-menu-secondary {
-        @apply w-full rounded-lg bg-white p-2 font-medium text-orange-600 transition hover:bg-orange-50 hover:text-orange-600 active:scale-95 border hover:border-orange-600 hover:shadow-lg hover:shadow-orange-100;
-    }
+	.btn-menu-secondary {
+		@apply w-full rounded-lg border bg-white p-2 font-medium text-orange-600 transition hover:border-orange-600 hover:bg-orange-50 hover:text-orange-600 hover:shadow-lg hover:shadow-orange-100 active:scale-95;
+	}
 
-    .prose-article {
-        @apply prose prose-neutral max-w-none prose-h5:font-sans prose-h5:font-semibold prose-strong:text-blue-600 prose-em:text-orange-600 prose-code:w-full prose-code:rounded-lg prose-code:bg-neutral-50 prose-code:font-mono prose-code:text-black prose-pre:w-full prose-pre:overflow-auto prose-pre:bg-slate-200 prose-pre:relative hover:prose-pre:shadow-lg prose-pre:transition;
-    }
+	.prose-article {
+		@apply prose prose-neutral max-w-none prose-h5:font-sans prose-h5:font-semibold prose-strong:text-blue-600 prose-em:text-orange-600 prose-code:w-full prose-code:rounded-lg prose-code:bg-neutral-50 prose-code:font-mono prose-code:text-black prose-pre:relative prose-pre:w-full prose-pre:overflow-auto prose-pre:bg-slate-200 prose-pre:transition hover:prose-pre:shadow-lg;
+	}
 
-    .prose-article svg {
-        @apply inline-block
-    }
+	.prose-article svg {
+		@apply inline-block;
+	}
 
-    .prose-article .hint {
-        @apply bg-slate-50 rounded-lg my-5 divide-y shadow active:scale-[97%] transition border hover:brightness-95;
-    }
+	.prose-article .hint {
+		@apply my-5 divide-y rounded-lg border bg-slate-50 shadow transition hover:brightness-95 active:scale-[97%];
+	}
 
-    .prose-article .hint-heading {
-        @apply rounded-t-lg text-neutral-500 flex items-center justify-between font-bold uppercase px-4 py-2 last:rounded-lg;
-    }
+	.prose-article .hint-heading {
+		@apply flex items-center justify-between rounded-t-lg px-4 py-2 font-bold uppercase text-neutral-500 last:rounded-lg;
+	}
 
-    .prose-article .hint-content {
-        @apply p-4;
-    }
+	.prose-article .hint-content {
+		@apply p-4;
+	}
 
-    .prose-article .focus {
-        @apply bg-orange-950 rounded-lg my-5 divide-y divide-orange-300;
-    }
+	.prose-article .focus {
+		@apply my-5 divide-y divide-orange-300 rounded-lg bg-orange-950;
+	}
 
-    .prose-article .focus-heading {
-        @apply rounded-t-lg text-orange-50 flex items-center justify-between font-bold uppercase px-4 py-2 bg-stripes bg-stripes-orange-900;
-    }
+	.prose-article .focus-heading {
+		@apply flex items-center justify-between rounded-t-lg px-4 py-2 font-bold uppercase text-orange-50 bg-stripes bg-stripes-orange-900;
+	}
 
-    .prose-article .focus-content {
-        @apply p-4 text-orange-50;
-    }
+	.prose-article .focus-content {
+		@apply p-4 text-orange-50;
+	}
 
-    .prose-article .extension {
-        @apply bg-gradient-to-tr from-blue-50 to-purple-50 rounded-lg my-5 divide-y divide-purple-300;
-    }
+	.prose-article .extension {
+		@apply my-5 divide-y divide-purple-300 rounded-lg bg-gradient-to-tr from-blue-50 to-purple-50;
+	}
 
-    .prose-article .extension-heading {
-        @apply rounded-t-lg text-purple-600 flex items-center justify-between font-bold uppercase px-4 py-2 bg-stripes bg-stripes-purple-100;
-    }
+	.prose-article .extension-heading {
+		@apply flex items-center justify-between rounded-t-lg px-4 py-2 font-bold uppercase text-purple-600 bg-stripes bg-stripes-purple-100;
+	}
 
-    .prose-article .extension-content {
-        @apply p-4;
-    }
+	.prose-article .extension-content {
+		@apply p-4;
+	}
 
-    .prose-article .fold {
-        @apply my-5 divide-y open:bg-slate-50 border-y transition hover:border-l-2 hover:border-l-blue-600;
-    }
+	.prose-article .fold {
+		@apply my-5 divide-y border-y transition open:bg-slate-50 hover:border-l-2 hover:border-l-blue-600;
+	}
 
-    .prose-article .fold-heading {
-        @apply flex items-center justify-between font-bold px-4 py-2;
-    }
+	.prose-article .fold-heading {
+		@apply flex items-center justify-between px-4 py-2 font-bold;
+	}
 
-    .prose-article .fold-content {
-        @apply p-4;
-    }
+	.prose-article .fold-content {
+		@apply p-4;
+	}
 
-    .prose .code-lang {
-        @apply absolute text-xs font-medium left-3 top-2 text-neutral-500 font-sans;
-    }
+	.prose .code-lang {
+		@apply absolute left-3 top-2 font-sans text-xs font-medium text-neutral-500;
+	}
 }
 
 .fade-enter-active,
 .fade-leave-active {
-    transition: opacity 0.3s ease;
+	transition: opacity 0.3s ease;
 }
 
 .fade-enter-from,
 .fade-leave-to {
-    opacity: 0;
+	opacity: 0;
 }
 
 .list-move,
 .list-enter-active {
-    transition: all 0.5s ease;
+	transition: all 0.5s ease;
 }
 
 .list-enter-from {
-    opacity: 0;
-    transform: translateX(30px);
+	opacity: 0;
+	transform: translateX(30px);
 }
 
 .list-leave-active {
-    visibility: hidden;
-    position: absolute;
+	visibility: hidden;
+	position: absolute;
 }
-
-

@@ -12,12 +12,18 @@
 			</button>
 		</div>
 		<div class="flex items-end justify-between">
-			<div class="space-y-4 max-w-[512px]">
-				<div class='flex space-x-4 items-baseline'>
-					<h1 class="font-semibold drop-shadow-xl text-white">{{ code }}</h1>
-					<h5 class="font-medium uppercase drop-shadow-xl text-white">{{ statusText }}</h5>
+			<div class="max-w-[512px] space-y-4">
+				<div class="flex items-baseline space-x-4">
+					<h1 class="font-semibold text-white drop-shadow-xl">
+						{{ code }}
+					</h1>
+					<h5 class="font-medium uppercase text-white drop-shadow-xl">
+						{{ statusText }}
+					</h5>
 				</div>
-				<p class="leading-5 drop-shadow-xl text-white">{{ description }}</p>
+				<p class="leading-5 text-white drop-shadow-xl">
+					{{ description }}
+				</p>
 			</div>
 			<div class="max-w-[25%] space-y-4">
 				<slot />

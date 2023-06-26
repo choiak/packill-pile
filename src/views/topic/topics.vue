@@ -1,55 +1,59 @@
 <template>
 	<Index>
 		<Dock>
-			<div v-if='isLoading' class='space-y-1'>
-				<div class='rounded bg-slate-200 animate-pulse w-32 h-7' />
-				<div class='rounded bg-slate-200 animate-pulse w-20 h-4' />
+			<div v-if="isLoading" class="space-y-1">
+				<div class="h-7 w-32 animate-pulse rounded bg-slate-200" />
+				<div class="h-4 w-20 animate-pulse rounded bg-slate-200" />
 			</div>
 			<div v-else>
-				<h5 class='font-medium'>{{ pack?.name }}</h5>
-				<p class='text-sm'>Topics list</p>
+				<h5 class="font-medium">{{ pack?.name }}</h5>
+				<p class="text-sm">Topics list</p>
 			</div>
 		</Dock>
-		<div class='overflow-auto space-y-5 p-2'>
-			<div class='flex space-x-4'>
+		<div class="space-y-5 overflow-auto p-2">
+			<div class="flex space-x-4">
 				<div>
 					<VenustBadge>{{ partitionsCount }} PARTITIONS</VenustBadge>
 				</div>
-				<div
-					v-if='pack?.certificated'
-					class='flex space-x-2'
-				>
-					<TrophyIcon class='h-4 w-4' />
+				<div v-if="pack?.certificated" class="flex space-x-2">
+					<TrophyIcon class="h-4 w-4" />
 					<label>Certificated</label>
 				</div>
-				<div class='flex'>
-					<TrophyIcon class='h-6 w-6 p-1' />
+				<div class="flex">
+					<TrophyIcon class="h-6 w-6 p-1" />
 					<label>Certificated</label>
 				</div>
 			</div>
-			<div class='space-y-2 pl-2'>
-				<div
-					v-for='partition in partitions' :key='partition.id'
-				>
-					<div class='flex font-medium items-center space-x-4'>
-						<div class='px-1 py-0.5 text-white bg-blue-700 rounded'>
+			<div class="space-y-2 pl-2">
+				<div v-for="partition in partitions" :key="partition.id">
+					<div class="flex items-center space-x-4 font-medium">
+						<div class="rounded bg-blue-700 px-1 py-0.5 text-white">
 							<p>{{ partition?.attributes?.name }}</p>
 						</div>
 						<div>
-							<VenustBadge>{{ partition.attributes.topics.data.length }} TOPICS</VenustBadge>
+							<VenustBadge>
+								{{
+									partition.attributes.topics.data.length
+								}}
+								TOPICS
+							</VenustBadge>
 						</div>
 					</div>
-					<div class='pt-2 space-y-2'>
-						<div class='pl-4'>
+					<div class="space-y-2 pt-2">
+						<div class="pl-4">
 							<p>{{ partition.attributes.description }}</p>
 						</div>
-						<div class='pt-2 px-4 pb-6 flex space-x-4 flex-nowrap overflow-x-auto snap-x'>
+						<div
+							class="flex snap-x flex-nowrap space-x-4 overflow-x-auto px-4 pb-6 pt-2"
+						>
 							<router-link
-								:to='`/workspace/${topic.id}`'
-								v-for='topic in partition.attributes.topics.data' :key='topic.id'
-								class='flex flex-col-reverse py-2 px-4 h-40 w-60 bg-blue-700 rounded shadow-md transition hover:ease-in-out duration-100 text-white snap-start scroll-ml-4 hover:scale-105 hover:shadow-blue-400 hover:shadow-lg hover:brightness-110 flex-shrink-0'
+								:to="`/workspace/${topic.id}`"
+								v-for="topic in partition.attributes.topics
+									.data"
+								:key="topic.id"
+								class="flex h-40 w-60 flex-shrink-0 snap-start scroll-ml-4 flex-col-reverse rounded bg-blue-700 px-4 py-2 text-white shadow-md transition duration-100 hover:scale-105 hover:shadow-lg hover:shadow-blue-400 hover:brightness-110 hover:ease-in-out"
 							>
-								<p class='mt-auto font-medium'>
+								<p class="mt-auto font-medium">
 									{{ topic.attributes.title }}
 								</p>
 							</router-link>
@@ -93,5 +97,4 @@ const partitions = computed(() => {
 const partitionsCount = computed(() => {
 	return partitions.value?.length;
 });
-
 </script>

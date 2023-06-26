@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="group block rounded-lg bg-white shadow-lg transition hover:brightness-95 hover:border-blue-600 border"
+		class="group block rounded-lg border bg-white shadow-lg transition hover:border-blue-600 hover:brightness-95"
 	>
 		<div class="relative p-2">
 			<img

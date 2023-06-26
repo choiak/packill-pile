@@ -10,7 +10,9 @@ export const useSettingsStore = defineStore('settings', () => {
 	function getLocale() {
 		const browserLocales = navigator.languages;
 		const availableLocales = SUPPORTED_LOCALES;
-		const bestFitLocale = browserLocales.filter(locale => availableLocales.includes(locale))[0];
+		const bestFitLocale = browserLocales.filter((locale) =>
+			availableLocales.includes(locale),
+		)[0];
 		return bestFitLocale || 'en';
 	}
 
@@ -19,7 +21,9 @@ export const useSettingsStore = defineStore('settings', () => {
 	}
 
 	async function loadLocaleMessages(i18n) {
-		const messages = await import(`@/locale/${locale.value}/${locale.value}.js`);
+		const messages = await import(
+			`@/locale/${locale.value}/${locale.value}.js`
+		);
 		i18n.global.setLocaleMessage(locale.value, messages.default);
 		return nextTick();
 	}

@@ -14,13 +14,19 @@ export default [
 		},
 		children: [
 			{
-				name: 'SettingsGeneral', path: 'general', component: General,
+				name: 'SettingsGeneral',
+				path: 'general',
+				component: General,
 			},
 			{
-				name: 'SettingsSecurity', path: 'security', component: Security,
+				name: 'SettingsSecurity',
+				path: 'security',
+				component: Security,
 			},
 			{
-				name: 'SettingsSubscription', path: 'subscription', component: Subscription,
+				name: 'SettingsSubscription',
+				path: 'subscription',
+				component: Subscription,
 			},
 		],
 	},

@@ -1,16 +1,16 @@
 <template>
-	<Notification :timestamp='timestamp' :is-read='isRead'>
+	<Notification :timestamp="timestamp" :is-read="isRead">
 		<template #icon>
-			<div class='rounded-full border border-red-600 bg-neutral-100 p-2'>
-				<ExclamationTriangleIcon class='h-4 w-4' />
+			<div class="rounded-full border border-red-600 bg-neutral-100 p-2">
+				<ExclamationTriangleIcon class="h-4 w-4" />
 			</div>
 		</template>
 		<template #message>
 			{{ $t('notification.clientErrorMessage') }}
 		</template>
 		<template #content>
-			<div class='p-2 bg-neutral-100 rounded-lg'>
-				<p class='text-sm font-medium'>{{ details }}</p>
+			<div class="rounded-lg bg-neutral-100 p-2">
+				<p class="text-sm font-medium">{{ details }}</p>
 			</div>
 		</template>
 	</Notification>
@@ -24,8 +24,8 @@ import { computed } from 'vue';
 
 const props = defineProps({
 	notification: {
-		type: NotificationInstance
-	}
+		type: NotificationInstance,
+	},
 });
 
 const timestamp = computed(() => {

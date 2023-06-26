@@ -3,12 +3,12 @@
 		<template #reference>
 			<div class="flex flex-col items-center space-y-1">
 				<div class="relative">
-					<div v-if='isLoading'>
+					<div v-if="isLoading">
 						<cube-transparent-icon
-							class="h-6 w-6 text-slate-200 animate-pulse"
+							class="h-6 w-6 animate-pulse text-slate-200"
 						/>
 						<p
-							class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-bold text-slate-400 animate-pulse"
+							class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 animate-pulse font-bold text-slate-400"
 						>
 							?
 						</p>
@@ -27,7 +27,10 @@
 					</div>
 				</div>
 				<div v-if="showName">
-					<div v-if='isLoading' class='rounded bg-slate-200 animate-pulse w-6 h-4'/>
+					<div
+						v-if="isLoading"
+						class="h-4 w-6 animate-pulse rounded bg-slate-200"
+					/>
 					<p
 						v-else
 						class="text-center text-xs font-medium"
@@ -39,7 +42,7 @@
 			</div>
 		</template>
 		<template #tooltip>
-			<p class='text-justify'>{{ description }}</p>
+			<p class="text-justify">{{ description }}</p>
 		</template>
 	</VenustTooltip>
 </template>
@@ -59,7 +62,11 @@ const propDifficultyId = computed(() => {
 	return props.difficultyId;
 });
 
-const difficultyResponse = getDifficulty(propDifficultyId, {}, { immediate: false });
+const difficultyResponse = getDifficulty(
+	propDifficultyId,
+	{},
+	{ immediate: false },
+);
 
 if (propDifficultyId.value) {
 	difficultyResponse.execute();
@@ -72,7 +79,12 @@ watch(propDifficultyId, (newDifficultyId) => {
 });
 
 const isLoading = computed(() => {
-	return difficultyResponse.isFetching.value || (!difficultyResponse.isFetching.value && !difficultyResponse.isFinished.value) || !propDifficultyId.value;
+	return (
+		difficultyResponse.isFetching.value ||
+		(!difficultyResponse.isFetching.value &&
+			!difficultyResponse.isFinished.value) ||
+		!propDifficultyId.value
+	);
 });
 
 const difficulty = computed(() => {

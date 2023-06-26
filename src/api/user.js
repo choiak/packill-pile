@@ -4,15 +4,19 @@ import { computed, unref } from 'vue';
 
 export function getUserByUsername(username, query = {}, config = {}) {
 	const queryString = computed(() => {
-		return qs.stringify({
-			filters: {
-				username: {
-					$eq: unref(username),
+		return qs.stringify(
+			{
+				filters: {
+					username: {
+						$eq: unref(username),
+					},
 				},
-			}, ...unref(query),
-		}, {
-			encodeValuesOnly: true, // prettify URL
-		});
+				...unref(query),
+			},
+			{
+				encodeValuesOnly: true, // prettify URL
+			},
+		);
 	});
 
 	const url = computed(() => {

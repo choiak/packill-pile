@@ -17,7 +17,10 @@
 		</button>
 		<button
 			class="btn-light group flex items-center space-x-1"
-			@click.prevent="lock(); close()"
+			@click.prevent="
+				lock();
+				close();
+			"
 		>
 			<XMarkIcon class="h-4 w-4" />
 			<label>Abort</label>
@@ -35,13 +38,11 @@
 				<div class="space-y-1">
 					<h4 class="font-semibold">Lock</h4>
 					<h6 class="text-sm font-medium text-neutral-500">
-						Enter your current password to confirm changes to settings
+						Enter your current password to confirm changes to
+						settings
 					</h6>
 				</div>
-				<form
-					class="space-y-8"
-					@keydown.enter.prevent="updateAndLock"
-				>
+				<form class="space-y-8" @keydown.enter.prevent="updateAndLock">
 					<VenustInput
 						placeholder="Password"
 						default-type="password"
@@ -57,7 +58,10 @@
 						<button
 							class="btn-light group flex items-center space-x-1"
 							type="button"
-							@click.prevent="lock(); close()"
+							@click.prevent="
+								lock();
+								close();
+							"
 						>
 							<XMarkIcon class="h-4 w-4" />
 							<label>Abort</label>
@@ -89,7 +93,11 @@ import { vOnClickOutside } from '@vueuse/components';
 import { useRoute } from 'vue-router';
 import { updateMe, updateMyPassword } from '@/api/me.js';
 
-const emit = defineEmits(['validationState', 'unlockedState', 'IsUpdateClicked']);
+const emit = defineEmits([
+	'validationState',
+	'unlockedState',
+	'IsUpdateClicked',
+]);
 const props = defineProps({
 	modified: Object,
 });
@@ -97,7 +105,7 @@ const props = defineProps({
 const route = useRoute();
 const path = computed(() => {
 	return route.path;
-})
+});
 
 const isUnlocked = ref(false);
 const isActive = ref(false);
@@ -133,14 +141,28 @@ function getPassword(value) {
 }
 
 async function updateAndLock() {
-	if (password.value && modified.value && Object.keys(modified.value).length) {
-		const hasModifiedAndConfirmedPassword = modified.value.newPassword && modified.value.confirmationPassword && modified.value.confirmationPassword === modified.value.newPassword;
+	if (
+		password.value &&
+		modified.value &&
+		Object.keys(modified.value).length
+	) {
+		const hasModifiedAndConfirmedPassword =
+			modified.value.newPassword &&
+			modified.value.confirmationPassword &&
+			modified.value.confirmationPassword === modified.value.newPassword;
 		if (hasModifiedAndConfirmedPassword) {
-			updateMyPassword(password.value, modified.value.newPassword, modified.value.confirmationPassword);
+			updateMyPassword(
+				password.value,
+				modified.value.newPassword,
+				modified.value.confirmationPassword,
+			);
 			const modifiedWithoutNewPassword = { ...modified.value };
 			delete modifiedWithoutNewPassword.newPassword;
 			delete modifiedWithoutNewPassword.confirmationPassword;
-			updateMe({ ...modifiedWithoutNewPassword, validationPassword: password.value });
+			updateMe({
+				...modifiedWithoutNewPassword,
+				validationPassword: password.value,
+			});
 			lock();
 			close();
 		} else {
@@ -153,5 +175,5 @@ async function updateAndLock() {
 
 watch(path, () => {
 	lock();
-})
+});
 </script>

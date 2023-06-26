@@ -81,5 +81,5 @@ onUnmounted(() => {
 	if (questionSubmissionResponse.canAbort.value) {
 		questionSubmissionResponse.abort();
 	}
-})
+});
 </script>

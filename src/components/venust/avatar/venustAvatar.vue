@@ -1,25 +1,26 @@
 <template>
 	<div
-		class='rounded-full border-2 border-transparent p-0.5'
-		v-if='isLoading'
+		class="rounded-full border-2 border-transparent p-0.5"
+		v-if="isLoading"
 	>
 		<div
-			class='animate-pulse rounded-full bg-slate-200' :class='sizeStyle'
+			class="animate-pulse rounded-full bg-slate-200"
+			:class="sizeStyle"
 		/>
 	</div>
 	<div
-		class='rounded-full border-2 p-0.5 w-fit'
+		class="w-fit rounded-full border-2 p-0.5"
 		:class="{
-			'border-neutral-300 border-dashed': !isOnline,
+			'border-dashed border-neutral-300': !isOnline,
 			'border-teal-600': isOnline,
 		}"
 		v-else
 	>
-		<div class='overflow-hidden rounded-full' :class='sizeStyle'>
+		<div class="overflow-hidden rounded-full" :class="sizeStyle">
 			<img
-				v-if='avatarUrl'
-				:src='avatarUrlFull'
-				class='h-full w-full object-cover object-center'
+				v-if="avatarUrl"
+				:src="avatarUrlFull"
+				class="h-full w-full object-cover object-center"
 				:alt="`${displayName}'s Avatar`"
 			/>
 		</div>
@@ -45,10 +46,14 @@ const propUserId = computed(() => {
 	return props.userId;
 });
 
-const userResponse = getUserById(propUserId, {
-	populate: ['avatar'],
-	fields: ['displayName'],
-}, { immediate: false });
+const userResponse = getUserById(
+	propUserId,
+	{
+		populate: ['avatar'],
+		fields: ['displayName'],
+	},
+	{ immediate: false },
+);
 const isOnline = ref(false);
 
 if (propUserId.value) {
@@ -88,7 +93,7 @@ const avatarUrlFull = computed(() => {
 const sizeStyle = computed(() => {
 	switch (props.size) {
 		case 'xs':
-			return 'h-10 w-10'
+			return 'h-10 w-10';
 		case 'sm':
 			return 'h-12 w-12';
 		case 'lg':

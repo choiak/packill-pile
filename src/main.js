@@ -41,7 +41,7 @@ export const i18n = await installI18n(app);
 app.use(InstantSearch);
 
 app.directive('focus', {
-	mounted: function(el) {
+	mounted: function (el) {
 		el.focus();
 	},
 });

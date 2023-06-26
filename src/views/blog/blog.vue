@@ -1,29 +1,44 @@
 <template>
 	<Index>
-		<div class='flex h-full flex-col'>
+		<div class="flex h-full flex-col">
 			<Dock>
 				<div>
-					<h5 class='font-medium'>{{ $t('announcement.blog') }}</h5>
-					<p class='text-sm'>
+					<h5 class="font-medium">{{ $t('announcement.blog') }}</h5>
+					<p class="text-sm">
 						All the latest Packill news, directly from our team.
 					</p>
 				</div>
 			</Dock>
-			<div class='flex-1 overflow-auto snap-y'>
-				<router-link class='block relative h-full w-full overflow-hidden snap-start snap-always'
-							 :to='`/blog/${latestAnnouncementId}`'>
-					<img :src='latestAnnouncementCoverUrlFull' class='object-cover h-full w-full object-center'>
-					<div class='absolute w-full h-full left-0 top-0 p-8 flex flex-col justify-between'>
-						<h5 class='text-white font-medium ml-auto'>
+			<div class="flex-1 snap-y overflow-auto">
+				<router-link
+					class="relative block h-full w-full snap-start snap-always overflow-hidden"
+					:to="`/blog/${latestAnnouncementId}`"
+				>
+					<img
+						:src="latestAnnouncementCoverUrlFull"
+						class="h-full w-full object-cover object-center"
+					/>
+					<div
+						class="absolute left-0 top-0 flex h-full w-full flex-col justify-between p-8"
+					>
+						<h5 class="ml-auto font-medium text-white">
 							{{ latestAnnouncementPublishedAtDateString }}
 						</h5>
-						<div class='space-y-2'>
-							<p class='text-white font-medium'>{{ latestAnnouncementLead }}</p>
-							<h3 class='text-white font-display font-semibold'>{{ latestAnnouncementTitle }}</h3>
-							<div class='flex items-center justify-center space-x-2'>
-								<ChevronDownIcon class='h-6 w-6 text-white animate-bounce stroke-2' />
+						<div class="space-y-2">
+							<p class="font-medium text-white">
+								{{ latestAnnouncementLead }}
+							</p>
+							<h3 class="font-display font-semibold text-white">
+								{{ latestAnnouncementTitle }}
+							</h3>
+							<div
+								class="flex items-center justify-center space-x-2"
+							>
+								<ChevronDownIcon
+									class="h-6 w-6 animate-bounce stroke-2 text-white"
+								/>
 								<div
-									class='w-fit rounded border border-white px-1 text-xs font-medium text-white'
+									class="w-fit rounded border border-white px-1 text-xs font-medium text-white"
 								>
 									Scroll
 								</div>
@@ -31,14 +46,23 @@
 						</div>
 					</div>
 				</router-link>
-				<div class='flex flex-col items-center snap-start snap-always'>
-					<div class='px-4 md:px-8 space-y-8 py-16'>
-						<h4 class='ml-auto mr-auto text-center lg:text-left lg:ml-0 lg:mr-0 font-bold relative before:absolute before:-bottom-2 before:left-1/2 before:h-1 before:w-4 before:-translate-x-1/2 before:rounded-full before:bg-blue-600 w-fit'>
-							{{ $t('announcement.allAnnouncements') }}</h4>
+				<div class="flex snap-start snap-always flex-col items-center">
+					<div class="space-y-8 px-4 py-16 md:px-8">
+						<h4
+							class="relative ml-auto mr-auto w-fit text-center font-bold before:absolute before:-bottom-2 before:left-1/2 before:h-1 before:w-4 before:-translate-x-1/2 before:rounded-full before:bg-blue-600 lg:ml-0 lg:mr-0 lg:text-left"
+						>
+							{{ $t('announcement.allAnnouncements') }}
+						</h4>
 						<div
-							class='space-y-4 lg:space-y-0 max-w-[1600px] lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-4'>
-							<router-link v-for='announcement in announcements' :to='`/blog/${announcement.id}`'>
-								<AnnouncementCard :announcement-id='announcement.id' />
+							class="max-w-[1600px] space-y-4 lg:grid lg:grid-cols-2 lg:gap-4 lg:space-y-0 xl:grid-cols-3"
+						>
+							<router-link
+								v-for="announcement in announcements"
+								:to="`/blog/${announcement.id}`"
+							>
+								<AnnouncementCard
+									:announcement-id="announcement.id"
+								/>
 							</router-link>
 						</div>
 					</div>

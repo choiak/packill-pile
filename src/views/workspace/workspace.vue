@@ -1,22 +1,30 @@
 <template>
 	<Index>
-		<div class='flex h-full w-full flex-col'>
+		<div class="flex h-full w-full flex-col">
 			<Dock>
-				<transition name='fade' mode='out-in'>
-					<div v-if='isLoading' class='space-y-1'>
-						<div class='rounded bg-slate-200 animate-pulse w-32 h-7' />
-						<div class='rounded bg-slate-200 animate-pulse w-20 h-4' />
+				<transition name="fade" mode="out-in">
+					<div v-if="isLoading" class="space-y-1">
+						<div
+							class="h-7 w-32 animate-pulse rounded bg-slate-200"
+						/>
+						<div
+							class="h-4 w-20 animate-pulse rounded bg-slate-200"
+						/>
 					</div>
 					<div v-else>
-						<h5 class='font-medium'>{{ topicTitle }}</h5>
-						<p class='text-sm'>Workspace</p>
+						<h5 class="font-medium">{{ topicTitle }}</h5>
+						<p class="text-sm">Workspace</p>
 					</div>
 				</transition>
 			</Dock>
-			<div class='flex w-full flex-1 divide-x overflow-auto'>
-				<Topic class='w-full flex-1 overflow-auto' />
-				<Problem :key='$route.fullPath' :topic-id='paramTopicId'
-						 :problem-id='problemIdSuggested' class='w-[500px] overflow-auto' />
+			<div class="flex w-full flex-1 divide-x overflow-auto">
+				<Topic class="w-full flex-1 overflow-auto" />
+				<Problem
+					:key="$route.fullPath"
+					:topic-id="paramTopicId"
+					:problem-id="problemIdSuggested"
+					class="w-[500px] overflow-auto"
+				/>
 			</div>
 		</div>
 	</Index>
@@ -42,13 +50,17 @@ const paramProblemId = computed(() => {
 	return Number(route.params.problemId) || null;
 });
 
-const topicResponse = getTopic(paramTopicId, {
-	populate: {
-		problems: {
-			fields: ['id'],
+const topicResponse = getTopic(
+	paramTopicId,
+	{
+		populate: {
+			problems: {
+				fields: ['id'],
+			},
 		},
 	},
-}, { immediate: false });
+	{ immediate: false },
+);
 
 if (paramTopicId.value) {
 	topicResponse.execute();
@@ -61,7 +73,11 @@ watch(paramTopicId, (newTopicId) => {
 });
 
 const isLoading = computed(() => {
-	return topicResponse.isFetching.value || (!topicResponse.isFetching.value && !topicResponse.isFinished.value) || !paramTopicId;
+	return (
+		topicResponse.isFetching.value ||
+		(!topicResponse.isFetching.value && !topicResponse.isFinished.value) ||
+		!paramTopicId
+	);
 });
 
 const topic = computed(() => {
@@ -87,14 +103,22 @@ const problemSuggestedIsLoading = computed(() => {
 
 watch(problemSuggestedIsLoading, (newIsLoading, oldIsLoading) => {
 	if (oldIsLoading && !newIsLoading) {
-		if (!paramProblemId.value || (paramProblemId.value === '0' && problemIdSuggested.value !== 0)) {
-			router.replace(`/workspace/${paramTopicId.value}/${problemIdSuggested.value}`);
+		if (
+			!paramProblemId.value ||
+			(paramProblemId.value === '0' && problemIdSuggested.value !== 0)
+		) {
+			router.replace(
+				`/workspace/${paramTopicId.value}/${problemIdSuggested.value}`,
+			);
 		}
 	}
 });
 
 watch(problemIdSuggested, (newId) => {
-	if (!paramProblemId.value || (paramProblemId.value === '0' && newId !== 0)) {
+	if (
+		!paramProblemId.value ||
+		(paramProblemId.value === '0' && newId !== 0)
+	) {
 		router.replace(`/workspace/${paramTopicId.value}/${newId}`);
 	}
 });

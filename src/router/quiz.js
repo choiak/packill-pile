@@ -12,7 +12,8 @@ export default [
 		name: 'QuizSubmissions',
 		path: '/submissions/quizzes/:quizId',
 		component: QuizSubmissions,
-	}, {
+	},
+	{
 		name: 'QuizSubmission',
 		path: '/submission/quiz/:quizSubmissionId',
 		component: QuizSubmission,

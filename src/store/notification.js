@@ -6,11 +6,21 @@ import { computed } from 'vue';
 export const useNotificationStore = defineStore('notification', () => {
 	const notifications = useSessionStorage('notifications', [], {
 		serializer: {
-			read: value => {
+			read: (value) => {
 				const valueParsed = JSON.parse(value);
-				return valueParsed.map(v => new NotificationInstance(v.type, v.message, v.details, v.shouldShowToast, v.isRead, new Date(v.timestamp)));
-		},
-			write: value => JSON.stringify(value),
+				return valueParsed.map(
+					(v) =>
+						new NotificationInstance(
+							v.type,
+							v.message,
+							v.details,
+							v.shouldShowToast,
+							v.isRead,
+							new Date(v.timestamp),
+						),
+				);
+			},
+			write: (value) => JSON.stringify(value),
 		},
 	});
 

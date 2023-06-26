@@ -1,9 +1,18 @@
 <template>
-	<SearchPreviewPackage v-if='category === "package"' :package-object='item'/>
-	<SearchPreviewTopic v-else-if='category === "topic"' :topic-object='item'/>
-	<SearchPreviewKnowledge v-else-if='category === "knowledge"' :knowledge-object='item'/>
-	<SearchPreviewProblem v-else-if='category === "problem"' :problem-object='item'/>
-	<SearchPreviewUser v-else-if='category === "user"' :user-object='item'/>
+	<SearchPreviewPackage
+		v-if="category === 'package'"
+		:package-object="item"
+	/>
+	<SearchPreviewTopic v-else-if="category === 'topic'" :topic-object="item" />
+	<SearchPreviewKnowledge
+		v-else-if="category === 'knowledge'"
+		:knowledge-object="item"
+	/>
+	<SearchPreviewProblem
+		v-else-if="category === 'problem'"
+		:problem-object="item"
+	/>
+	<SearchPreviewUser v-else-if="category === 'user'" :user-object="item" />
 </template>
 
 <script setup>

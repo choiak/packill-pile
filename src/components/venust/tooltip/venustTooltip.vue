@@ -1,14 +1,16 @@
 <template>
 	<div>
-		<div class='relative'>
-			<div @mouseover='open' @mouseleave='close' ref='elReference'>
-				<slot name='reference' />
+		<div class="relative">
+			<div @mouseover="open" @mouseleave="close" ref="elReference">
+				<slot name="reference" />
 			</div>
-			<transition name='fade'>
+			<transition name="fade">
 				<div
-					class='flex items-center rounded-lg space-x-1 px-2 py-1 text-xs text-white bg-neutral-950/75 absolute max-w-[300px] w-max shadow z-30'
-					v-show='isActive' ref='elTooltip'>
-					<slot name='tooltip' />
+					class="absolute z-30 flex w-max max-w-[300px] items-center space-x-1 rounded-lg bg-neutral-950/75 px-2 py-1 text-xs text-white shadow"
+					v-show="isActive"
+					ref="elTooltip"
+				>
+					<slot name="tooltip" />
 				</div>
 			</transition>
 		</div>

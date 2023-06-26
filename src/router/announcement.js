@@ -12,4 +12,4 @@ export default [
 		path: '/blog/:announcementId',
 		component: Announcement,
 	},
-]
+];

@@ -23,25 +23,40 @@
 				</div>
 			</div>
 		</div>
-		<div class='space-y-2'>
-			<div class='flex items-center justify-between'>
-				<p class='uppercase text-sm text-neutral-500 font-bold'>Knowledges inside</p>
+		<div class="space-y-2">
+			<div class="flex items-center justify-between">
+				<p class="text-sm font-bold uppercase text-neutral-500">
+					Knowledges inside
+				</p>
 				<VenustBadge>{{ knowledgesCount }}</VenustBadge>
 			</div>
-			<div class='space-y-2'>
-				<div v-for='knowledge in knowledges' class='rounded-lg border bg-neutral-100 px-4 py-2 space-y-2'>
-					<div class='flex items-center space-x-4'>
-						<LightBulbIcon class='h-4 w-4 text-neutral-500'/>
-						<div class='flex justify-between items-center flex-1 space-x-4'>
-							<p class='font-semibold text-neutral-500'>{{ knowledge.title }}</p>
+			<div class="space-y-2">
+				<div
+					v-for="knowledge in knowledges"
+					class="space-y-2 rounded-lg border bg-neutral-100 px-4 py-2"
+				>
+					<div class="flex items-center space-x-4">
+						<LightBulbIcon class="h-4 w-4 text-neutral-500" />
+						<div
+							class="flex flex-1 items-center justify-between space-x-4"
+						>
+							<p class="font-semibold text-neutral-500">
+								{{ knowledge.title }}
+							</p>
 							<div
-								class='rounded border px-1 text-xs font-medium text-white bg-orange-600 border-orange-600'
-								v-if='knowledge.type'>
+								class="rounded border border-orange-600 bg-orange-600 px-1 text-xs font-medium text-white"
+								v-if="knowledge.type"
+							>
 								<p>{{ knowledge.type }}</p>
 							</div>
 						</div>
 					</div>
-					<p class='font-medium text-xs text-neutral-500 ml-8' v-if='knowledge.purpose'>{{ knowledge.purpose }}</p>
+					<p
+						class="ml-8 text-xs font-medium text-neutral-500"
+						v-if="knowledge.purpose"
+					>
+						{{ knowledge.purpose }}
+					</p>
 				</div>
 			</div>
 		</div>
@@ -49,7 +64,10 @@
 </template>
 
 <script setup>
-import { BookOpenIcon, LightBulbIcon } from '@heroicons/vue/24/outline/index.js';
+import {
+	BookOpenIcon,
+	LightBulbIcon,
+} from '@heroicons/vue/24/outline/index.js';
 import VenustTag from '@/components/venust/tag/venustTag.vue';
 import { computed } from 'vue';
 import VenustBadge from '@/components/venust/badge/venustBadge.vue';

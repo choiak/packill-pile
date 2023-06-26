@@ -1,41 +1,43 @@
 <template>
-	<div class='w-[250px] divide-y rounded-lg border bg-white shadow-lg'>
-		<div class='flex items-center justify-between px-3 py-1'>
-			<p class='text-sm font-bold uppercase text-neutral-500'>Problems</p>
-			<VenustBadge class='text-xs'>{{ problemsCount }}</VenustBadge>
+	<div class="w-[250px] divide-y rounded-lg border bg-white shadow-lg">
+		<div class="flex items-center justify-between px-3 py-1">
+			<p class="text-sm font-bold uppercase text-neutral-500">Problems</p>
+			<VenustBadge class="text-xs">{{ problemsCount }}</VenustBadge>
 		</div>
-		<div v-if='problemsCount' class='p-1'>
+		<div v-if="problemsCount" class="p-1">
 			<router-link
-				v-for='problem in problems'
-				class='flex items-center justify-between rounded bg-white px-2 py-1 hover:brightness-95'
-				:to='{params:{problemId: problem.id.toString()}}'
+				v-for="problem in problems"
+				class="flex items-center justify-between rounded bg-white px-2 py-1 hover:brightness-95"
+				:to="{ params: { problemId: problem.id.toString() } }"
 			>
-				<div class='flex items-center space-x-2'>
+				<div class="flex items-center space-x-2">
 					<DifficultyIndicator
-						:difficulty-id='problem.attributes.difficulty.data.id'
+						:difficulty-id="problem.attributes.difficulty.data.id"
 					/>
-					<p class='text-sm font-medium'>
+					<p class="text-sm font-medium">
 						{{ problem.attributes.name }}
 					</p>
 				</div>
-				<VenustTooltip v-if='checkIsCompleted(problem.id)'>
+				<VenustTooltip v-if="checkIsCompleted(problem.id)">
 					<template #reference>
-						<CheckIcon class='w-4 h-4 min-w-fit text-blue-600 stroke-2' />
+						<CheckIcon
+							class="h-4 w-4 min-w-fit stroke-2 text-blue-600"
+						/>
 					</template>
 					<template #tooltip>Completed</template>
 				</VenustTooltip>
 			</router-link>
 		</div>
-		<div v-else class='flex flex-col items-center justify-center p-4'>
-			<div class='space-y-2'>
+		<div v-else class="flex flex-col items-center justify-center p-4">
+			<div class="space-y-2">
 				<FaceFrownIcon
-					class='ml-auto mr-auto h-8 w-8 text-neutral-300'
+					class="ml-auto mr-auto h-8 w-8 text-neutral-300"
 				/>
 				<p
-					class='max-w-[300px] text-center text-sm font-medium tracking-wide text-neutral-500'
+					class="max-w-[300px] text-center text-sm font-medium tracking-wide text-neutral-500"
 				>
-					Please check back later, as we are
-					working to make it available as soon as possible.
+					Please check back later, as we are working to make it
+					available as soon as possible.
 				</p>
 			</div>
 		</div>
@@ -121,9 +123,10 @@ const completedProblems = computed(() => {
 
 const checkIsCompleted = (problemId) => {
 	if (completedProblems.value) {
-		return completedProblems.value.some((completedProblem) => completedProblem.id === problemId);
-	} else
-		return false;
+		return completedProblems.value.some(
+			(completedProblem) => completedProblem.id === problemId,
+		);
+	} else return false;
 };
 
 onUnmounted(() => {

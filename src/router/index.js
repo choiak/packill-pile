@@ -45,16 +45,17 @@ const routes = [
 ];
 
 const router = createRouter({
-	history: createWebHistory(), routes,
+	history: createWebHistory(),
+	routes,
 });
 
 router.beforeEach(async (to) => {
-	const isAuthenticated  = await validateToken();
+	const isAuthenticated = await validateToken();
 
 	if (!publicRouteNames.includes(to.name) && !isAuthenticated) {
 		return { name: 'Login' };
 	}
-	if (isAuthenticated && auth.map(route => route.name).includes(to.name)) {
+	if (isAuthenticated && auth.map((route) => route.name).includes(to.name)) {
 		return { name: 'Dashboard' };
 	}
 });

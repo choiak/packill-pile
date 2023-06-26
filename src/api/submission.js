@@ -2,14 +2,16 @@ import { useFetchValidated } from '@/utils/fetch.js';
 import qs from 'qs';
 import { computed, unref } from 'vue';
 
-export const postProblemSubmission = (problemId, answers, query = {}, config = {}) => {
+export const postProblemSubmission = (
+	problemId,
+	answers,
+	query = {},
+	config = {},
+) => {
 	const queryString = computed(() => {
-		return qs.stringify(
-			unref(query),
-			{
-				encodeValuesOnly: true,
-			},
-		);
+		return qs.stringify(unref(query), {
+			encodeValuesOnly: true,
+		});
 	});
 
 	const url = computed(() => {
@@ -32,30 +34,23 @@ export const postProblemSubmission = (problemId, answers, query = {}, config = {
 
 export const getProblemSubmissions = (query = {}, config = {}) => {
 	const queryString = computed(() => {
-		return qs.stringify(
-			unref(query),
-			{
-				encodeValuesOnly: true, // prettify URL
-			},
-		);
+		return qs.stringify(unref(query), {
+			encodeValuesOnly: true, // prettify URL
+		});
 	});
 
 	const url = computed(() => {
 		return `api/problem-submissions?${unref(queryString)}`;
 	});
 
-
 	return useFetchValidated(url, config).get().json();
 };
 
 export const getProblemSubmission = (id, query = {}, config = {}) => {
 	const queryString = computed(() => {
-		return qs.stringify(
-			unref(query),
-			{
-				encodeValuesOnly: true, // prettify URL
-			},
-		);
+		return qs.stringify(unref(query), {
+			encodeValuesOnly: true, // prettify URL
+		});
 	});
 
 	const url = computed(() => {
@@ -67,12 +62,9 @@ export const getProblemSubmission = (id, query = {}, config = {}) => {
 
 export const getQuestionSubmission = (id, query = {}, config = {}) => {
 	const queryString = computed(() => {
-		return qs.stringify(
-			unref(query),
-			{
-				encodeValuesOnly: true, // prettify URL
-			},
-		);
+		return qs.stringify(unref(query), {
+			encodeValuesOnly: true, // prettify URL
+		});
 	});
 
 	const url = computed(() => {
@@ -84,11 +76,9 @@ export const getQuestionSubmission = (id, query = {}, config = {}) => {
 
 export function postQuizSubmission(quizId, answers, query = {}, config = {}) {
 	const queryString = computed(() => {
-		return qs.stringify(
-			unref(query),
-			{
-				encodeValuesOnly: true,
-			});
+		return qs.stringify(unref(query), {
+			encodeValuesOnly: true,
+		});
 	});
 
 	const url = computed(() => {
@@ -109,13 +99,11 @@ export function postQuizSubmission(quizId, answers, query = {}, config = {}) {
 	return useFetchValidated(url, config).post(payload).json();
 }
 
-export function getQuizSubmissions(query = {}, config ={}) {
+export function getQuizSubmissions(query = {}, config = {}) {
 	const queryString = computed(() => {
-		return qs.stringify(
-			unref(query),
-			{
-				encodeValuesOnly: true,
-			});
+		return qs.stringify(unref(query), {
+			encodeValuesOnly: true,
+		});
 	});
 
 	const url = computed(() => {
@@ -125,13 +113,11 @@ export function getQuizSubmissions(query = {}, config ={}) {
 	return useFetchValidated(url, config).get().json();
 }
 
-export function getQuizSubmission(id, query = {}, config ={}) {
+export function getQuizSubmission(id, query = {}, config = {}) {
 	const queryString = computed(() => {
-		return qs.stringify(
-			unref(query),
-			{
-				encodeValuesOnly: true,
-			});
+		return qs.stringify(unref(query), {
+			encodeValuesOnly: true,
+		});
 	});
 
 	const url = computed(() => {

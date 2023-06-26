@@ -1,7 +1,7 @@
 <template>
 	<div class="flex w-max flex-col space-y-2">
 		<router-link to="/dashboard">
-			<button class='btn-menu-secondary flex items-center space-x-4'>
+			<button class="btn-menu-secondary flex items-center space-x-4">
 				<RectangleGroupIcon class="h-5 w-5" />
 			</button>
 		</router-link>
@@ -22,6 +22,6 @@
 import {
 	RectangleGroupIcon,
 	Square3Stack3DIcon,
-	MegaphoneIcon
+	MegaphoneIcon,
 } from '@heroicons/vue/24/outline';
 </script>

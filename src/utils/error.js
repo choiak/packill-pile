@@ -11,24 +11,52 @@ export function handleError(error, message, source, line, column) {
 	const errorStore = useErrorStore();
 	const notificationStore = useNotificationStore();
 
-	const errorInstance = new ErrorInstance(ErrorType.GLOBAL, error?.name || 'GlobalError', message || JSON.stringify(error), {
-		source, line, column,
-	});
+	const errorInstance = new ErrorInstance(
+		ErrorType.GLOBAL,
+		error?.name || 'GlobalError',
+		message || JSON.stringify(error),
+		{
+			source,
+			line,
+			column,
+		},
+	);
 
 	errorStore.push(errorInstance);
 	const clientErrorMessage = i18n.global.t('notification.clientErrorMessage');
-	notificationStore.unshift(new NotificationInstance(NotificationType.CLIENT_ERROR, clientErrorMessage, `${error?.name || 'GlobalError'}: ${message || JSON.stringify(error)}`));
+	notificationStore.unshift(
+		new NotificationInstance(
+			NotificationType.CLIENT_ERROR,
+			clientErrorMessage,
+			`${error?.name || 'GlobalError'}: ${
+				message || JSON.stringify(error)
+			}`,
+		),
+	);
 }
 
 export function handleVueError(error, info) {
 	const errorStore = useErrorStore();
 	const notificationStore = useNotificationStore();
 
-	const errorInstance = new ErrorInstance(ErrorType.VUE, error?.name || 'VueError', error?.message || JSON.stringify(error), { info });
+	const errorInstance = new ErrorInstance(
+		ErrorType.VUE,
+		error?.name || 'VueError',
+		error?.message || JSON.stringify(error),
+		{ info },
+	);
 
 	errorStore.push(errorInstance);
 	const clientErrorMessage = i18n.global.t('notification.clientErrorMessage');
-	notificationStore.unshift(new NotificationInstance(NotificationType.CLIENT_ERROR, clientErrorMessage, `${error?.name || 'VueError'}: ${error?.message || JSON.stringify(error)}`));
+	notificationStore.unshift(
+		new NotificationInstance(
+			NotificationType.CLIENT_ERROR,
+			clientErrorMessage,
+			`${error?.name || 'VueError'}: ${
+				error?.message || JSON.stringify(error)
+			}`,
+		),
+	);
 }
 
 export async function handleApiError(ctx) {
@@ -38,31 +66,51 @@ export async function handleApiError(ctx) {
 	const { status, url } = response;
 
 	switch (true) {
-		case(status === 401): {
+		case status === 401: {
 			router.replace('/401');
 			break;
 		}
-		case(status === 404): {
+		case status === 404: {
 			router.replace('/404');
 			break;
 		}
-		case(status === 403): {
+		case status === 403: {
 			router.replace('/403');
 			break;
 		}
-		case(status >= 400): {
-			const clientErrorMessage = i18n.global.t('notification.clientErrorMessage');
-			notificationStore.unshift(new NotificationInstance(NotificationType.CLIENT_ERROR, clientErrorMessage, `${status}: ${error.message}`));
+		case status >= 400: {
+			const clientErrorMessage = i18n.global.t(
+				'notification.clientErrorMessage',
+			);
+			notificationStore.unshift(
+				new NotificationInstance(
+					NotificationType.CLIENT_ERROR,
+					clientErrorMessage,
+					`${status}: ${error.message}`,
+				),
+			);
 			break;
 		}
-		case(status >= 500): {
-			const serverErrorMessage = i18n.global.t('notification.serverErrorMessage');
-			notificationStore.unshift(new NotificationInstance(NotificationType.SERVER_ERROR, serverErrorMessage, `${status}: ${error.message}`));
+		case status >= 500: {
+			const serverErrorMessage = i18n.global.t(
+				'notification.serverErrorMessage',
+			);
+			notificationStore.unshift(
+				new NotificationInstance(
+					NotificationType.SERVER_ERROR,
+					serverErrorMessage,
+					`${status}: ${error.message}`,
+				),
+			);
 			break;
 		}
 	}
 
-	errorStore.push(new ErrorInstance(ErrorType.API, error.name, error.message, {
-		url, status, data,
-	}));
+	errorStore.push(
+		new ErrorInstance(ErrorType.API, error.name, error.message, {
+			url,
+			status,
+			data,
+		}),
+	);
 }

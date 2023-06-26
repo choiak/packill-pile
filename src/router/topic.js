@@ -10,4 +10,4 @@ export default [
 		path: '/topics',
 		component: Topics,
 	},
-]
+];

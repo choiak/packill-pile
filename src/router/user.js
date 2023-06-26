@@ -12,10 +12,14 @@ export default [
 		},
 		children: [
 			{
-				name: 'UserActivities', path: 'activities', component: Activities,
+				name: 'UserActivities',
+				path: 'activities',
+				component: Activities,
 			},
 			{
-				name: 'userProjects', path: 'projects', component: Projects,
+				name: 'userProjects',
+				path: 'projects',
+				component: Projects,
 			},
 		],
 	},

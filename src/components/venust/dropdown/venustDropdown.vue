@@ -1,6 +1,6 @@
 <template>
 	<div @click.prevent="toggle" class="relative">
-		<div ref='elToggler' class='cursor-pointer'>
+		<div ref="elToggler" class="cursor-pointer">
 			<slot name="toggler" />
 		</div>
 		<transition name="fade">
@@ -8,7 +8,7 @@
 				v-show="isActive"
 				class="absolute z-20 w-max"
 				v-on-click-outside="onClickOutsideHandler"
-				ref='elContainer'
+				ref="elContainer"
 			>
 				<slot name="container" />
 			</div>
@@ -41,7 +41,7 @@ let popperInstance = null;
 function toggle() {
 	isActive.value = !isActive.value;
 	if (isActive.value) {
-		createPopperInstance()
+		createPopperInstance();
 	}
 }
 
@@ -51,10 +51,10 @@ function close() {
 
 const onClickOutsideHandler = [
 	() => {
-		close()
+		close();
 	},
-	{ ignore: [elToggler] }
-]
+	{ ignore: [elToggler] },
+];
 
 const createPopperInstance = () => {
 	popperInstance = createPopper(unref(elToggler), unref(elContainer), {

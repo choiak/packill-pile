@@ -4,12 +4,9 @@ import { computed, unref } from 'vue';
 
 export function getProblem(id, query = {}, config = {}) {
 	const queryString = computed(() => {
-		return qs.stringify(
-			unref(query),
-			{
-				encodeValuesOnly: true, // prettify URL
-			},
-		);
+		return qs.stringify(unref(query), {
+			encodeValuesOnly: true, // prettify URL
+		});
 	});
 
 	const url = computed(() => {
@@ -21,12 +18,9 @@ export function getProblem(id, query = {}, config = {}) {
 
 export function getProblems(query = {}, config = {}) {
 	const queryString = computed(() => {
-		return qs.stringify(
-			unref(query),
-			{
-				encodeValuesOnly: true, // prettify URL
-			},
-		);
+		return qs.stringify(unref(query), {
+			encodeValuesOnly: true, // prettify URL
+		});
 	});
 
 	const url = computed(() => {

@@ -30,7 +30,9 @@
 			<p class="text-xs font-medium text-neutral-500">
 				{{ publishDateTime }}
 			</p>
-			<p class="text-xs font-medium text-neutral-500">Problem Submission ID: {{ id }}</p>
+			<p class="text-xs font-medium text-neutral-500">
+				Problem Submission ID: {{ id }}
+			</p>
 		</div>
 	</div>
 </template>

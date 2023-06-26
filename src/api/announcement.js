@@ -4,12 +4,11 @@ import { computed, unref } from 'vue';
 
 export function getAnnouncements(query = {}, config = {}) {
 	const queryString = computed(() => {
-		return qs.stringify(unref(query),
-			{ encodeValuesOnly: true });
+		return qs.stringify(unref(query), { encodeValuesOnly: true });
 	});
 
 	const url = computed(() => {
-		return `api/announcements?${queryString.value}`
+		return `api/announcements?${queryString.value}`;
 	});
 
 	return useFetchValidated(url, config).get().json();

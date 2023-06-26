@@ -5,9 +5,11 @@ import { useMyStore } from '@/store/me.js';
 import { storeToRefs } from 'pinia';
 
 export async function login(identifier, password) {
-	await useFetch('api/auth/local').post({
-		identifier: identifier, password: password,
-	})
+	await useFetch('api/auth/local')
+		.post({
+			identifier: identifier,
+			password: password,
+		})
 		.json()
 		.then((res) => {
 			const myStore = useMyStore();
@@ -26,9 +28,13 @@ export async function logout() {
 }
 
 export async function register(username, displayName, email, password) {
-	await useFetch('api/auth/local/register').post({
-		username: username, displayName: displayName, email: email, password: password,
-	})
+	await useFetch('api/auth/local/register')
+		.post({
+			username: username,
+			displayName: displayName,
+			email: email,
+			password: password,
+		})
 		.json()
 		.then((res) => {
 			const myStore = useMyStore();
@@ -46,11 +52,14 @@ export async function validateToken() {
 	let isValid = false;
 
 	if (token.value && token.value.length) {
-		const query = qs.stringify({
-			fields: ['id'],
-		}, {
-			encodeValuesOnly: true, // prettify URL
-		});
+		const query = qs.stringify(
+			{
+				fields: ['id'],
+			},
+			{
+				encodeValuesOnly: true, // prettify URL
+			},
+		);
 
 		await useFetchValidated(`api/users/me?${query}`)
 			.get()

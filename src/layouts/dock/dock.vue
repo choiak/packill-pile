@@ -3,7 +3,7 @@
 		<div class="flex items-end">
 			<slot />
 		</div>
-		<div class='flex items-center space-x-8'>
+		<div class="flex items-center space-x-8">
 			<Tracker />
 			<Search />
 		</div>

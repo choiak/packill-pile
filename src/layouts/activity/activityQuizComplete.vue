@@ -1,25 +1,36 @@
 <template>
 	<Activity>
 		<template #icon>
-			<DocumentIcon class='h-4 w-4' />
+			<DocumentIcon class="h-4 w-4" />
 		</template>
 		<template #message>
-			{{ $t('activity.quizCompleteMessage', { displayName: displayName, quizName: name}) }}
+			{{
+				$t('activity.quizCompleteMessage', {
+					displayName: displayName,
+					quizName: name,
+				})
+			}}
 		</template>
 		<template #createdAtDate>{{ createdAtDateString }}</template>
 		<template #createdAtTime>{{ createdAtTimeString }}</template>
 		<template #details>
-			<router-link :to='`/quizzes/${quizId}`' class='flex space-x-2 border rounded-lg bg-white p-2 w-fit items-center hover:underline hover:text-sky-800'>
-				<DocumentIcon class='text-rose-600 w-4 h-4' />
-				<p class='text-sm font-semibold'>{{ name }}</p>
-				<ArrowUpRightIcon class='w-3 h-3'/>
+			<router-link
+				:to="`/quizzes/${quizId}`"
+				class="flex w-fit items-center space-x-2 rounded-lg border bg-white p-2 hover:text-sky-800 hover:underline"
+			>
+				<DocumentIcon class="h-4 w-4 text-rose-600" />
+				<p class="text-sm font-semibold">{{ name }}</p>
+				<ArrowUpRightIcon class="h-3 w-3" />
 			</router-link>
 		</template>
 	</Activity>
 </template>
 
 <script setup>
-import { ArrowUpRightIcon, DocumentIcon } from '@heroicons/vue/24/outline/index.js';
+import {
+	ArrowUpRightIcon,
+	DocumentIcon,
+} from '@heroicons/vue/24/outline/index.js';
 import Activity from '@/layouts/activity/activity.vue';
 import { computed, onUnmounted, toRefs, watch } from 'vue';
 import { getActivity } from '@/api/activity.js';
@@ -27,24 +38,28 @@ import moment from 'moment';
 
 const props = defineProps({
 	activityId: Number,
-})
+});
 
 const { activityId } = toRefs(props);
 
-const activityResponse = getActivity(activityId, {
-	populate: {
-		target: {
-			populate: {
-				quiz: {
-					fields: ['id', 'name'],
+const activityResponse = getActivity(
+	activityId,
+	{
+		populate: {
+			target: {
+				populate: {
+					quiz: {
+						fields: ['id', 'name'],
+					},
 				},
 			},
-		},
-		user: {
-			fields: ['id', 'displayName'],
+			user: {
+				fields: ['id', 'displayName'],
+			},
 		},
 	},
-}, { immediate: false });
+	{ immediate: false },
+);
 
 if (activityId.value) {
 	activityResponse.execute();
@@ -87,8 +102,8 @@ const target = computed(() => {
 });
 
 const quizId = computed(() => {
-	return  target.value?.quiz?.data?.id;
-})
+	return target.value?.quiz?.data?.id;
+});
 
 const quiz = computed(() => {
 	return target.value?.quiz?.data?.attributes;

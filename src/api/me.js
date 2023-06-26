@@ -37,16 +37,23 @@ export function updateMe(content, query = {}, config = {}) {
 	return useFetchValidated(url, config).put(payload).json();
 }
 
-export function updateMyPassword(currentPassword, newPassword, confirmationPassword, config = {}) {
+export function updateMyPassword(
+	currentPassword,
+	newPassword,
+	confirmationPassword,
+	config = {},
+) {
 	const payload = computed(() => {
 		return {
 			currentPassword: unref(currentPassword),
 			password: unref(newPassword),
 			passwordConfirmation: unref(confirmationPassword),
-		}
+		};
 	});
 
-	return useFetchValidated('api/auth/change-password?', config).post(payload).json();
+	return useFetchValidated('api/auth/change-password?', config)
+		.post(payload)
+		.json();
 }
 
 export function updateMyPackage(packageId, query = {}, config = {}) {

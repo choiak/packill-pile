@@ -15,11 +15,13 @@
 					tag="div"
 					class="flex-1 columns-3 space-y-4 overflow-auto"
 				>
-					<router-link :to='`/packages/${pack.id}`' :key="pack.id" v-for="pack in packsFiltered" class="block break-inside-avoid">
-						<PackageCard
-							:key="pack.id"
-							:package-id='pack.id'
-						/>
+					<router-link
+						:to="`/packages/${pack.id}`"
+						:key="pack.id"
+						v-for="pack in packsFiltered"
+						class="block break-inside-avoid"
+					>
+						<PackageCard :key="pack.id" :package-id="pack.id" />
 					</router-link>
 				</transition-group>
 				<div class="h-fit justify-between rounded-xl border bg-white">
@@ -30,7 +32,9 @@
 							Filters
 						</p>
 						<div class="flex items-center space-x-1">
-							<VenustNumberBadge>{{ packsFilteredCount.toFixed(0) }}</VenustNumberBadge>
+							<VenustNumberBadge>
+								{{ packsFilteredCount.toFixed(0) }}
+							</VenustNumberBadge>
 							<FunnelIcon class="h-4 w-4 text-neutral-500" />
 						</div>
 					</div>
@@ -97,7 +101,7 @@ function getAreasSelected(value) {
 
 watch(areasSelected, () => {
 	filterPackages();
-})
+});
 
 function filterPackages() {
 	if (areasSelected.value.length) {

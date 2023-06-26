@@ -1,22 +1,24 @@
 <template>
-	<div class='flex items-start space-x-4 rounded-lg bg-white shadow-xl border p-4'>
-		<div class='flex flex-col items-center space-y-2'>
-			<slot name='icon' />
+	<div
+		class="flex items-start space-x-4 rounded-lg border bg-white p-4 shadow-xl"
+	>
+		<div class="flex flex-col items-center space-y-2">
+			<slot name="icon" />
 			<div
-				class='rounded-full h-2 w-2 bg-blue-600 animate-pulse'
-				:class='{"hidden": isRead}'
+				class="h-2 w-2 animate-pulse rounded-full bg-blue-600"
+				:class="{ hidden: isRead }"
 			/>
 		</div>
-		<div class='flex-1 space-y-4'>
-			<p class='font-semibold text-sm'>
-				<slot name='message' />
+		<div class="flex-1 space-y-4">
+			<p class="text-sm font-semibold">
+				<slot name="message" />
 			</p>
 			<div>
-				<slot name='content' />
+				<slot name="content" />
 			</div>
-			<div class='flex items-baseline justify-between'>
-				<p class='text-xs font-semibold'>{{ time }}</p>
-				<p class='text-xs font-semibold'>{{ date }}</p>
+			<div class="flex items-baseline justify-between">
+				<p class="text-xs font-semibold">{{ time }}</p>
+				<p class="text-xs font-semibold">{{ date }}</p>
 			</div>
 		</div>
 	</div>

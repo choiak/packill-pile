@@ -1,9 +1,9 @@
 <template>
-	<div class='space-y-8'>
+	<div class="space-y-8">
 		<ProblemSubmission
-			v-for='problemSubmission in problemSubmissions'
-			:key='problemSubmission.id'
-			:problem-submission-id='problemSubmission.id'
+			v-for="problemSubmission in problemSubmissions"
+			:key="problemSubmission.id"
+			:problem-submission-id="problemSubmission.id"
 		/>
 	</div>
 </template>
@@ -29,12 +29,15 @@ const query = computed(() => {
 	};
 });
 
-const problemSubmissionsResponse = getProblemSubmissions({
-	sort: ['id:desc'],
-	filters: {
-		problem: props.problemId,
+const problemSubmissionsResponse = getProblemSubmissions(
+	{
+		sort: ['id:desc'],
+		filters: {
+			problem: props.problemId,
+		},
 	},
-}, { immediate: false });
+	{ immediate: false },
+);
 
 if (problemId) {
 	problemSubmissionsResponse.execute();

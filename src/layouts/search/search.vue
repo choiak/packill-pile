@@ -131,7 +131,12 @@
 																		item,
 																	);
 																"
-																@dblclick='router.push(`/packages/${item.id}`); close()'
+																@dblclick="
+																	router.push(
+																		`/packages/${item.id}`,
+																	);
+																	close();
+																"
 															>
 																<span
 																	class="h-3 w-3 rounded-bl border-b-2 border-l-2 border-neutral-300"
@@ -211,7 +216,12 @@
 																		item,
 																	);
 																"
-																@dblclick='router.push(`/workspace/${item.id}`); close()'
+																@dblclick="
+																	router.push(
+																		`/workspace/${item.id}`,
+																	);
+																	close();
+																"
 															>
 																<span
 																	class="h-3 w-3 rounded-bl border-b-2 border-l-2 border-neutral-300"
@@ -515,7 +525,7 @@ const searchClient = instantMeiliSearch(
 	'http://localhost:7700',
 	'h9kyooq_Lz4KhOZrnlVxoL7mGaSjyVqmcRNnwBPKRJw',
 	{
-		placeholderSearch: false
+		placeholderSearch: false,
 	},
 );
 

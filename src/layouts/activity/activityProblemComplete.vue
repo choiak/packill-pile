@@ -1,18 +1,26 @@
 <template>
 	<Activity>
 		<template #icon>
-			<PencilIcon class='h-4 w-4' />
+			<PencilIcon class="h-4 w-4" />
 		</template>
 		<template #message>
-			{{ $t('activity.problemCompleteMessage', { displayName: displayName, problemName: problemName }) }}
+			{{
+				$t('activity.problemCompleteMessage', {
+					displayName: displayName,
+					problemName: problemName,
+				})
+			}}
 		</template>
 		<template #createdAtDate>{{ createdAtDateString }}</template>
 		<template #createdAtTime>{{ createdAtTimeString }}</template>
 		<template #details>
-			<router-link to='' class='flex space-x-2 border rounded-lg bg-white p-2 w-fit items-center hover:underline hover:text-sky-800'>
-				<PencilIcon class='text-violet-600 w-4 h-4'/>
-				<p class='text-sm font-semibold'>{{ problemName }}</p>
-				<ArrowUpRightIcon class='w-3 h-3'/>
+			<router-link
+				to=""
+				class="flex w-fit items-center space-x-2 rounded-lg border bg-white p-2 hover:text-sky-800 hover:underline"
+			>
+				<PencilIcon class="h-4 w-4 text-violet-600" />
+				<p class="text-sm font-semibold">{{ problemName }}</p>
+				<ArrowUpRightIcon class="h-3 w-3" />
 			</router-link>
 		</template>
 	</Activity>
@@ -23,7 +31,10 @@ import Activity from '@/layouts/activity/activity.vue';
 import { computed, onUnmounted, watch } from 'vue';
 import { getActivity } from '@/api/activity.js';
 import moment from 'moment';
-import { PencilIcon, ArrowUpRightIcon } from '@heroicons/vue/24/outline/index.js';
+import {
+	PencilIcon,
+	ArrowUpRightIcon,
+} from '@heroicons/vue/24/outline/index.js';
 
 const props = defineProps({
 	activityId: Number,
@@ -33,20 +44,24 @@ const propActivityId = computed(() => {
 	return props.activityId;
 });
 
-const activityResponse = getActivity(propActivityId, {
-	populate: {
-		target: {
-			populate: {
-				problem: {
-					fields: ['id', 'name'],
+const activityResponse = getActivity(
+	propActivityId,
+	{
+		populate: {
+			target: {
+				populate: {
+					problem: {
+						fields: ['id', 'name'],
+					},
 				},
 			},
-		},
-		user: {
-			fields: ['id', 'displayName'],
+			user: {
+				fields: ['id', 'displayName'],
+			},
 		},
 	},
-}, { immediate: false });
+	{ immediate: false },
+);
 
 if (propActivityId.value) {
 	activityResponse.execute();

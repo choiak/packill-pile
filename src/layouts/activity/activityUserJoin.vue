@@ -1,9 +1,11 @@
 <template>
 	<Activity>
 		<template #icon>
-			<SparklesIcon class='h-4 w-4' />
+			<SparklesIcon class="h-4 w-4" />
 		</template>
-		<template #message>{{ $t('activity.userJoinMessage', { displayName: displayName }) }}</template>
+		<template #message>
+			{{ $t('activity.userJoinMessage', { displayName: displayName }) }}
+		</template>
 		<template #createdAtDate>{{ createdAtDateString }}</template>
 		<template #createdAtTime>{{ createdAtTimeString }}</template>
 	</Activity>
@@ -24,13 +26,17 @@ const propActivityId = computed(() => {
 	return props.activityId;
 });
 
-const activityResponse = getActivity(propActivityId, {
-	populate: {
-		user: {
-			fields: ['id', 'displayName'],
+const activityResponse = getActivity(
+	propActivityId,
+	{
+		populate: {
+			user: {
+				fields: ['id', 'displayName'],
+			},
 		},
 	},
-}, { immediate: false });
+	{ immediate: false },
+);
 
 if (propActivityId.value) {
 	activityResponse.execute();
