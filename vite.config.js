@@ -14,9 +14,9 @@ export default defineConfig({
 	server: {
 		proxy: {
 			'/devServer': {
-				target: 'http://127.0.0.1:1337',
+				target: 'https://d448-182-239-103-32.ngrok-free.app/',
 				changeOrigin: true,
-				secure: false,
+				secure: true,
 				rewrite: (path) => path.replace(/^\/devServer/, ''),
 			},
 		},

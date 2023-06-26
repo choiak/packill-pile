@@ -25,6 +25,8 @@ export const useFetchValidated = createFetch({
 			}
 			options.headers = {
 				...options.headers,
+				// rmb to remove this shit
+				"ngrok-skip-browser-warning": 69420,
 				Authorization: `Bearer ${token.value}`,
 			};
 			return { options };
