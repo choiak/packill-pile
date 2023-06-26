@@ -29,7 +29,7 @@
 <script setup>
 import { getUserById } from '@/api/user.js';
 import { computed, onUnmounted, ref, watch } from 'vue';
-import { useInfoStore } from '@/store/index.js';
+import { useInfoStore } from '@/store/info.js';
 
 const infoStore = useInfoStore();
 const props = defineProps({
