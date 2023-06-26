@@ -29,7 +29,7 @@
 							<h4 class='font-bold'>{{ $t('activity.recentActivities') }}</h4>
 							<ChevronRightIcon class='h-5 w-5 text-blue-600 stroke-2' />
 						</div>
-						<Activities :user-id='Number(userStore.id)' class='flex-1 overflow-auto' />
+						<Activities :user-id='Number(myId)' :page-size='5' class='flex-1 overflow-auto' />
 					</div>
 				</div>
 				<div class='grid grid-cols-4 gap-4 w-[900px]'>
@@ -40,12 +40,12 @@
 							 class='absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2 group-hover:hue-rotate-90 group-hover:animate-pulse transition'
 						>
 							<defs>
-								<linearGradient x1='50%' y1='0%' x2='50%' y2='100%' id='gggyrate-grad'>
+								<linearGradient x1='50%' y1='0%' x2='50%' y2='100%' id='unpack-gyrate-grad-1'>
 									<stop stop-color='hsl(17, 91%, 55%)' stop-opacity='1' offset='0%'></stop>
 									<stop stop-color='hsl(55, 94%, 54%)' stop-opacity='1' offset='100%'></stop>
 								</linearGradient>
 							</defs>
-							<g stroke-width='5' stroke='url(#gggyrate-grad)' fill='none'>
+							<g stroke-width='5' stroke='url(#unpack-gyrate-grad-1)' fill='none'>
 								<path
 									d='M372.05631645215544 -3.0238136378602007C389.34788671583897 -13.005308302029164 410.6521743193173 -13.005308302029164 427.9437445830008 -3.0210192664536635L735.0563396476213 174.29022959287227C752.3479099113048 184.27172425704129 763.0000537130439 202.72295865443982 763.0000537130439 222.68874235418434V577.3112400728363C763.0000537130439 597.2770237725808 752.3479099113048 615.7282581699794 735.0563396476213 625.7125472055549L427.9437445830008 803.0237960648808C410.6521743193173 813.0052907290496 389.34788671583897 813.0052907290496 372.05631645215544 803.0210016934743L64.94372138753494 625.7097528341484C47.65215112385147 615.7282581699794 37.00000732211237 597.2770237725808 37.00000732211237 577.3112400728363V222.68874235418434C37.00000732211237 202.72295865443982 47.65215112385147 184.27172425704129 64.94372138753494 174.28743522146584L372.05631645215544 -3.0238136378602007Z '
 									transform='rotate(44, 400, 400)' opacity='0.05'></path>
@@ -118,12 +118,12 @@
 							 class='absolute bottom-0 right-0 translate-x-1/2 translate-y-1/2 group-hover:hue-rotate-90 group-hover:animate-pulse transition'
 						>
 							<defs>
-								<linearGradient x1='50%' y1='0%' x2='50%' y2='100%' id='gggyrate-grad'>
+								<linearGradient x1='50%' y1='0%' x2='50%' y2='100%' id='unpack-gyrate-grad-2'>
 									<stop stop-color='hsl(17, 91%, 55%)' stop-opacity='1' offset='0%'></stop>
 									<stop stop-color='hsl(55, 94%, 54%)' stop-opacity='1' offset='100%'></stop>
 								</linearGradient>
 							</defs>
-							<g stroke-width='5' stroke='url(#gggyrate-grad)' fill='none'>
+							<g stroke-width='5' stroke='url(#unpack-gyrate-grad-2)' fill='none'>
 								<path
 									d='M372.05631645215544 -3.0238136378602007C389.34788671583897 -13.005308302029164 410.6521743193173 -13.005308302029164 427.9437445830008 -3.0210192664536635L735.0563396476213 174.29022959287227C752.3479099113048 184.27172425704129 763.0000537130439 202.72295865443982 763.0000537130439 222.68874235418434V577.3112400728363C763.0000537130439 597.2770237725808 752.3479099113048 615.7282581699794 735.0563396476213 625.7125472055549L427.9437445830008 803.0237960648808C410.6521743193173 813.0052907290496 389.34788671583897 813.0052907290496 372.05631645215544 803.0210016934743L64.94372138753494 625.7097528341484C47.65215112385147 615.7282581699794 37.00000732211237 597.2770237725808 37.00000732211237 577.3112400728363V222.68874235418434C37.00000732211237 202.72295865443982 47.65215112385147 184.27172425704129 64.94372138753494 174.28743522146584L372.05631645215544 -3.0238136378602007Z '
 									transform='rotate(44, 400, 400)' opacity='0.05'></path>
@@ -247,11 +247,11 @@
 				</div>
 				<div class='flex-1 overflow-auto min-w-fit'>
 					<transition name='fade' mode='out-in'>
-						<div v-if='isLoading' class='space-y-4 flex flex-col h-full'>
+						<div v-if='meIsLoading' class='space-y-4 flex flex-col h-full'>
 							<div class='bg-slate-200 animate-pulse rounded-xl border border-blue-500 w-full h-44' />
 							<div class='bg-slate-200 animate-pulse rounded-xl border w-full flex-1' />
 						</div>
-						<div class='h-full space-y-4 flex flex-col overflow-auto' v-else>
+						<div class='h-full space-y-8 flex flex-col overflow-auto' v-else-if='currentPackage'>
 							<div
 								class='bg-white border border-blue-600 rounded-xl shadow-xl shadow-blue-100'
 							>
@@ -261,12 +261,14 @@
 									<p class='text-sm font-bold uppercase text-neutral-500'>
 										Current Package
 									</p>
+									<Square3Stack3DIcon class='h-4 w-4 text-neutral-500' />
 								</div>
 								<div class='flex items-center justify-between p-8'>
 									<div class='space-y-1'>
 										<h4 class='font-semibold font-display uppercase text-blue-600'>
 											{{ currentPackageName }}</h4>
-										<div class='rounded-lg border flex items-center divide-x w-fit overflow-hidden'>
+										<div class='rounded-lg border flex items-center divide-x w-fit overflow-hidden'
+											 v-if='!isCurrentPackageCompleted'>
 											<div
 												class='p-1 flex bg-neutral-200 items-center space-x-1 text-neutral-500'>
 												<Square2StackIcon class='w-4 h-4 text-neutral-500' />
@@ -285,36 +287,27 @@
 									</router-link>
 								</div>
 							</div>
-							<div
-								class='flex-1 bg-white border rounded-xl p-8 space-y-8 overflow-auto'>
-								<div class='rounded-lg space-y-2'>
-									<p class='uppercase text-sm text-neutral-500 font-semibold'>Upcoming</p>
-									<router-link :to='`/workspace/${currentTopicOrQuizId}`' class='block'>
-										<TopicCard :topic-id='currentTopicOrQuizId' class='!bg-neutral-100' />
+							<div class='flex flex-col flex-1	 space-y-2 overflow-auto' v-if='upcomingTopics'>
+								<p class='bg-orange-600 px-2 py-1 rounded-lg uppercase text-xs text-white font-medium w-fit'>
+									Upcoming topics in {{ currentPartitionName }}</p>
+								<div class='space-y-4 overflow-auto flex-1'>
+									<router-link :to='`/workspace/${topic.id}`'
+												 v-for='(topic, index) in upcomingTopics'
+												 :key='topic.id'
+												 class='block'>
+										<TopicCard :topic-id='topic.id'
+												   class='!bg-neutral-100' :accent='index === 0' />
 									</router-link>
 								</div>
-								<div class='rounded-lg space-y-2 overflow-auto flex-1'>
-									<p class='uppercase text-sm text-neutral-500 font-semibold'>More in
-										{{ currentPartitionName
-										}}</p>
-									<div class='space-y-4 overflow-auto'>
-										<router-link :to='`/workspace/${topic.id}`' v-for='topic in upcomingTopics'
-													 class='block'>
-											<TopicCard :topic-id='topic.id'
-													   class='!bg-neutral-100' />
-										</router-link>
-									</div>
-								</div>
-								<div class='rounded-lg space-y-2 overflow-auto flex-1'>
-									<p class='uppercase text-sm text-neutral-500 font-semibold'>Final quiz in
-										{{ currentPartitionName
-										}}</p>
-									<div class='space-y-4 overflow-auto'>
-										<router-link :to='`/quizzes/${currentPartitionQuiz.id}`' class='block'>
-											<QuizCard :quiz-id='currentPartitionQuiz.id'
-													  class='!bg-neutral-100' />
-										</router-link>
-									</div>
+							</div>
+							<div class='space-y-2 overflow-auto' v-if='quizInCurrentPartition'>
+								<p class='bg-rose-600 px-2 py-1 rounded-lg uppercase text-xs text-white font-medium w-fit'>
+									Final quiz in {{ currentPartitionName }}</p>
+								<div class='space-y-4 overflow-auto'>
+									<router-link :to='`/quizzes/${quizInCurrentPartition?.id}`' class='block'>
+										<QuizCard :quiz-id='quizInCurrentPartition?.id'
+												  class='!bg-neutral-100' />
+									</router-link>
 								</div>
 							</div>
 						</div>
@@ -332,9 +325,9 @@ import {
 	ArrowUpRightIcon,
 	Square2StackIcon,
 } from '@heroicons/vue/24/outline/index.js';
+import {Square3Stack3DIcon} from '@heroicons/vue/24/solid/index.js';
 import { ChartBarIcon } from '@heroicons/vue/24/solid/index.js';
 import Index from '@/layouts/utils/index.vue';
-import { getMe } from '@/api/me.js';
 import { computed, onUnmounted } from 'vue';
 import Dock from '@/layouts/dock/dock.vue';
 import TopicCard from '@/layouts/topic/topicCard.vue';
@@ -344,111 +337,35 @@ import { useMyStore } from '@/store/me.js';
 import { getAnnouncements } from '@/api/announcement.js';
 import { useInfoStore } from '@/store/info.js';
 import QuizCard from '@/layouts/quiz/quizCard.vue';
+import { storeToRefs } from 'pinia';
 
-const userStore = useMyStore();
+const myStore = useMyStore();
 const infoStore = useInfoStore();
-const meResponse = getMe({
-	populate: {
-		currentPackage: true,
-		currentTopicOrQuiz: {
-			populate: {
-				topic: {
-					fields: ['id'],
-					populate: {
-						partitions: {
-							populate: {
-								'package': {
-									fields: ['id'],
-								},
-								'topics': {
-									fields: ['id'],
-								},
-								'quiz': {
-									fields: ['id'],
-								},
-							},
-						},
-					},
-				},
-				quiz: {
-					fields: ['id'],
-					populate: ['partition'],
-				},
-			},
-		},
-		completedTopics: {
-			fields: ['id'],
-		},
-		completedProblems: {
-			fields: ['id'],
-		},
-		completedPackages: {
-			fields: ['id'],
-		},
-	},
-});
 
-const isLoading = computed(() => {
-	return meResponse.isFetching.value || (!meResponse.isFetching.value && !meResponse.isFinished.value);
-});
-
-const me = computed(() => {
-	return meResponse.data.value;
-});
-
-const createdAt = computed(() => {
-	return new Date(me.value?.createdAt);
-});
+const {
+	meIsLoading,
+	myId,
+	createdAt,
+	currentPackage,
+	currentPartition,
+	completedTopics,
+	completedProblems,
+	completedPackages,
+	currentTopicOrQuiz,
+	isCurrentPackageCompleted,
+	currentType,
+} = storeToRefs(myStore);
 
 const createdAtToNowString = computed(() => {
 	return moment(createdAt.value).fromNow();
-});
-
-const currentPackage = computed(() => {
-	return me.value?.currentPackage;
 });
 
 const currentPackageName = computed(() => {
 	return currentPackage.value?.name;
 });
 
-const currentType = computed(() => {
-	if (me.value?.currentTopicOrQuiz.length) {
-		switch (me.value?.currentTopicOrQuiz[0].__component) {
-			case 'relation.topic-connector' :
-				return 'topic';
-			case 'relation.quiz-connector' :
-				return 'quiz';
-			default:
-				return null;
-		}
-	} else {
-		return null;
-	}
-});
-
-const currentTopicOrQuiz = computed(() => {
-	switch (currentType.value) {
-		case 'topic' :
-			return me.value.currentTopicOrQuiz[0].topic;
-		case 'quiz' :
-			return me.value.currentTopicOrQuiz[0].quiz;
-		default:
-			return null;
-	}
-});
-
 const currentTopicOrQuizId = computed(() => {
 	return currentTopicOrQuiz.value?.id;
-});
-
-const currentPartition = computed(() => {
-	switch (currentType.value) {
-		case 'topic':
-			return currentTopicOrQuiz.value?.partitions.filter(partition => partition.package.id === currentPackage.value?.id)[0];
-		case 'quiz':
-			return currentTopicOrQuiz.value?.partition;
-	}
 });
 
 const currentPartitionName = computed(() => {
@@ -459,24 +376,12 @@ const currentPartitionTopics = computed(() => {
 	return currentPartition.value?.topics;
 });
 
-const completedTopics = computed(() => {
-	return me.value?.completedTopics;
-});
-
 const completedTopicsCount = computed(() => {
 	return completedTopics.value?.length;
 });
 
-const completedProblems = computed(() => {
-	return me.value?.completedProblems;
-});
-
 const completedProblemsCount = computed(() => {
 	return completedProblems.value?.length;
-});
-
-const completedPackages = computed(() => {
-	return me.value?.completedPackages;
 });
 
 const completedPackagesCount = computed(() => {
@@ -484,13 +389,15 @@ const completedPackagesCount = computed(() => {
 });
 
 const upcomingTopics = computed(() => {
-	if (currentPartitionTopics.value) {
-		const nextTopicIndex = currentPartitionTopics.value.findIndex(topic => topic.id === currentTopicOrQuizId.value) + 1;
+	if (currentPartitionTopics.value && currentType.value === 'topic') {
+		const nextTopicIndex = currentPartitionTopics.value.findIndex(topic => topic.id === currentTopicOrQuizId.value);
 		return currentPartitionTopics.value.slice(nextTopicIndex);
+	} else {
+		return null;
 	}
 });
 
-const currentPartitionQuiz = computed(() => {
+const quizInCurrentPartition = computed(() => {
 	return currentPartition.value?.quiz;
 });
 
@@ -549,9 +456,6 @@ const latestAnnouncementCoverUrlFull = computed(() => {
 });
 
 onUnmounted(() => {
-	if (meResponse.canAbort.value) {
-		meResponse.abort();
-	}
 	if (announcementsResponse.canAbort.value) {
 		announcementsResponse.abort();
 	}
