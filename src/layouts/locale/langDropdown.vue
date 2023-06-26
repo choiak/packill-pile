@@ -12,8 +12,8 @@
 				</div>
 				<div class='border-t-2 p-2 overflow-auto max-h-[500px] divide-y'>
 					<div class='bg-white flex text-sm justify-between p-2 w-[200px] rounded hover:brightness-95'
-						 v-for='locale in $i18n.availableLocales' :key='`locale-${locale}`'
-						 @click.prevent='$i18n.locale = locale'>
+						 v-for='locale in SUPPORTED_LOCALES' :key='`locale-${locale}`'
+						 @click.prevent='setLocale(locale)'>
 						<div class='bg-neutral-300 text-neutral-500 rounded px-1 '>
 							<p>{{ locale }}</p>
 						</div>
@@ -29,6 +29,11 @@
 
 <script setup>
 import VenustDropdown from '@/components/venust/dropdown/venustDropdown.vue';
+import { useSettingsStore } from '@/store/settings.js';
+import { SUPPORTED_LOCALES } from '@/locale/index.js';
+
+const settingsStore = useSettingsStore();
+const { setLocale } = settingsStore;
 
 const dropdownOptions = { placement: 'right' };
 const dropdownModifiers = {
