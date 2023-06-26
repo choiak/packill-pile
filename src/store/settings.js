@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { useLocalStorage } from '@vueuse/core';
-import { messages } from '@/locale/index.js';
-import { watch } from 'vue';
+import { SUPPORTED_LOCALES } from '@/locale/index.js';
+import { nextTick, watch } from 'vue';
 import { i18n } from '@/main.js';
 
 export const useSettingsStore = defineStore('settings', () => {
@@ -9,7 +9,7 @@ export const useSettingsStore = defineStore('settings', () => {
 
 	function getLocale() {
 		const browserLocales = navigator.languages;
-		const availableLocales = Object.keys(messages);
+		const availableLocales = SUPPORTED_LOCALES;
 		const bestFitLocale = browserLocales.filter(locale => availableLocales.includes(locale))[0];
 		return bestFitLocale || 'en';
 	}
@@ -18,9 +18,16 @@ export const useSettingsStore = defineStore('settings', () => {
 		locale.value = newLocale;
 	}
 
-	watch(locale, (newLocale) => {
+	async function loadLocaleMessages(i18n) {
+		const messages = await import(`@/locale/${locale.value}/${locale.value}.js`);
+		i18n.global.setLocaleMessage(locale.value, messages.default);
+		return nextTick();
+	}
+
+	watch(locale, async (newLocale) => {
+		await loadLocaleMessages(i18n);
 		i18n.global.locale.value = newLocale;
 	});
 
-	return { locale, setLocale };
+	return { locale, setLocale, loadLocaleMessages };
 });
