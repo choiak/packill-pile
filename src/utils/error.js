@@ -5,7 +5,7 @@ import { ErrorType } from '@/utils/classes/errorType.js';
 import { useNotificationStore } from '@/store/notification.js';
 import { NotificationInstance } from '@/utils/classes/notificationInstance.js';
 import { NotificationType } from '@/utils/classes/notificationType.js';
-import i18n from '@/locale/index.js';
+import { i18n } from '@/main.js';
 
 export function handleError(error, message, source, line, column) {
 	const errorStore = useErrorStore();
